@@ -11,7 +11,7 @@ import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
 @Database(
     entities = [ApiToken::class],
-    version = 1
+    version = 2
 )
 
 abstract class PokemonRoomDb : RoomDatabase() {
@@ -27,11 +27,11 @@ abstract class PokemonRoomDb : RoomDatabase() {
             instance ?: buildDataBase(context).also { instance = it }
         }
 
-        private fun buildDataBase(context: Context) = Room.databaseBuilder(
-            context.applicationContext,
-            PokemonRoomDb::class.java,
-            POKEMON_ROOM_DB_NAME,
-        ).fallbackToDestructiveMigration()
-            .build()
+        private fun buildDataBase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                PokemonRoomDb::class.java,
+                POKEMON_ROOM_DB_NAME
+            ).fallbackToDestructiveMigration().build()
     }
 }

@@ -8,5 +8,5 @@ import java.io.Serializable
 data class ApiToken(
     @PrimaryKey
     val token: String,
-    val expiresAt: Double
+    val expiresAt: Long
 ) : Serializable

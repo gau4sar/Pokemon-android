@@ -14,9 +14,6 @@ interface FirebaseApiDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTokenInfo(apiToken: ApiToken)
 
-    @Query("SELECT expiresAt FROM apiToken")
-    fun fetchExpiresAt(): Livedata<Double>
-
     @Query("SELECT * FROM apiToken")
     fun fetchTokenInfo(): LiveData<ApiToken>
 }
