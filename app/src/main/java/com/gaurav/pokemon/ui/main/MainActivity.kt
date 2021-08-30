@@ -2,8 +2,11 @@ package com.gaurav.pokemon.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.gaurav.pokemon.R
 import com.gaurav.pokemon.databinding.ActivityMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 /**
  *
@@ -12,10 +15,10 @@ import com.google.android.material.tabs.TabLayoutMediator
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
-    // tab titles
-    private val titles = arrayOf("Explore", "Community", "MyTeam", "Captured")
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +26,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewPager = binding.pager
-        val tabLayout = binding.tabLayout
+        navController = findNavController(R.id.nav_host_fragment_container)
 
-        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-        viewPager.adapter = viewPagerAdapter
-
-        // attaching tab mediator
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = titles[position]
-        }.attach()
+        mainViewModel = getViewModel()
     }
 }
