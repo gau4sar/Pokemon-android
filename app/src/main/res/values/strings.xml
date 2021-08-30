@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Pokemon</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <string name="connect_error">Please check your network connectivity and try again.</string>
+    <string name="retry">retry</string>
+    <string name="no_network">Internet connection not found</string>
 </resources>
