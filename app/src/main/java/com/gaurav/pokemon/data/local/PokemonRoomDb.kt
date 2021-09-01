@@ -5,12 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.gaurav.pokemon.data.local.dao.FirebaseApiDao
-import com.gaurav.pokemon.data.model.ApiToken
+import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
 
 @Database(
-    entities = [ApiToken::class],
+    entities = [ApiTokenInfo::class],
     version = 2
 )
 

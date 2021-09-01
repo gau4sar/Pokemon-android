@@ -6,4 +6,8 @@ object Constants {
     const val DEFAULT_SCOPE = "default"
 
     const val POKEMON_ROOM_DB_NAME = "pokemon"
+
+    // DS Preferences
+    const val DS_PREFS = "datastore-preferences"
+    const val AUTH_TOKEN = "auth-token"
 }

@@ -2,14 +2,18 @@ package com.gaurav.pokemon.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.gaurav.pokemon.data.model.ApiToken
+import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 
-class MainViewModel(private val firebaseApiRepository: FirebaseApiRepository) : ViewModel() {
+class MainViewModel(
+    private val firebaseApiRepository: FirebaseApiRepository?
+) : ViewModel() {
 
-    val apiTokenInfo: LiveData<ResponseHandler<ApiToken>> =
-        firebaseApiRepository.observeApiTokenInfo
+    val apiTokenInfoLiveData: LiveData<ResponseHandler<ApiTokenInfo>>? =
+        firebaseApiRepository?.observeApiTokenInfo
 
-    val getApiTokenInfo = firebaseApiRepository.getApiTokenInfo
+    val getApiTokenInfo = firebaseApiRepository?.getApiTokenInfo
+
+
 }

@@ -3,6 +3,10 @@ package com.gaurav.pokemon.utils
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
@@ -12,7 +16,11 @@ import androidx.lifecycle.map
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import java.io.IOException
 
 fun <T, L> responseLiveData(
     roomQueryToRetrieveData: () -> LiveData<T>,
@@ -103,4 +111,33 @@ fun Activity.checkNetworkConnection(lifecycleOwner: LifecycleOwner) {
             }
         }
     })
+}
+
+/**
+ * Jetpack DataStore helpers
+ */
+
+
+fun <gfg> DataStore<Preferences>.getValueFlow(
+    your_key: Preferences.Key<gfg>,
+    someDefaultValue: gfg
+    // Value is gfg here
+): Flow<gfg> {
+    return this.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                // Exception handling
+                throw exception
+            }
+        }.map { preferences ->
+            preferences[your_key] ?: someDefaultValue
+        }
+}
+
+suspend fun <gfg> DataStore<Preferences>.setValue(your_key: Preferences.Key<gfg>, value: gfg) {
+    this.edit { preferences ->
+        preferences[your_key] = value
+    }
 }

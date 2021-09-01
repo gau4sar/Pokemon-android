@@ -29,7 +29,6 @@ android {
         }
     }
 
-
     compileOptions {
 
         // Flag to enable support for the new language APIs
@@ -159,15 +158,15 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
     testImplementation "org.hamcrest:hamcrest-all:1.3"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5"
     testImplementation "org.robolectric:robolectric:4.4"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
     testImplementation "com.google.truth:truth:1.1.3"
     testImplementation "org.mockito:mockito-core:2.21.0"
 
     // Instrumented Unit Tests
     androidTestImplementation "junit:junit:4.13.2"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.12.1"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -176,5 +175,8 @@ dependencies {
 
     // ViewPager2
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 }

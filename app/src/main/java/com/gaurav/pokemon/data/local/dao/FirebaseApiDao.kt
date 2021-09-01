@@ -5,15 +5,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gaurav.pokemon.data.model.ApiToken
-import io.reactivex.Single
+import com.gaurav.pokemon.data.model.ApiTokenInfo
 
 @Dao
 interface FirebaseApiDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTokenInfo(apiToken: ApiToken)
+    suspend fun insertTokenInfo(apiTokenInfo: ApiTokenInfo)
 
     @Query("SELECT * FROM apiToken")
-    fun fetchTokenInfo(): LiveData<ApiToken>
+    fun fetchTokenInfo(): LiveData<ApiTokenInfo>
 }

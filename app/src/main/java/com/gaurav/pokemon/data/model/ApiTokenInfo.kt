@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(tableName = "apiToken")
-data class ApiToken(
+data class ApiTokenInfo(
     @PrimaryKey
     val token: String,
     val expiresAt: Long

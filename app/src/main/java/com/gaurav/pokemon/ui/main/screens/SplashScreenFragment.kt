@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.ui.main.MainViewModel
+import com.gaurav.pokemon.utils.DataStorePreferences
 import com.gaurav.pokemon.utils.handleApiError
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -25,6 +29,9 @@ class SplashScreenFragment : Fragment() {
 
     private lateinit var navController: NavController
 
+    private val dataStorePreferences: DataStorePreferences by inject()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,22 +45,32 @@ class SplashScreenFragment : Fragment() {
 
         navController = findNavController()
 
-        mainViewModel.getApiTokenInfo.observe(viewLifecycleOwner, {
+        mainViewModel.getApiTokenInfo?.observe(viewLifecycleOwner, {
 
-            Timber.d("token expires at : ${it.expiresAt} \n current time : ${System.currentTimeMillis()}")
+            Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
+            val token : String
+            
             if(it == null || it.expiresAt < System.currentTimeMillis()) {
+                token = ""
                 // Token has expired fetch a new one using api
                 getApiTokenInfo()
             } else {
+                token = it.token
                 navigateToMain()
+            }
+
+            lifecycleScope.launch {
+                Timber.d("saveApiToken called !!!")
+                dataStorePreferences.saveApiToken(token)
             }
         })
     }
 
     private fun getApiTokenInfo() {
 
-        mainViewModel.apiTokenInfo.observe(viewLifecycleOwner, { apiResponse ->
+
+        mainViewModel.apiTokenInfoLiveData?.observe(viewLifecycleOwner, { apiResponse ->
 
             Timber.d("Api token info response : $apiResponse")
 
@@ -62,6 +79,7 @@ class SplashScreenFragment : Fragment() {
                 is ResponseHandler.Success -> {
                     apiResponse.data?.let { getTokenInfoResponse ->
                         Timber.d("Get token info response $getTokenInfoResponse")
+
                     }
 
                     navigateToMain()

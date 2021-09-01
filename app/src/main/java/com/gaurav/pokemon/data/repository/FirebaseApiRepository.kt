@@ -13,7 +13,7 @@ class FirebaseApiRepository(
         // Fetch data from room db
         roomQueryToRetrieveData = { firebaseApiDao.fetchTokenInfo() },
         // Response from network API
-        networkRequest = { firebaseApiRemoteDataSource.getToken() },
+        networkRequest = { firebaseApiRemoteDataSource.getApiTokenInfo() },
         // Save data to Room db
         roomQueryToSaveData = { firebaseApiDao.insertTokenInfo(it) })
 

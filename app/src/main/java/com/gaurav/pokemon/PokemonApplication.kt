@@ -1,10 +1,7 @@
 package com.gaurav.pokemon
 
 import android.app.Application
-import com.gaurav.pokemon.di.appModule
-import com.gaurav.pokemon.di.localDataModule
-import com.gaurav.pokemon.di.networkModule
-import com.gaurav.pokemon.di.viewModelModule
+import com.gaurav.pokemon.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -36,6 +33,7 @@ class PokemonApplication: Application() {
                     networkModule,
                     localDataModule,
                     viewModelModule,
+                    preferencesModule
                 )
             )
         }
