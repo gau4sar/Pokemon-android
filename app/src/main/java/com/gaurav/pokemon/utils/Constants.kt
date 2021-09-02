@@ -10,4 +10,6 @@ object Constants {
     // DS Preferences
     const val DS_PREFS = "datastore-preferences"
     const val AUTH_TOKEN = "auth-token"
+
+    const val LOCATION_REQUEST_CODE=1111
 }

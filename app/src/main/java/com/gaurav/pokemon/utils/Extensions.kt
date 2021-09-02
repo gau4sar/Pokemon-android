@@ -1,8 +1,16 @@
 package com.gaurav.pokemon.utils
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.provider.Settings
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,6 +23,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
+import com.gaurav.pokemon.utils.Constants.LOCATION_REQUEST_CODE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -146,4 +155,49 @@ suspend fun <gfg> DataStore<Preferences>.setValue(key: Preferences.Key<gfg>, val
 suspend fun <gfg> DataStore<Preferences>.getValue(key: Preferences.Key<gfg>) : gfg? {
     val preferences = this.data.first()
     return preferences[key]
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.enableGps(): Unit {
+    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+    builder.setMessage("Enable GPS").setCancelable(false)
+        .setPositiveButton("Yes", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+        }).setNegativeButton("No", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface, which: Int) {
+                dialog.cancel()
+            }
+        })
+    val alertDialog: AlertDialog = builder.create()
+    alertDialog.show()
+}
+
+fun Activity.isGpsEnabled(): Boolean {
+    val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+}
+
+fun Activity.checkIfUserPermissionIsNotProvided(): Boolean {
+    return ActivityCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+}
+
+fun Activity.requestPermission() {
+    requestPermissions(
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ), LOCATION_REQUEST_CODE
+    )
 }
