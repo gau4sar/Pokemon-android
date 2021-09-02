@@ -7,13 +7,12 @@ import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 
 class MainViewModel(
-    private val firebaseApiRepository: FirebaseApiRepository?
+    private val firebaseApiRepository: FirebaseApiRepository
 ) : ViewModel() {
 
-    val apiTokenInfoLiveData: LiveData<ResponseHandler<ApiTokenInfo>>? =
-        firebaseApiRepository?.observeApiTokenInfo
+    val apiTokenInfoLiveData: LiveData<ResponseHandler<ApiTokenInfo>> =
+        firebaseApiRepository.observeApiTokenInfo
 
-    val getApiTokenInfo = firebaseApiRepository?.getApiTokenInfo
-
+    val fetchTokenInfo = firebaseApiRepository.fetchTokenInfo
 
 }

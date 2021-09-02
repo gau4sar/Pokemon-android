@@ -5,6 +5,9 @@ import com.gaurav.pokemon.data.remote.FirebaseApiRemoteDataSource
 import com.gaurav.pokemon.data.remote.FirebaseApiService
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.DataStorePreferences
+import com.gaurav.pokemon.utils.EncryptPrefUtils
+import com.gaurav.pokemon.utils.GeneralUtils
 import com.google.gson.Gson
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -20,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 val networkModule = module {
 
-    single(named(Constants.DEFAULT_SCOPE)) { provideDefaultOkHttpClient(androidContext()) }
+    single(named(Constants.DEFAULT_SCOPE)) { provideDefaultOkHttpClient(androidContext(), get()) }
     single(named(Constants.DEFAULT_SCOPE)) { provideRetrofit(get((named(Constants.DEFAULT_SCOPE))), get()) }
 
     single { provideFirebaseAPIService(get(named(Constants.DEFAULT_SCOPE))) }
@@ -29,7 +32,7 @@ val networkModule = module {
     single { FirebaseApiRemoteDataSource(get()) }
 }
 
-fun provideDefaultOkHttpClient(context: Context): OkHttpClient {
+fun provideDefaultOkHttpClient(context: Context, preferences: EncryptPrefUtils): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor { message -> Timber.i(message) }
     loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -43,6 +46,7 @@ fun provideDefaultOkHttpClient(context: Context): OkHttpClient {
         .addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${GeneralUtils.getAuthToken(preferences)}")
                 .build()
             chain.proceed(request)
         }

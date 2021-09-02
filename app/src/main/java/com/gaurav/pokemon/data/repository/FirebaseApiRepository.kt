@@ -17,5 +17,5 @@ class FirebaseApiRepository(
         // Save data to Room db
         roomQueryToSaveData = { firebaseApiDao.insertTokenInfo(it) })
 
-    val getApiTokenInfo = firebaseApiDao.fetchTokenInfo()
+    val fetchTokenInfo = firebaseApiDao.fetchTokenInfo()
 }

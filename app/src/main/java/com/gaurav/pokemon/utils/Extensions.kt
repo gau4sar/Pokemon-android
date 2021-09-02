@@ -18,6 +18,7 @@ import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import java.io.IOException
@@ -84,6 +85,7 @@ fun Fragment.handleApiError(
 
             when (error.message) {
                 // Handle expected scenarios. Example : Authentication failure, token expiry, etc
+
             }
 
             val errorMessage = error.data?.string().toString()
@@ -117,11 +119,10 @@ fun Activity.checkNetworkConnection(lifecycleOwner: LifecycleOwner) {
  * Jetpack DataStore helpers
  */
 
-
+// Value is gfg here
 fun <gfg> DataStore<Preferences>.getValueFlow(
     your_key: Preferences.Key<gfg>,
     someDefaultValue: gfg
-    // Value is gfg here
 ): Flow<gfg> {
     return this.data
         .catch { exception ->
@@ -136,8 +137,13 @@ fun <gfg> DataStore<Preferences>.getValueFlow(
         }
 }
 
-suspend fun <gfg> DataStore<Preferences>.setValue(your_key: Preferences.Key<gfg>, value: gfg) {
+suspend fun <gfg> DataStore<Preferences>.setValue(key: Preferences.Key<gfg>, value: gfg) {
     this.edit { preferences ->
-        preferences[your_key] = value
+        preferences[key] = value
     }
+}
+
+suspend fun <gfg> DataStore<Preferences>.getValue(key: Preferences.Key<gfg>) : gfg? {
+    val preferences = this.data.first()
+    return preferences[key]
 }

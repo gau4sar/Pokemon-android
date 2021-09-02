@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.gaurav.pokemon.R
+import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.utils.DataStorePreferences
+import com.gaurav.pokemon.utils.EncryptPrefUtils
 import com.gaurav.pokemon.utils.handleApiError
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
@@ -29,7 +29,7 @@ class SplashScreenFragment : Fragment() {
 
     private lateinit var navController: NavController
 
-    private val dataStorePreferences: DataStorePreferences by inject()
+    private val encryptPrefs: EncryptPrefUtils by inject()
 
 
     override fun onCreateView(
@@ -45,55 +45,51 @@ class SplashScreenFragment : Fragment() {
 
         navController = findNavController()
 
-        mainViewModel.getApiTokenInfo?.observe(viewLifecycleOwner, {
+        mainViewModel.fetchTokenInfo.observe(viewLifecycleOwner, {
 
+            Timber.d("fetchTokenInfo called !!!")
             Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
-            val token : String
-            
-            if(it == null || it.expiresAt < System.currentTimeMillis()) {
-                token = ""
+            if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
-                getApiTokenInfo()
+                getNewApiToken()
             } else {
-                token = it.token
                 navigateToMain()
             }
-
-            lifecycleScope.launch {
-                Timber.d("saveApiToken called !!!")
-                dataStorePreferences.saveApiToken(token)
-            }
         })
     }
 
-    private fun getApiTokenInfo() {
+    private val fetchApiTokenObserver = Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
 
 
-        mainViewModel.apiTokenInfoLiveData?.observe(viewLifecycleOwner, { apiResponse ->
+    private fun onFetchAuthInfo(apiResponse : ResponseHandler<ApiTokenInfo>) {
 
-            Timber.d("Api token info response : $apiResponse")
+        when (apiResponse) {
 
-            when (apiResponse) {
+            is ResponseHandler.Success -> {
+                apiResponse.data?.let { getTokenInfoResponse ->
 
-                is ResponseHandler.Success -> {
-                    apiResponse.data?.let { getTokenInfoResponse ->
-                        Timber.d("Get token info response $getTokenInfoResponse")
+                    mainViewModel.apiTokenInfoLiveData.removeObserver(fetchApiTokenObserver)
 
-                    }
-
-                    navigateToMain()
+                    Timber.d("Success token ${getTokenInfoResponse.token}")
+                    encryptPrefs.saveApiToken(getTokenInfoResponse.token)
                 }
-
-                is ResponseHandler.Error -> {
-                    Timber.d("Get token info error response: $apiResponse")
-                    handleApiError(apiResponse, requireActivity())
-                }
-
-                is ResponseHandler.Loading -> { }
             }
-        })
+
+            is ResponseHandler.Error -> {
+                Timber.d("Get token info error response: $apiResponse")
+                handleApiError(apiResponse, requireActivity())
+            }
+
+            is ResponseHandler.Loading -> {
+            }
+        }
     }
 
-    private fun navigateToMain() = navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
+    private fun getNewApiToken() {
+        mainViewModel.apiTokenInfoLiveData.observe(requireActivity(), fetchApiTokenObserver)
+    }
+
+    private fun navigateToMain() =
+        navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
 }
