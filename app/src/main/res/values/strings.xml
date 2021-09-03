@@ -4,4 +4,6 @@
     <string name="connect_error">Please check your network connectivity and try again.</string>
     <string name="retry">retry</string>
     <string name="no_network">Internet connection not found</string>
+    <string name="friends">Friends</string>
+    <string name="foes">Foes</string>
 </resources>

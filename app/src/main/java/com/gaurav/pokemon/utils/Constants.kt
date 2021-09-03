@@ -10,4 +10,6 @@ object Constants {
     // DS Preferences
     const val DS_PREFS = "datastore-preferences"
     const val AUTH_TOKEN = "auth-token"
+
+    const val CONVERTED_DATE_FORMAT = "MMM d, h:mm a"
 }

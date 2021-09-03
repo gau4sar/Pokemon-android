@@ -1,13 +1,16 @@
-package com.gaurav.pokemon.ui.main.screens
+package com.gaurav.pokemon.ui.main.screens.community
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.gaurav.pokemon.R
-import com.gaurav.pokemon.databinding.FragmentCapturedBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.FragmentCommunityBinding
+import com.gaurav.pokemon.ui.main.MainViewModel
+import com.gaurav.pokemon.utils.handleApiError
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 /**
@@ -19,6 +22,10 @@ class CommunityFragment : Fragment() {
 
     private var _binding: FragmentCommunityBinding? = null
     private val binding get() = _binding!!
+
+    private val mainViewModel by sharedViewModel<MainViewModel>()
+
+    private lateinit var friendsListAdapter: FriendsListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,5 +39,39 @@ class CommunityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Timber.d("onViewCreated called !!!")
+
+        setupRecyclerView()
+
+        mainViewModel.fetchFriendsList.observe(viewLifecycleOwner, {response ->
+            when (response) {
+
+                is ResponseHandler.Success -> {
+                    binding.progressFriends.show()
+
+                    response.data?.let { friendsListResponse ->
+                        friendsListAdapter.differ.submitList(friendsListResponse)
+                    }
+                }
+
+                is ResponseHandler.Error -> {
+                    binding.progressFriends.hide()
+                    handleApiError(response, requireActivity())
+                }
+
+                is ResponseHandler.Loading -> {
+                    binding.progressFriends.show()
+                }
+            }
+        })
+    }
+
+    private fun setupRecyclerView() {
+
+        friendsListAdapter = FriendsListAdapter(requireActivity())
+
+        binding.rvFriends.apply {
+            adapter = friendsListAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 }

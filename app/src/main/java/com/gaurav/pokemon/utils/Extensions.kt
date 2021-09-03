@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun <T, L> responseLiveData(
     roomQueryToRetrieveData: () -> LiveData<T>,
@@ -42,7 +44,7 @@ fun <T, L> responseLiveData(
 
         is ResponseHandler.Success -> {
             apiResponse.data?.let {
-                Timber.d("networkRequest to get data : $source")
+                Timber.d("networkRequest response : ${apiResponse.data}")
                 roomQueryToSaveData(it)
             }
         }
@@ -146,4 +148,12 @@ suspend fun <gfg> DataStore<Preferences>.setValue(key: Preferences.Key<gfg>, val
 suspend fun <gfg> DataStore<Preferences>.getValue(key: Preferences.Key<gfg>) : gfg? {
     val preferences = this.data.first()
     return preferences[key]
+}
+
+/*
+    Date util method
+ */
+fun getFormattedDateTime(dateTimeString: String): String {
+    val parsedDate = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
+    return parsedDate.format(DateTimeFormatter.ofPattern(Constants.CONVERTED_DATE_FORMAT))
 }
