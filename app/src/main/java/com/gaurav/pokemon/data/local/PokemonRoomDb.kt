@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.gaurav.pokemon.data.local.dao.FirebaseApiDao
+import com.gaurav.pokemon.data.local.dao.FirebaseDao
 import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
@@ -18,7 +18,7 @@ import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 @TypeConverters(ListConverters::class)
 abstract class PokemonRoomDb : RoomDatabase() {
 
-    abstract fun getFirebaseApiDao(): FirebaseApiDao
+    abstract fun getFirebaseApiDao(): FirebaseDao
 
     companion object {
         private var instance: PokemonRoomDb? = null

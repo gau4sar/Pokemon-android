@@ -1,4 +1,4 @@
-package com.gaurav.pokemon.data.remote
+package com.gaurav.pokemon.data.remote.firebase
 
 import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.remote.responses.GetCommunityResponse

@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gaurav.pokemon.ui.main.screens.CapturedFragment
-import com.gaurav.pokemon.ui.main.screens.CommunityFragment
+import com.gaurav.pokemon.ui.main.screens.community.CommunityFragment
 import com.gaurav.pokemon.ui.main.screens.ExploreFragment
 import com.gaurav.pokemon.ui.main.screens.MyTeamFragment
 import timber.log.Timber

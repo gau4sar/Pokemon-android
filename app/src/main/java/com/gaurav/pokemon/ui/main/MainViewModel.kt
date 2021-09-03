@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gaurav.pokemon.data.model.ApiTokenInfo
+import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.google.android.gms.maps.model.LatLng
@@ -21,5 +22,8 @@ class MainViewModel(
     var currentLocationLiveData: MutableLiveData<Location> = MutableLiveData()
 
     val moveToLocationLiveData: MutableLiveData<LatLng> = MutableLiveData()
+
+    val fetchFriendsList: LiveData<ResponseHandler<List<Friend>>> =
+        firebaseApiRepository.observeCommunityActivity
 
 }

@@ -28,9 +28,7 @@ class SplashScreenFragment : Fragment() {
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var navController: NavController
-
     private val encryptPrefs: EncryptPrefUtils by inject()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,11 +48,7 @@ class SplashScreenFragment : Fragment() {
             Timber.d("fetchTokenInfo called !!!")
             Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
-            Timber.d("fetchTokenInfo called !!!")
-            //Testing
-            if(1==2)
-            {
-//            if (it == null || it.expiresAt < System.currentTimeMillis()) {
+            if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
                 Timber.d("getNewApiToken")
                 getNewApiToken()

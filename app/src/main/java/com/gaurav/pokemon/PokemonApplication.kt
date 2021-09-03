@@ -31,6 +31,7 @@ class PokemonApplication: Application() {
                 listOf(
                     appModule,
                     networkModule,
+                    pokeModule,
                     localDataModule,
                     viewModelModule,
                     preferencesModule

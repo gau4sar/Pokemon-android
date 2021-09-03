@@ -1,26 +1,26 @@
 package com.gaurav.pokemon.data.repository
 
-import com.gaurav.pokemon.data.local.dao.FirebaseApiDao
-import com.gaurav.pokemon.data.remote.FirebaseApiRemoteDataSource
+import com.gaurav.pokemon.data.local.dao.FirebaseDao
+import com.gaurav.pokemon.data.remote.firebase.FirebaseApiRemoteDataSource
 import com.gaurav.pokemon.utils.responseLiveData
 
 class FirebaseApiRepository(
     private val firebaseApiRemoteDataSource: FirebaseApiRemoteDataSource,
-    private val firebaseApiDao: FirebaseApiDao
+    private val firebaseDao: FirebaseDao
 )  {
 
     val observeApiTokenInfo = responseLiveData(
         // Fetch data from room db
-        roomQueryToRetrieveData = { firebaseApiDao.fetchTokenInfo() },
+        roomQueryToRetrieveData = { firebaseDao.fetchTokenInfo() },
         // Response from network API
         networkRequest = { firebaseApiRemoteDataSource.getApiTokenInfo() },
         // Save data to Room db
-        roomQueryToSaveData = { firebaseApiDao.insertTokenInfo(it) })
+        roomQueryToSaveData = { firebaseDao.insertTokenInfo(it) })
 
-    val fetchTokenInfo = firebaseApiDao.fetchTokenInfo()
+    val fetchTokenInfo = firebaseDao.fetchTokenInfo()
 
     val observeCommunityActivity = responseLiveData(
-        roomQueryToRetrieveData = { firebaseApiDao.fetchFriendsList() },
+        roomQueryToRetrieveData = { firebaseDao.fetchFriendsList() },
         networkRequest = { firebaseApiRemoteDataSource.getCommunity() },
-        roomQueryToSaveData = { firebaseApiDao.insertFriendsList(it.friends) })
+        roomQueryToSaveData = { firebaseDao.insertFriendsList(it.friends) })
 }

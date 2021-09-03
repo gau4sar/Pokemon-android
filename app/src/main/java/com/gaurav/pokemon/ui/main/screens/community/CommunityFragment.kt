@@ -11,7 +11,6 @@ import com.gaurav.pokemon.databinding.FragmentCommunityBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.handleApiError
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -37,8 +36,6 @@ class CommunityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Timber.d("onViewCreated called !!!")
 
         setupRecyclerView()
 

@@ -9,7 +9,7 @@ import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.model.Friend
 
 @Dao
-interface FirebaseApiDao {
+interface FirebaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTokenInfo(apiTokenInfo: ApiTokenInfo)

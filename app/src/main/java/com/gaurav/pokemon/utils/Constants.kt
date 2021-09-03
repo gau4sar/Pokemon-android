@@ -5,6 +5,9 @@ object Constants {
     const val BASE_URL = "https://us-central1-samaritan-android-assignment.cloudfunctions.net"
     const val DEFAULT_SCOPE = "default"
 
+    const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2"
+    const val POKEAPI_SCOPE = "pokemon"
+
     const val POKEMON_ROOM_DB_NAME = "pokemon"
 
     // DS Preferences

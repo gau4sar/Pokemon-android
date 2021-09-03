@@ -1,17 +1,17 @@
 package com.gaurav.pokemon.di
 
 import android.content.Context
-import com.gaurav.pokemon.data.remote.firebase.FirebaseApiRemoteDataSource
-import com.gaurav.pokemon.data.remote.firebase.FirebaseApiService
-import com.gaurav.pokemon.data.repository.FirebaseApiRepository
+import com.gaurav.pokemon.data.remote.PokeApiService
+import com.gaurav.pokemon.data.repository.PokemonApiRepository
+import com.gaurav.pokemon.ui.PokeApiViewModel
 import com.gaurav.pokemon.utils.Constants
-import com.gaurav.pokemon.utils.EncryptPrefUtils
-import com.gaurav.pokemon.utils.GeneralUtils
+import com.gaurav.pokemon.utils.Constants.POKEAPI_SCOPE
 import com.google.gson.Gson
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -20,18 +20,31 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-val networkModule = module {
+val pokeModule = module {
 
-    single(named(Constants.DEFAULT_SCOPE)) { provideDefaultOkHttpClient(androidContext(), get()) }
-    single(named(Constants.DEFAULT_SCOPE)) { provideRetrofit(get((named(Constants.DEFAULT_SCOPE))), get()) }
+    single(named(POKEAPI_SCOPE)) { providePokemonOkHttpClient(androidContext()) }
+    single(named(POKEAPI_SCOPE)) {
+        providePokemonRetrofit(
+            get((named(POKEAPI_SCOPE))),
+            get()
+        )
+    }
 
-    single { provideFirebaseAPIService(get(named(Constants.DEFAULT_SCOPE))) }
+    single(named(POKEAPI_SCOPE)) {
+        PokemonApiRepository(get((named(POKEAPI_SCOPE))),get())
+    }
 
-    single { FirebaseApiRepository(get(), get()) }
-    single { FirebaseApiRemoteDataSource(get()) }
+    single(named(POKEAPI_SCOPE)) {
+        providePokemonApiService(get((named(POKEAPI_SCOPE))))
+    }
+
+    viewModel {
+        PokeApiViewModel(get(named(POKEAPI_SCOPE)))
+    }
+
 }
 
-fun provideDefaultOkHttpClient(context: Context, preferences: EncryptPrefUtils): OkHttpClient {
+fun providePokemonOkHttpClient(context: Context): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor { message -> Timber.i(message) }
     loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -45,7 +58,6 @@ fun provideDefaultOkHttpClient(context: Context, preferences: EncryptPrefUtils):
         .addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer ${GeneralUtils.getAuthToken(preferences)}")
                 .build()
             chain.proceed(request)
         }
@@ -54,13 +66,13 @@ fun provideDefaultOkHttpClient(context: Context, preferences: EncryptPrefUtils):
         .build()
 }
 
-fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
+fun providePokemonRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
+        .baseUrl(Constants.POKEMON_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(okHttpClient)
         .build()
 }
 
-fun provideFirebaseAPIService(retrofit: Retrofit) : FirebaseApiService =
-    retrofit.create(FirebaseApiService::class.java)
+fun providePokemonApiService(retrofit: Retrofit): PokeApiService =
+    retrofit.create(PokeApiService::class.java)
