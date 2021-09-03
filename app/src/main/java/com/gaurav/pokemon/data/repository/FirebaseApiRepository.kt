@@ -18,4 +18,9 @@ class FirebaseApiRepository(
         roomQueryToSaveData = { firebaseApiDao.insertTokenInfo(it) })
 
     val fetchTokenInfo = firebaseApiDao.fetchTokenInfo()
+
+    val observeCommunityActivity = responseLiveData(
+        roomQueryToRetrieveData = { firebaseApiDao.fetchFriendsList() },
+        networkRequest = { firebaseApiRemoteDataSource.getCommunity() },
+        roomQueryToSaveData = { firebaseApiDao.insertFriendsList(it.friends) })
 }
