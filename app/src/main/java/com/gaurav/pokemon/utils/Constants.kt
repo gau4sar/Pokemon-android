@@ -12,4 +12,6 @@ object Constants {
     const val AUTH_TOKEN = "auth-token"
 
     const val CONVERTED_DATE_FORMAT = "MMM d, h:mm a"
+
+    const val LOCATION_REQUEST_CODE=1111
 }

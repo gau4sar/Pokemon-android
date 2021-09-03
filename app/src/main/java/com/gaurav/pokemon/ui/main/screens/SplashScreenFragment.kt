@@ -50,10 +50,17 @@ class SplashScreenFragment : Fragment() {
             Timber.d("fetchTokenInfo called !!!")
             Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
-            if (it == null || it.expiresAt < System.currentTimeMillis()) {
+            Timber.d("fetchTokenInfo called !!!")
+            //Testing
+            if(1==2)
+            {
+//            if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
+                Timber.d("getNewApiToken")
                 getNewApiToken()
             } else {
+
+                Timber.d("navigateToMain")
                 navigateToMain()
             }
         })
