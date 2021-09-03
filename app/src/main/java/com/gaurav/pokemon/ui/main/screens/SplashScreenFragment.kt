@@ -51,10 +51,8 @@ class SplashScreenFragment : Fragment() {
             Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
             Timber.d("fetchTokenInfo called !!!")
-            //Testing
-            if(1==2)
-            {
-//            if (it == null || it.expiresAt < System.currentTimeMillis()) {
+
+            if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
                 Timber.d("getNewApiToken")
                 getNewApiToken()
@@ -66,10 +64,11 @@ class SplashScreenFragment : Fragment() {
         })
     }
 
-    private val fetchApiTokenObserver = Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
+    private val fetchApiTokenObserver =
+        Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
 
 
-    private fun onFetchAuthInfo(apiResponse : ResponseHandler<ApiTokenInfo>) {
+    private fun onFetchAuthInfo(apiResponse: ResponseHandler<ApiTokenInfo>) {
 
         when (apiResponse) {
 

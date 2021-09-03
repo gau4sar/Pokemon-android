@@ -6,4 +6,20 @@
     <string name="retry">retry</string>
     <string name="no_network">Internet connection not found</string>
     <string name="unable_to_find_location">Unable to find location please try again</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="level">Level:</string>
+    <string name="types">Types</string>
+    <string name="capture_on">Capture on:</string>
+    <string name="assign_a_name">Assign a Name?</string>
+    <string name="name">Name:</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="captured_by">Captured By</string>
+    <string name="found_in">Found In</string>
+    <string name="moves">Moves</string>
+    <string name="razor_wind">Razor Wind: </string>
+    <string name="swords_dance">Swords Dance: </string>
+    <string name="bind">Bind: </string>
+    <string name="solar_beam">Solar Beam: </string>
+    <string name="captured_in">Captured In</string>
 </resources>

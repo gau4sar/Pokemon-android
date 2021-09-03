@@ -3,12 +3,14 @@ package com.gaurav.pokemon.utils
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.provider.Settings
+import android.view.Window
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.datastore.core.DataStore
@@ -21,6 +23,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
 import com.gaurav.pokemon.utils.Constants.LOCATION_REQUEST_CODE
@@ -152,13 +155,13 @@ suspend fun <gfg> DataStore<Preferences>.setValue(key: Preferences.Key<gfg>, val
     }
 }
 
-suspend fun <gfg> DataStore<Preferences>.getValue(key: Preferences.Key<gfg>) : gfg? {
+suspend fun <gfg> DataStore<Preferences>.getValue(key: Preferences.Key<gfg>): gfg? {
     val preferences = this.data.first()
     return preferences[key]
 }
 
 fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
 }
 
 fun Activity.enableGps(): Unit {
@@ -180,6 +183,12 @@ fun Activity.enableGps(): Unit {
 fun Activity.isGpsEnabled(): Boolean {
     val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+}
+
+fun Activity.checkAndEnableGps() {
+    if (!isGpsEnabled()) {
+        enableGps()
+    }
 }
 
 fun Activity.checkIfUserPermissionIsNotProvided(): Boolean {

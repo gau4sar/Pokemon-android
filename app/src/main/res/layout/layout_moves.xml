@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="@dimen/margin_4">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/margin_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Heading1Black"
+            android:text="@string/moves"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="@string/razor_wind"/>
+
+            <TextView
+                android:id="@+id/tv_razor_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="15/15"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="@string/swords_dance"/>
+
+            <TextView
+                android:id="@+id/tv_sword_dance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="6/10"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="@string/bind"/>
+
+            <TextView
+                android:id="@+id/tv_bind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="5/10"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="@string/solar_beam"/>
+
+            <TextView
+                android:id="@+id/tv_solar_beam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Heading2Black"
+                android:text="1/5"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

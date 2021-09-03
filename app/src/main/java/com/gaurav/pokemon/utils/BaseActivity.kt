@@ -103,7 +103,6 @@ open class BaseActivity : AppCompatActivity() {
 
                     Timber.d("permission granted")
                     requestLocation()
-                    /*gotoSelectPlacesFragment()*/
                 } else {
 
                     if (ActivityCompat.shouldShowRequestPermissionRationale(
