@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -189,5 +190,7 @@ dependencies {
     //Google maps
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation "com.google.android.libraries.places:places:2.4.0"
+
+    implementation 'com.github.clans:fab:1.6.4'
 
 }

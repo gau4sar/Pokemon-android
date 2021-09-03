@@ -3,7 +3,10 @@ package com.gaurav.pokemon.utils
 object Constants {
 
     const val BASE_URL = "https://us-central1-samaritan-android-assignment.cloudfunctions.net"
+    const val POKEMON_URL = "https://pokeapi.co/api/v2"
     const val DEFAULT_SCOPE = "default"
+    const val POKEMON = "pokemon"
+    const val POKEMON_FOUND = "PokemonFound"
 
     const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2"
     const val POKEAPI_SCOPE = "pokemon"

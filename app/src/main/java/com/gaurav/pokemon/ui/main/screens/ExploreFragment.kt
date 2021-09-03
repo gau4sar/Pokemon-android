@@ -1,14 +1,16 @@
 package com.gaurav.pokemon.ui.main.screens
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
+import com.gaurav.pokemon.data.model.PokemonFound
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.utils.BaseActivity
-import com.gaurav.pokemon.utils.enableGps
-import com.gaurav.pokemon.utils.isGpsEnabled
-import com.gaurav.pokemon.utils.showToast
+import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.utils.*
+import com.gaurav.pokemon.utils.Constants.POKEMON_FOUND
+import com.gaurav.pokemon.utils.GeneralUtils.generateRandomMarkers
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,19 +28,29 @@ import java.util.*
 class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     private val TOTAL_POKEMONS = 7
+
+    //In meters
+    val minimumDistance = 1000
+    val maximumDistance = 3000
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var googleMap: GoogleMap
 
     lateinit var callback: OnMapReadyCallback
 
+    var counter = 1
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Timber.d("onViewCreated called !!!")
-
-        (requireActivity() as BaseActivity).isLocationPermissionGranted()
+        initialization()
 
         viewModelWorks()
+    }
+
+    private fun initialization() {
+        requireActivity().checkAndEnableGps()
+
+        (requireActivity() as BaseActivity).isLocationPermissionGranted()
     }
 
     private fun viewModelWorks() {
@@ -54,18 +66,47 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private fun callBack(latLng: LatLng) {
         callback = OnMapReadyCallback { _googleMap ->
 
-            //Test
             val currentLocation = LatLng(latLng.latitude, latLng.longitude)
             _googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation))
             googleMap = _googleMap
 
-            getCurrentLocation()
-            generateRandomMarkers()
+            clickListener()
+
+            generateRandomMarkers(TOTAL_POKEMONS, mainViewModel.currentLocationLiveData.value!!,minimumDistance,maximumDistance) {
+                addMarker(it)
+            }
+
+            moveCameraToLocation(currentLocation)
         }
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
+    }
+
+    private fun clickListener() {
+
+        googleMap.setOnMarkerClickListener { marker ->
+
+            val intent = Intent(requireActivity(), PokemonDetailsActivity::class.java)
+            when (counter) {
+                1 -> {
+                    intent.putExtra(POKEMON_FOUND, PokemonFound(1, false, marker.position, true))
+                }
+                2 -> {
+                    intent.putExtra(POKEMON_FOUND, PokemonFound(1, true, marker.position, false))
+                }
+
+                else -> {
+                    intent.putExtra(POKEMON_FOUND, PokemonFound(1, false, marker.position, false))
+                    counter = 0
+                }
+            }
+            counter++
+            startActivity(intent)
+
+            false
+        }
     }
 
     private fun getCurrentLocation() {
@@ -88,7 +129,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     }
 
     private fun addMarker(latLng: LatLng) {
-        googleMap.addMarker(
+        val marker = googleMap.addMarker(
             MarkerOptions()
                 .position(LatLng(latLng.latitude, latLng.longitude))
                 .title("Pokemon")
@@ -97,21 +138,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                         .fromResource(com.gaurav.pokemon.R.drawable.icons8_pokeball_96)
                 )
         )
-    }
 
-    fun generateRandomMarkers() {
-        //set your own minimum distance here
-        val minimumDistanceFromMe = 1000
-        //set your own maximum distance here
-        val maximumDistanceFromMe = 3000
-        //set number of markers you want to generate in Map/
-        val markersToGenerate = TOTAL_POKEMONS
-        for (position in 1..markersToGenerate) {
-            val coordinates: LatLng =
-                generateRandomCoordinates(minimumDistanceFromMe, maximumDistanceFromMe)
-            Timber.d("random_coordinates $coordinates")
-            addMarker(coordinates)
-        } // end FOR loop
+        marker?.tag = "bulbasaur"
     }
 
     fun generateRandomCoordinates(min: Int, max: Int): LatLng {
@@ -147,6 +175,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             LatLng(currentLat - metersCordN, currentLong)
         }
     }
+
     private fun moveCameraToLocation(latLng: LatLng) {
         zoomin(LatLng(latLng.latitude, latLng.longitude))
     }
@@ -172,5 +201,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             .build()
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
     }
 }

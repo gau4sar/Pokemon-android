@@ -60,10 +60,11 @@ class SplashScreenFragment : Fragment() {
         })
     }
 
-    private val fetchApiTokenObserver = Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
+    private val fetchApiTokenObserver =
+        Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
 
 
-    private fun onFetchAuthInfo(apiResponse : ResponseHandler<ApiTokenInfo>) {
+    private fun onFetchAuthInfo(apiResponse: ResponseHandler<ApiTokenInfo>) {
 
         when (apiResponse) {
 
