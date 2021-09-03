@@ -8,7 +8,7 @@ object Constants {
     const val POKEMON = "pokemon"
     const val POKEMON_FOUND = "PokemonFound"
 
-    const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2"
+    const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2/"
     const val POKEAPI_SCOPE = "pokemon"
 
     const val POKEMON_ROOM_DB_NAME = "pokemon"

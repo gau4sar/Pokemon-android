@@ -1,8 +1,10 @@
 package com.gaurav.pokemon.ui.main.screens
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.model.PokemonFound
@@ -15,23 +17,17 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.util.*
 
 
 class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
-    private val TOTAL_POKEMONS = 7
-
-    //In meters
-    val minimumDistance = 1000
-    val maximumDistance = 3000
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private lateinit var googleMap: GoogleMap
 
@@ -42,15 +38,14 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initialization()
-
-        viewModelWorks()
-    }
-
-    private fun initialization() {
         requireActivity().checkAndEnableGps()
 
-        (requireActivity() as BaseActivity).isLocationPermissionGranted()
+        // Runtime Permission handler for Location access
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (requireActivity() as BaseActivity).isLocationPermissionGranted()
+        }
+
+        viewModelWorks()
     }
 
     private fun viewModelWorks() {
@@ -61,6 +56,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         mainViewModel.moveToLocationLiveData.observe(
             viewLifecycleOwner,
             { moveCameraToLocation(it) })
+
+        mainViewModel.fetchPokemonInfoList.observe(viewLifecycleOwner, {
+            Timber.d("Saved pokemon info list : $it")
+            // TODO :: Use the info list here to set the item information on the pokemon balls
+        })
     }
 
     private fun callBack(latLng: LatLng) {
@@ -72,7 +72,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
             clickListener()
 
-            generateRandomMarkers(TOTAL_POKEMONS, mainViewModel.currentLocationLiveData.value!!,minimumDistance,maximumDistance) {
+            generateRandomMarkers(TOTAL_POKEMONS, mainViewModel.currentLocationLiveData.value!!,MIN_DISTANCE,MAX_DISTANCE) {
                 addMarker(it)
             }
 
@@ -135,7 +135,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 .title("Pokemon")
                 .icon(
                     BitmapDescriptorFactory
-                        .fromResource(com.gaurav.pokemon.R.drawable.icons8_pokeball_96)
+                        .fromResource(R.drawable.icons8_pokeball_96)
                 )
         )
 
@@ -203,8 +203,12 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
+    companion object {
+        private const val TOTAL_POKEMONS = 7
+
+        //In meters
+        private const val MIN_DISTANCE = 1000
+        private const val MAX_DISTANCE = 3000
     }
+
 }

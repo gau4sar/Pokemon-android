@@ -3,6 +3,7 @@ package com.gaurav.pokemon.data.local
 import androidx.room.TypeConverter
 import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.data.model.Pokemon
+import com.gaurav.pokemon.data.model.PokemonInfo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.java.KoinJavaComponent.inject
@@ -12,15 +13,15 @@ class ListConverters {
     private val gson: Gson by inject(Gson::class.java)
 
     @TypeConverter
-    fun friendListToJson(friends: List<Friend>?): String? {
-        val type = object : TypeToken<Friend>() {}.type
-        return gson.toJson(friends, type)
+    fun pokemonInfoListToJson(pokemonInfoList: List<PokemonInfo>?): String? {
+        val type = object : TypeToken<PokemonInfo>() {}.type
+        return gson.toJson(pokemonInfoList, type)
     }
 
     @TypeConverter
-    fun friendJsonToList(friendString: String): List<Friend>? {
-        val type = object : TypeToken<List<Friend>>() {}.type
-        return gson.fromJson(friendString, type)
+    fun pokemonInfoJsonToList(pokemonInfoString: String): List<PokemonInfo>? {
+        val type = object : TypeToken<List<PokemonInfo>>() {}.type
+        return gson.fromJson(pokemonInfoString, type)
     }
 
     @TypeConverter

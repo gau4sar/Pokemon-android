@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
+import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonFound
 import com.gaurav.pokemon.databinding.*
 import com.gaurav.pokemon.ui.main.MainViewModel
@@ -25,11 +26,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textview.MaterialTextView
-import org.koin.android.ext.android.bind
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.java.KoinJavaComponent
 import timber.log.Timber
 
 class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
@@ -42,6 +43,8 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
 
+    private val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,15 +56,17 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().intent?.let {
-            it.getParcelableExtra<PokemonFound>(POKEMON_FOUND)?.let {pokemonFound->
+        requireActivity().intent?.let { it ->
+            it.getSerializableExtra(POKEMON_FOUND)?.let {
+
+                val type = object : TypeToken<PokemonFound>() {}.type
+                val jsonString = gson.toJson(it, type).toString()
+                val pokemonFound = gson.fromJson<PokemonFound>(jsonString, type)
 
                 Timber.d("POKEMON_FOUND $pokemonFound")
 
                 setMarker(pokemonFound.pokemon_location)
-
                 initializeTheUi(pokemonFound)
-
                 viewModelWorks(pokemonFound.pokemon_id)
             }
         }
@@ -149,7 +154,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     }
 
-    fun showCaptureDialog() {
+    private fun showCaptureDialog() {
         val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_assign_name_to_pokemon)
@@ -171,7 +176,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
             dialog.dismiss()
         }
 
-        resources?.let {
+        resources.let {
             val displayMetrics = it.displayMetrics
             val dialogWidth = (displayMetrics.widthPixels * 0.70).toInt()
             val dialogHeight = WindowManager.LayoutParams.WRAP_CONTENT

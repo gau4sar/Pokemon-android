@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.gaurav.pokemon.R
 import androidx.core.content.ContextCompat
+import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -25,15 +28,37 @@ open class BaseActivity : AppCompatActivity() {
 
     val mainViewModel by viewModel<MainViewModel>()
 
+    private val POKEMON_ITEM_LIMIT = "10"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeTheLocationRequest()
-
         listenTheLocationCallBack()
 
+        mainViewModel.observePokemonInfoList(POKEMON_ITEM_LIMIT).observe(this, { apiResponse ->
+
+            when (apiResponse) {
+
+                is ResponseHandler.Success -> {
+
+                    apiResponse.data?.let { getPokemonInfoListResponse ->
+                        Timber.d("Pokemon info list ${getPokemonInfoListResponse}")
+                    }
+                }
+
+                is ResponseHandler.Error -> {
+                    Timber.e("Get token info error response: $apiResponse")
+                    //handleApiError(apiResponse, this)
+                }
+
+                is ResponseHandler.Loading -> {
+                }
+            }
+        })
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun isLocationPermissionGranted():Boolean {
         if (checkIfUserPermissionIsNotProvided()
         ) {
@@ -74,8 +99,25 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     //request location
-    fun requestLocation() {
+    private fun requestLocation() {
         Timber.d("requestLocation")
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         mFusedLocationClient?.lastLocation?.addOnSuccessListener(this) { location ->
             if (location != null) {
                 mainViewModel.currentLocationLiveData.postValue(location)

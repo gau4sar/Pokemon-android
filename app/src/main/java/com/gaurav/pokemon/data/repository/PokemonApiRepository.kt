@@ -9,4 +9,10 @@ class PokemonApiRepository(
     private val pokemonDao: PokemonDao
 ) {
 
+    fun observePokemonInfoList(limit: String) = responseLiveData(
+        roomQueryToRetrieveData = { pokemonDao.fetchPokemonList() },
+        networkRequest = { pokemonApiRemoteDataSource.getPokemonInfoList(limit) },
+        roomQueryToSaveData = { pokemonDao.insertPokemonList(it.results) })
+
+    val fetchPokemonInfoList = pokemonDao.fetchPokemonList()
 }

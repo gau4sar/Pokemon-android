@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
-    <dimen name="margin_8">8dp</dimen>
-    <dimen name="margin_16">16dp</dimen>
-=======
+
     <!-- Text dimensions -->
     <dimen name="text_size_9">9sp</dimen>
     <dimen name="text_size_10">10sp</dimen>
@@ -15,7 +12,6 @@
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
->>>>>>> 72ca5c9083fe266c2dc4ba4a23b10462b22d8b0e
 
     <!-- Margin dimensions -->
     <dimen name="margin_2">2dp</dimen>
@@ -37,9 +33,6 @@
     <dimen name="neg_margin_6">-6dp</dimen>
 
     <dimen name="size_60">60dp</dimen>
-<<<<<<< HEAD
 
-=======
     <dimen name="app_bar_height">45</dimen>
->>>>>>> 72ca5c9083fe266c2dc4ba4a23b10462b22d8b0e
 </resources>

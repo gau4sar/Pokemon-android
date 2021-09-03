@@ -1,7 +1,8 @@
 package com.gaurav.pokemon.di
 
 import android.content.Context
-import com.gaurav.pokemon.data.remote.PokeApiService
+import com.gaurav.pokemon.data.remote.pokemon.PokeApiService
+import com.gaurav.pokemon.data.remote.pokemon.PokemonApiRemoteDataSource
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
 import com.gaurav.pokemon.ui.PokeApiViewModel
 import com.gaurav.pokemon.utils.Constants
@@ -22,24 +23,27 @@ import java.util.concurrent.TimeUnit
 
 val pokeModule = module {
 
-    single(named(POKEAPI_SCOPE)) { providePokemonOkHttpClient(androidContext()) }
+    single(named(POKEAPI_SCOPE)) {
+        providePokemonOkHttpClient(androidContext())
+    }
+
     single(named(POKEAPI_SCOPE)) {
         providePokemonRetrofit(
-            get((named(POKEAPI_SCOPE))),
+            get(named(POKEAPI_SCOPE)),
             get()
         )
     }
 
     single(named(POKEAPI_SCOPE)) {
-        PokemonApiRepository(get((named(POKEAPI_SCOPE))),get())
+        providePokemonApiService(get(named(POKEAPI_SCOPE)))
     }
 
     single(named(POKEAPI_SCOPE)) {
-        providePokemonApiService(get((named(POKEAPI_SCOPE))))
+        PokemonApiRemoteDataSource(get((named(POKEAPI_SCOPE))))
     }
 
-    viewModel {
-        PokeApiViewModel(get(named(POKEAPI_SCOPE)))
+    single(named(POKEAPI_SCOPE)) {
+        PokemonApiRepository(get(named(POKEAPI_SCOPE)), get())
     }
 
 }
