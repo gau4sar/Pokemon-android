@@ -11,7 +11,7 @@ class PokemonApiRemoteDataSource(private val apiService: PokeApiService) : BaseD
         return safeApiCall { apiService.getPokemonInfoList(limit) }
     }
 
-    suspend fun getPokemonDetails(id: String): ResponseHandler<GetPokemonDetailsResponse> {
-        return safeApiCall { apiService.getPokemonDetailsById(id) }
+    suspend fun getPokemonDetails(id: Int): ResponseHandler<GetPokemonDetailsResponse> {
+        return safeApiCall { apiService.getPokemonDetailsById(id.toString()) }
     }
 }

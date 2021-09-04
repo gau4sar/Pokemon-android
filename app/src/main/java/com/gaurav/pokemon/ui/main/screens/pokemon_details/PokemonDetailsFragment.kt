@@ -10,11 +10,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
-import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonFound
-import com.gaurav.pokemon.databinding.*
+import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.Constants.POKEMON_FOUND
+import com.gaurav.pokemon.utils.handleApiError
 import com.gaurav.pokemon.utils.showToast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -67,7 +68,13 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
                 setMarker(pokemonFound.pokemon_location)
                 initializeTheUi(pokemonFound)
-                viewModelWorks(pokemonFound.pokemon_id)
+
+
+                // TODO :: We need to get the URL from the Pokemon balls list and pass it hardcoding for testing
+                val pokeDetailsUrl = "https://pokeapi.co/api/v2/pokemon/1/"
+                val pokemonId = getPokemonIdFromUrl(pokeDetailsUrl)
+
+                viewModelWorks(pokemonId)
             }
         }
     }
@@ -77,7 +84,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
         val captureButton: MaterialButton = binding.btnCapture
         val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
-        val pokemonCaptured: com.github.clans.fab.FloatingActionButton =binding.fabCapture
+        val pokemonCaptured: com.github.clans.fab.FloatingActionButton = binding.fabCapture
         val layoutMap: CardView = binding.layoutMap.cvFoundCaptured
         val layoutCapturedBy: CardView = binding.layoutCapturedBy.cvCapturedBy
         val appBarLayout: AppBarLayout = binding.appBarLayout
@@ -105,7 +112,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
             layoutCapturedBy.visibility = View.VISIBLE
         }
 
-        if(!pokemonFound.isCapturedByOther&&!pokemonFound.isWild) {
+        if (!pokemonFound.isCapturedByOther && !pokemonFound.isWild) {
             appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
                 if (Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                     pokemonCaptured.visibility = View.GONE
@@ -152,6 +159,39 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private fun viewModelWorks(pokemonId: Int) {
 
+        Timber.d("Pokemon ID : $pokemonId")
+        mainViewModel.fetchPokemonDetails(pokemonId)
+
+        mainViewModel.pokemonDetailsLiveData.observe(requireActivity(), {
+            Timber.d("Pokemon details response : $it")
+        })
+
+        /*mainViewModel.observePokemonDetails(pokemonId).observe(viewLifecycleOwner, { apiResponse ->
+            when (apiResponse) {
+
+                is ResponseHandler.Success -> {
+
+                    apiResponse.data?.let { getPokemonDetailsResponse ->
+                        Timber.d("Pokemon info list ${getPokemonDetailsResponse}")
+                    }
+                }
+
+                is ResponseHandler.Error -> {
+                    Timber.e("Get token info error response: $apiResponse")
+                    handleApiError(apiResponse, requireActivity())
+                }
+
+                is ResponseHandler.Loading -> {
+                }
+            }
+        })*/
+    }
+
+    private fun getPokemonIdFromUrl(pokeDetailsUrl: String): Int {
+        return pokeDetailsUrl
+            .replace("https://pokeapi.co/api/v2/pokemon/", "")
+            .replace("/", "")
+            .toInt()
     }
 
     private fun showCaptureDialog() {

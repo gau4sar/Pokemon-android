@@ -7,7 +7,9 @@ import androidx.navigation.findNavController
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.databinding.ActivityMainBinding
 import com.gaurav.pokemon.utils.BaseActivity
+import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 /**
@@ -20,6 +22,7 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,5 +32,10 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         navController = findNavController(R.id.nav_host_fragment_container)
+
+
+        mainViewModel.pokemonDetailsLiveData.observe(this@MainActivity, {
+            Timber.d("pokemonDetailsLiveData response : $it")
+        })
     }
 }

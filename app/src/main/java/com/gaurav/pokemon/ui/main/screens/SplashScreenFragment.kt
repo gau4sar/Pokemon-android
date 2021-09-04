@@ -64,7 +64,7 @@ class SplashScreenFragment : Fragment() {
         Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
 
 
-    private fun onFetchAuthInfo(apiResponse : ResponseHandler<ApiTokenInfo>) {
+    private fun onFetchAuthInfo(apiResponse: ResponseHandler<ApiTokenInfo>) {
 
         when (apiResponse) {
 
