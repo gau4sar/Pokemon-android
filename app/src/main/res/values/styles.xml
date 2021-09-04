@@ -161,4 +161,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!-- Text Design styles -->
+    <style name="TextStyle16" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import com.gaurav.pokemon.adapter.CapturedPokemonAdapter
 import com.gaurav.pokemon.databinding.FragmentCapturedBinding
 import timber.log.Timber
 
@@ -28,5 +30,19 @@ class CapturedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Timber.d("onViewCreated called !!!")
+
+        val capturedPokemonAdapter =
+            context?.let {
+                CapturedPokemonAdapter(
+                    requireActivity()
+                )
+            }
+
+        val recyclerViewCaptured = binding.rvCaptured
+
+        val gridLayoutManager = GridLayoutManager(context, 3)
+        recyclerViewCaptured.setHasFixedSize(true)
+        recyclerViewCaptured.layoutManager = gridLayoutManager
+        recyclerViewCaptured.adapter = capturedPokemonAdapter
     }
 }

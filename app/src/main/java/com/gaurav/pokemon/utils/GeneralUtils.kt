@@ -1,19 +1,50 @@
 package com.gaurav.pokemon.utils
 
 import android.location.Location
+import com.gaurav.pokemon.data.model.PokemonInfo
 import com.google.android.gms.maps.model.LatLng
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 object GeneralUtils {
 
     fun getAuthToken(encryptPrefUtils: EncryptPrefUtils) = encryptPrefUtils.getApiToken()
 
+    fun pickPokemonsRandomly(
+        totalPokemons: Int, pokemonList: List<PokemonInfo>,
+        sendRandomPokemonList: (MutableList<PokemonInfo>) -> Unit = {}
+    ) {
+
+
+        val randomlySelectedPokemons = mutableListOf<PokemonInfo>()
+
+        val mutablePokemonList = pokemonList.toMutableList()
+
+        for (i in 1..totalPokemons) {
+            mutablePokemonList.apply {
+                val randomPokemon = this.random()
+                randomlySelectedPokemons.add(randomPokemon)
+
+                this.remove(randomPokemon)
+            }
+        }
+
+        val listOfIds: List<Int> = mutablePokemonList.map {
+            it.id
+        }
+
+        Timber.d("Pokemon list after removing -> ${listOfIds}")
+        Timber.d("Random Pokemon list -> ${randomlySelectedPokemons}")
+
+        sendRandomPokemonList(randomlySelectedPokemons)
+    }
+
     fun generateRandomMarkers(
         totalPokemons: Int,
         currentLocation: Location,
-        minimumDistanceFromMe:Int,
-        maximumDistanceFromMe:Int,
+        minimumDistanceFromMe: Int,
+        maximumDistanceFromMe: Int,
         randomCoordintes: (LatLng) -> Unit = {}
     ) {
         //set number of markers you want to generate in Map/
@@ -63,6 +94,23 @@ object GeneralUtils {
         } else {
             LatLng(currentLat - metersCordN, currentLong)
         }
+    }
+
+
+    fun parseDateToShortMonthDateAndYear(date: String): String {
+        //2020-02-16T00:00:00.000Z
+        val outputPattern = "MMM dd---,yyyy"
+
+        return parseDates(date, outputPattern).replace("---","th")
+    }
+
+    fun parseDates(dateString: String, outputPattern: String): String {
+        val inputPattern = "yyyy-MM-dd"
+        val inputFormat = SimpleDateFormat(inputPattern, Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat(outputPattern, Locale.ENGLISH)
+
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date)
     }
 
 }

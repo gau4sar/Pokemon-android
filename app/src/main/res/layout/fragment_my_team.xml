@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.screens.MyTeamFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_myTeam"
+        android:nestedScrollingEnabled="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="My Team" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

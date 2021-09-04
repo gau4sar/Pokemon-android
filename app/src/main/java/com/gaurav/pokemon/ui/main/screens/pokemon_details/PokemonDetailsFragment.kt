@@ -83,6 +83,10 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         val appBarLayout: AppBarLayout = binding.appBarLayout
         val pokemonInToolbar: ImageView = binding.ivPokemonToolbar
 
+        pokemonFound.name?.let{
+            binding.collapsingToolbar.title = it
+        }
+
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)

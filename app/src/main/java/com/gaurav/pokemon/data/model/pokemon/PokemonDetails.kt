@@ -14,7 +14,7 @@ data class PokemonDetails(
     val gameIndices: List<GameIndice>,
     val height: Int,
     @SerializedName("held_items")
-    val heldItems: List<Any>,
+    val heldItems: List<HeldItem>,
     @PrimaryKey
     val id: Int,
     @SerializedName("is_default")

@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/friends"
                 android:padding="@dimen/margin_8"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_8"
                 android:text="@string/foes"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

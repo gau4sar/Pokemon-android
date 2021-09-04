@@ -2,12 +2,14 @@ package com.gaurav.pokemon.ui.main
 
 import android.location.Location
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.data.model.PokemonInfo
 import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.data.remote.responses.GetPokemonDetailsResponse
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
 import com.google.android.gms.maps.model.LatLng
@@ -38,4 +40,19 @@ class MainViewModel(
 
     val fetchMyTeamList = firebaseApiRepository.fetchMyTeamList
 
+    val pokemonInfoListAndCurrentLocationLiveData: LiveData<Pair<List<PokemonInfo>, Location>> =
+        object: MediatorLiveData<Pair<List<PokemonInfo>, Location>>() {
+            var pokemonInfoList: List<PokemonInfo>? = null
+            var location: Location? = null
+            init {
+                addSource(fetchPokemonInfoList) { pokemonInfoList ->
+                    this.pokemonInfoList = pokemonInfoList
+                    location?.let { value = pokemonInfoList to it }
+                }
+                addSource(currentLocationLiveData) { location ->
+                    this.location = location
+                    pokemonInfoList?.let { value = it to location }
+                }
+            }
+        }
 }
