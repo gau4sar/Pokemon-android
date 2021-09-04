@@ -48,7 +48,7 @@ class SplashScreenFragment : Fragment() {
             Timber.d("fetchTokenInfo called !!!")
             Timber.d("token expires at : ${it?.expiresAt} \n current time : ${System.currentTimeMillis()}")
 
-            /*if (it == null || it.expiresAt < System.currentTimeMillis()) {
+            if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
                 Timber.d("getNewApiToken")
                 getNewApiToken()
@@ -56,9 +56,9 @@ class SplashScreenFragment : Fragment() {
 
                 Timber.d("navigateToMain")
                 navigateToMain()
-            }*/
-            encryptPrefs.saveApiToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJSUjZucUtHMDJQUEpOUk5jV0oyMjRRMmlJdGgyIiwiaWF0IjoxNjMwNzU5NDI4LCJleHAiOjE2MzA3NjMwMjh9.UUKJzomqxBn643kkXloU4Mz_WNxz9Hro_fB5hG61hYc")
-            navigateToMain()
+            }
+          /*  encryptPrefs.saveApiToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJSUjZucUtHMDJQUEpOUk5jV0oyMjRRMmlJdGgyIiwiaWF0IjoxNjMwNzU5NDI4LCJleHAiOjE2MzA3NjMwMjh9.UUKJzomqxBn643kkXloU4Mz_WNxz9Hro_fB5hG61hYc")*/
+           /* navigateToMain()*/
         })
     }
 
@@ -66,7 +66,7 @@ class SplashScreenFragment : Fragment() {
         Observer<ResponseHandler<ApiTokenInfo>> { onFetchAuthInfo(it) }
 
 
-    private fun onFetchAuthInfo(apiResponse : ResponseHandler<ApiTokenInfo>) {
+    private fun onFetchAuthInfo(apiResponse: ResponseHandler<ApiTokenInfo>) {
 
         when (apiResponse) {
 

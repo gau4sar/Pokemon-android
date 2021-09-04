@@ -30,8 +30,8 @@ object GeneralUtils {
             }
         }
 
-        val listOfIds: List<Int> = mutablePokemonList.map {
-            it.id
+        val listOfIds: List<String> = mutablePokemonList.map {
+            it.name
         }
 
         Timber.d("Pokemon list after removing -> ${listOfIds}")

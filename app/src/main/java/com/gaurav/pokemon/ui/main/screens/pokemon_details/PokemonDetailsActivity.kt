@@ -16,8 +16,6 @@ class PokemonDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Timber.d("MainActivity")
-
         binding = ActivityPokemonDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

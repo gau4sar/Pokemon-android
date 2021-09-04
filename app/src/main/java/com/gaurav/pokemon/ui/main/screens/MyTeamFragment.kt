@@ -52,7 +52,7 @@ class MyTeamFragment : Fragment() {
 
     private fun viewModelWorks() {
 
-        /*mainViewModel.observeMyTeam.observe(
+        mainViewModel.observeMyTeam.observe(
             viewLifecycleOwner,
             {apiResponse ->
 
@@ -74,7 +74,7 @@ class MyTeamFragment : Fragment() {
                     is ResponseHandler.Loading -> {
                     }
                 }
-            })*/
+            })
 
         mainViewModel.fetchMyTeamList.observe(
             viewLifecycleOwner,
