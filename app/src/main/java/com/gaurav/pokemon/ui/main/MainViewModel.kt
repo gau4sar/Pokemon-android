@@ -34,4 +34,8 @@ class MainViewModel(
 
     val fetchPokemonInfoList = pokemonApiRepository.fetchPokemonInfoList
 
+    val observeMyTeam = firebaseApiRepository.observeMyTeam
+
+    val fetchMyTeamList = firebaseApiRepository.fetchMyTeamList
+
 }

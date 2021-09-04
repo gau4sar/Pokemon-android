@@ -23,4 +23,11 @@ class FirebaseApiRepository(
         roomQueryToRetrieveData = { firebaseDao.fetchFriendsList() },
         networkRequest = { firebaseApiRemoteDataSource.getCommunity() },
         roomQueryToSaveData = { firebaseDao.insertFriendsList(it.friends) })
+
+    val observeMyTeam = responseLiveData(
+        roomQueryToRetrieveData = { firebaseDao.fetchMyTeamList() },
+        networkRequest = { firebaseApiRemoteDataSource.getMyTeam() },
+        roomQueryToSaveData = { firebaseDao.insertMyTeamList(it.myTeamList) })
+
+    val fetchMyTeamList = firebaseDao.fetchMyTeamList()
 }

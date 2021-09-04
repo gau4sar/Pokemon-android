@@ -12,8 +12,9 @@ import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
 
 @Database(
-    entities = [ApiTokenInfo::class, Friend::class, Foe::class, Pokemon::class, PokemonInfo::class],
-    version = 6
+    entities = [ApiTokenInfo::class, Friend::class, Foe::class,
+        Pokemon::class, PokemonInfo::class, MyTeam::class],
+    version = 7
 )
 
 @TypeConverters(ListConverters::class)
