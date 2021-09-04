@@ -18,31 +18,25 @@ class MainViewModel(
     private val encryptPrefs: EncryptPrefUtils
 ) : ViewModel() {
 
-    init {
-        fetchTokenInfoApi()
-    }
-
     /**
      * Api token info handlers
      */
 
-    val tokenInfoLiveData = firebaseApiRepository.fetchTokenInfo
+    val tokenInfoLiveData: LiveData<ApiTokenInfo> = firebaseApiRepository.fetchTokenInfo
 
     fun fetchTokenInfoApi() {
-
-        Timber.d("fetchTokenInfo called !!!")
 
         viewModelScope.launch(Dispatchers.IO) {
 
             firebaseApiRepository.fetchTokenInfoApi().let { apiResponse ->
                 when (apiResponse) {
-                    is ResponseHandler.Success -> {
 
+                    is ResponseHandler.Success -> {
                         apiResponse.data?.let { getTokenInfoResponse ->
+                            Timber.d("fetchTokenInfo called $getTokenInfoResponse")
 
                             // Save token api to encrypted prefs
                             encryptPrefs.saveApiToken(getTokenInfoResponse.token)
-
                             firebaseApiRepository.saveTokenInfo(getTokenInfoResponse)
                         }
                     }

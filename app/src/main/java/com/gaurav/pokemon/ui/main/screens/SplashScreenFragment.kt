@@ -5,16 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.gaurav.pokemon.R
-import com.gaurav.pokemon.data.model.ApiTokenInfo
-import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.utils.EncryptPrefUtils
-import com.gaurav.pokemon.utils.handleApiError
-import org.koin.android.ext.android.inject
+import com.gaurav.pokemon.utils.observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -42,15 +37,21 @@ class SplashScreenFragment : Fragment() {
 
         navController = findNavController()
 
-        mainViewModel.tokenInfoLiveData.observe(viewLifecycleOwner, {
+        mainViewModel.tokenInfoLiveData.observeOnce {
+            Timber.d("Api Token Info : $it")
 
             if (it == null || it.expiresAt < System.currentTimeMillis()) {
                 // Token has expired fetch a new one using api
-                Timber.d("Token expired !!! fetchNewApiToken")
                 mainViewModel.fetchTokenInfoApi()
+                navigateToMain()
             } else {
-                navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
+                Timber.d("Token expires at : ${it.expiresAt}")
+                navigateToMain()
             }
-        })
+        }
+    }
+
+    private fun navigateToMain() {
+        navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
     }
 }

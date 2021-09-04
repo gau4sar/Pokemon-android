@@ -21,10 +21,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
@@ -219,4 +216,13 @@ fun Activity.requestPermission() {
             Manifest.permission.ACCESS_COARSE_LOCATION
         ), LOCATION_REQUEST_CODE
     )
+}
+
+fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
+    observeForever(object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            removeObserver(this)
+        }
+    })
 }
