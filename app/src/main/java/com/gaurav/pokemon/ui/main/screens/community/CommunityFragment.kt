@@ -26,6 +26,8 @@ class CommunityFragment : Fragment() {
 
     private lateinit var friendsListAdapter: FriendsListAdapter
 
+    private lateinit var foesListAdapter: FoesListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +41,7 @@ class CommunityFragment : Fragment() {
 
         setupRecyclerView()
 
-        mainViewModel.fetchFriendsList.observe(viewLifecycleOwner, {response ->
+        mainViewModel.fetchFriendsList.observe(viewLifecycleOwner, { response ->
             when (response) {
 
                 is ResponseHandler.Success -> {
@@ -60,6 +62,11 @@ class CommunityFragment : Fragment() {
                 }
             }
         })
+
+
+        mainViewModel.fetchFoesList.observe(viewLifecycleOwner, { foeList ->
+            foesListAdapter.differ.submitList(foeList)
+        })
     }
 
     private fun setupRecyclerView() {
@@ -68,6 +75,13 @@ class CommunityFragment : Fragment() {
 
         binding.rvFriends.apply {
             adapter = friendsListAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        foesListAdapter = FoesListAdapter(requireActivity())
+
+        binding.rvFoes.apply {
+            adapter = foesListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
     }

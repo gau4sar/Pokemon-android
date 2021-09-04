@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val viewModelModule by lazy {
     module {
-        viewModel { MainViewModel(get(), get(named(Constants.POKEAPI_SCOPE))) }
+        viewModel { MainViewModel(get(), get(named(Constants.POKEAPI_SCOPE)), get()) }
 
         viewModel { PokeApiViewModel(get(named(Constants.POKEAPI_SCOPE))) }
     }
