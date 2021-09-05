@@ -136,4 +136,12 @@ class MainViewModel(
                 }
             }
         }
+
+    /**
+     * Captured info
+     */
+
+    val observeCapturedList = firebaseApiRepository.observeCapturedInfo
+
+    val fetchCapturedList = firebaseApiRepository.fetchCapturedList
 }

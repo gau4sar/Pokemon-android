@@ -10,6 +10,7 @@ class FirebaseApiRepository(
     private val firebaseDao: FirebaseDao
 ) {
 
+    // Api Token Indo
     val fetchTokenInfo = firebaseDao.fetchTokenInfo()
 
     suspend fun saveTokenInfo(apiTokenInfo: ApiTokenInfo) =
@@ -17,6 +18,7 @@ class FirebaseApiRepository(
 
     suspend fun fetchTokenInfoApi() = firebaseApiRemoteDataSource.getApiTokenInfo()
 
+    // Community info
     val observeCommunityActivity = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchFriendsList() },
         networkRequest = { firebaseApiRemoteDataSource.getCommunity() },
@@ -27,10 +29,19 @@ class FirebaseApiRepository(
 
     val fetchFoesList = firebaseDao.fetchFoesList()
 
+    // MyTeam info
     val observeMyTeam = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchMyTeamList() },
         networkRequest = { firebaseApiRemoteDataSource.getMyTeam() },
         roomQueryToSaveData = { firebaseDao.insertMyTeamList(it) })
 
     val fetchMyTeamList = firebaseDao.fetchMyTeamList()
+
+    //Captured Info
+    val observeCapturedInfo = responseLiveData(
+        roomQueryToRetrieveData = { firebaseDao.fetchCapturedList() },
+        networkRequest = { firebaseApiRemoteDataSource.getCaptured() },
+        roomQueryToSaveData = { firebaseDao.insertCapturedList(it) })
+
+    val fetchCapturedList = firebaseDao.fetchCapturedList()
 }

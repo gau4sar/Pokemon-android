@@ -5,10 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gaurav.pokemon.data.model.ApiTokenInfo
-import com.gaurav.pokemon.data.model.Foe
-import com.gaurav.pokemon.data.model.Friend
-import com.gaurav.pokemon.data.model.MyTeam
+import com.gaurav.pokemon.data.model.*
 
 @Dao
 interface FirebaseDao {
@@ -36,5 +33,11 @@ interface FirebaseDao {
 
     @Query("SELECT * FROM myTeam")
     fun fetchMyTeamList(): LiveData<List<MyTeam>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCapturedList(capturedList: List<PokemonLocationInfo>)
+
+    @Query("SELECT * FROM pokemonLocationInfo")
+    fun fetchCapturedList(): LiveData<List<PokemonLocationInfo>>
 
 }

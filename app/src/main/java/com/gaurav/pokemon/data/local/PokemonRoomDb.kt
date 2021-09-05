@@ -11,11 +11,11 @@ import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
-
 @Database(
     entities = [ApiTokenInfo::class, Friend::class, Foe::class,
-        Pokemon::class, PokemonInfo::class, MyTeam::class],
-    version = 6
+        Pokemon::class, PokemonInfo::class, MyTeam::class,
+        PokemonLocationInfo::class],
+    version = 7
 )
 
 @TypeConverters(ListConverters::class)
