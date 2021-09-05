@@ -24,5 +24,5 @@ class PokemonApiRepository(
     // TODO:: Fetch from room
     //fun fetchPokemonDetails(id: Int) = pokemonDao.fetchPokemonDetails(id)
 
-    suspend fun fetchPokemonDetails(id: Int) = pokemonApiRemoteDataSource.getPokemonDetails(id)
+    suspend fun fetchPokemonDetails(name: String) = pokemonApiRemoteDataSource.getPokemonDetails(name)
 }

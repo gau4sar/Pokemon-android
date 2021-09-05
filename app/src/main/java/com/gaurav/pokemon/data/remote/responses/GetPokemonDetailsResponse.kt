@@ -1,7 +1,7 @@
 package com.gaurav.pokemon.data.remote.responses
 
-import com.gaurav.pokemon.data.model.PokemonDetails
+import com.gaurav.pokemon.data.model.Pokemon
 
 class GetPokemonDetailsResponse(
-    val pokemonDetails: PokemonDetails
+    val pokemon: Pokemon
 )

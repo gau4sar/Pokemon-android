@@ -22,7 +22,7 @@ class FirebaseApiRemoteDataSource(private val apiService: FirebaseApiService) : 
         return safeApiCall { apiService.getMyTeam() }
     }
 
-    suspend fun getCaptured(): ResponseHandler<List<PokemonLocationInfo>> {
+    suspend fun getCapturedList(): ResponseHandler<List<PokemonLocationInfo>> {
         return safeApiCall { apiService.getCaptured() }
     }
 }

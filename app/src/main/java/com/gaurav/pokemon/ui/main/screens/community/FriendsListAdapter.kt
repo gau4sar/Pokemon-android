@@ -64,7 +64,7 @@ class FriendsListAdapter(val context: FragmentActivity) :
 
         holder.binding.apply {
             tvName.text = "${friend.name}"
-            tvCapturedAt.text = " : ${getFormattedDateTime(friend.pokemon.capturedAt)}"
+            tvCapturedAt.text = " : ${getFormattedDateTime(friend.pokemonCapturedInfo.capturedAt)}"
 
             val imageUrl = ""
             Glide.with(context)

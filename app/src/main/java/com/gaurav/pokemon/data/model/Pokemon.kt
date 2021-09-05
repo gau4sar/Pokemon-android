@@ -1,28 +1,49 @@
 package com.gaurav.pokemon.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.gaurav.pokemon.data.model.pokemon.*
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
-@Entity(
-    tableName = "pokemon", foreignKeys = [
-        ForeignKey(
-            entity = Friend::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("friend_id_fk"),
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
-)
 data class Pokemon(
-    @SerializedName("captured_at")
-    val capturedAt: String,
+
+    val abilities: List<Ability>,
+
+    @SerializedName("base_experience")
+    val baseExperience: Int,
+
+    val forms: List<Form>,
+
+    @SerializedName("game_indices")
+    val gameIndices: List<GameIndice>,
+
+    val height: Int,
+
+    @Ignore
+    @SerializedName("held_items")
+    val heldItems: List<HeldItem>,
+
     @PrimaryKey
     val id: Int,
+
+    @SerializedName("is_default")
+    val isDefault: Boolean,
+
+    @SerializedName("location_area_encounters")
+    val locationAreaEncounters: String,
+
+    val moves: List<Move>,
     val name: String,
-    @ColumnInfo(name = "friend_id_fk", index = true)
-    val friendIdFk: Int
-) : Serializable
+    val order: Int,
+
+    @Ignore
+    @SerializedName("past_types")
+    val pastTypes: List<Any>,
+
+    val species: Species,
+    val sprites: Sprites,
+    val stats: List<Stat>,
+    val types: List<Type>,
+    val weight: Int
+
+)

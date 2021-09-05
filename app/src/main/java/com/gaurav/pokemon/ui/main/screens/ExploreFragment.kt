@@ -8,16 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
-import com.gaurav.pokemon.data.model.Pokemon
-import com.gaurav.pokemon.data.model.PokemonFound
-import com.gaurav.pokemon.data.model.PokemonInfo
-import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.databinding.FragmentExploreBinding
-import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.*
-import com.gaurav.pokemon.utils.Constants.POKEMON_FOUND
 import com.gaurav.pokemon.utils.GeneralUtils.generateRandomMarkers
 import com.gaurav.pokemon.utils.GeneralUtils.pickPokemonsRandomly
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,21 +23,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.java.KoinJavaComponent
 import timber.log.Timber
-import java.util.*
-
 
 class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
+
     private lateinit var googleMap: GoogleMap
-
     lateinit var callback: OnMapReadyCallback
-
-    var counter = 1
 
     private var _binding: FragmentExploreBinding? = null
     private val binding get() = _binding!!
@@ -70,9 +59,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     private fun viewModelWorks() {
 
-        mainViewModel.pokemonInfoListAndCurrentLocationLiveData.observe(
-            viewLifecycleOwner,
-            {(pokemonInfoList, currentLocation) ->
+        mainViewModel.pokemonListListAndCurrentLocationLiveData.observe(viewLifecycleOwner,
+            { (pokemonInfoList, currentLocation) ->
 
                 Timber.d("pokemonInfoListAndCurrentLocationLiveData ${pokemonInfoList} || ${currentLocation}")
 
@@ -81,7 +69,6 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 val totalPokemons = (minPokemon..MAX_POKEMONS).random()
 
                 pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
-
                     callBack(
                         LatLng(currentLocation.latitude, currentLocation.longitude),
                         totalPokemons, randomPokemonList
@@ -89,31 +76,32 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 }
             })
 
-       /* mainViewModel.fetchPokemonInfoList.observe(viewLifecycleOwner, { pokemonInfoList ->
-            Timber.d("Saved pokemon info list : $pokemonInfoList")
-            // TODO :: Use the info list here to set the item information on the pokemon balls
+        /* mainViewModel.fetchPokemonInfoList.observe(viewLifecycleOwner, { pokemonInfoList ->
+             Timber.d("Saved pokemon info list : $pokemonInfoList")
+             // TODO :: Use the info list here to set the item information on the pokemon balls
 
-            val minPokemon = MAX_POKEMONS - 4
+             val minPokemon = MAX_POKEMONS - 4
 
-            val totalPokemons = (minPokemon..MAX_POKEMONS).random()
+             val totalPokemons = (minPokemon..MAX_POKEMONS).random()
 
-            pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
+             pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
 
-                mainViewModel.currentLocationLiveData.observe(
-                    viewLifecycleOwner,
-                    { currentLocation ->
-                        callBack(
-                            LatLng(currentLocation.latitude, currentLocation.longitude),
-                            totalPokemons, randomPokemonList
-                        )
-                    })
+                 mainViewModel.currentLocationLiveData.observe(
+                     viewLifecycleOwner,
+                     { currentLocation ->
+                         callBack(
+                             LatLng(currentLocation.latitude, currentLocation.longitude),
+                             totalPokemons, randomPokemonList
+                         )
+                     })
 
-                mainViewModel.moveToLocationLiveData.observe(
-                    viewLifecycleOwner,
-                    { moveCameraToLocation(it) })
-            }
-        })
-*/
+                 mainViewModel.moveToLocationLiveData.observe(
+                     viewLifecycleOwner,
+                     { moveCameraToLocation(it) })
+             }
+         })
+         */
+
         mainViewModel.moveToLocationLiveData.observe(
             viewLifecycleOwner,
             { moveCameraToLocation(it) })
@@ -122,7 +110,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private fun callBack(
         latLng: LatLng,
         totalPokemons: Int,
-        pokemonList: MutableList<PokemonInfo>
+        pokemonList: MutableList<PokemonList>
     ) {
         callback = OnMapReadyCallback { _googleMap ->
 
@@ -157,7 +145,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
             val intent = Intent(requireActivity(), PokemonDetailsActivity::class.java)
             val bundle = Bundle()
-            when (counter) {
+
+            /*when (counter) {
                 1 -> {
                     bundle.putSerializable(
                         POKEMON_FOUND,
@@ -178,7 +167,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                     counter = 0
                 }
             }
-            counter++
+            counter++*/
+
+            // TODO :: Send info to details page
+
             intent.putExtras(bundle)
             startActivity(intent)
 
@@ -205,18 +197,18 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         }
     }
 
-    private fun addMarker(latLng: LatLng, pokemonInfo: PokemonInfo) {
+    private fun addMarker(latLng: LatLng, pokemonList: PokemonList) {
         val marker = googleMap.addMarker(
             MarkerOptions()
                 .position(LatLng(latLng.latitude, latLng.longitude))
-                .title(pokemonInfo.name)
+                .title(pokemonList.name)
                 .icon(
                     BitmapDescriptorFactory
                         .fromResource(R.drawable.icons8_pokeball_96)
                 )
         )
 
-        marker?.tag = pokemonInfo
+        marker?.tag = pokemonList
     }
 
     private fun moveCameraToLocation(latLng: LatLng) {

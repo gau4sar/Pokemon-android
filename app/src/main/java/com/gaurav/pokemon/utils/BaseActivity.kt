@@ -36,7 +36,7 @@ open class BaseActivity : AppCompatActivity() {
         initializeTheLocationRequest()
         listenTheLocationCallBack()
 
-        mainViewModel.observePokemonInfoList(POKEMON_ITEM_LIMIT).observe(this, { apiResponse ->
+        /*mainViewModel.observePokemonInfoList(POKEMON_ITEM_LIMIT).observe(this, { apiResponse ->
 
             when (apiResponse) {
 
@@ -55,7 +55,7 @@ open class BaseActivity : AppCompatActivity() {
                 is ResponseHandler.Loading -> {
                 }
             }
-        })
+        })*/
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

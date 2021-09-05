@@ -11,14 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gaurav.pokemon.R
-import com.gaurav.pokemon.data.model.PokemonFound
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemCapturedBinding
 import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants
-import com.google.android.gms.maps.model.LatLng
+import com.gaurav.pokemon.utils.GeneralUtils.getPokemonImageUrl
 import timber.log.Timber
 
-class CapturedPokemonAdapter(val fragmentActivity: FragmentActivity) :
+class CapturedPokemonAdapter(
+    private val fragmentActivity: FragmentActivity,
+    private val pokemonLocationInfoList: List<PokemonLocationInfo>
+) :
+
     RecyclerView.Adapter<CapturedPokemonAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemCapturedBinding) : RecyclerView.ViewHolder(binding.root)
@@ -37,26 +41,30 @@ class CapturedPokemonAdapter(val fragmentActivity: FragmentActivity) :
 
         Timber.d("onBindViewHolder")
 
-        Glide.with(fragmentActivity)
-            .load(ContextCompat.getDrawable(fragmentActivity, R.drawable.ic_barbasaur_front))
-            .apply(RequestOptions.circleCropTransform())
-            .into(holder.binding.ivPokemon)
+        pokemonLocationInfoList.forEach {pokemonLocationInfo ->
 
-        holder.binding.ivPokemon.setOnClickListener {
-            val intent = Intent(fragmentActivity, PokemonDetailsActivity::class.java)
-            val bundle = Bundle()
+            val url = getPokemonImageUrl(pokemonLocationInfo.id)
 
-            bundle.putSerializable(
-                Constants.POKEMON_FOUND,
-                PokemonFound(1, false, LatLng(27.5259, 95.5066), false)
-            )
+            Glide.with(fragmentActivity)
+                .load(url)
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.binding.ivPokemon)
 
-            intent.putExtras(bundle)
-            startActivity(fragmentActivity, intent, bundle)
+            holder.binding.ivPokemon.setOnClickListener {
+                val intent = Intent(fragmentActivity, PokemonDetailsActivity::class.java)
+                val bundle = Bundle()
+
+                bundle.putInt(Constants.POKEMON_ID, pokemonLocationInfo.id)
+                bundle.putString(Constants.POKEMON_NAME, pokemonLocationInfo.name)
+                bundle.putInt(Constants.POKEMON_STATUS, Constants.POKEMON_CAPTURED)
+
+                intent.putExtras(bundle)
+                startActivity(fragmentActivity, intent, bundle)
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return 15
+        return pokemonLocationInfoList.size
     }
 }

@@ -7,13 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gaurav.pokemon.adapter.CapturedPokemonAdapter
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.FragmentCapturedBinding
+import com.gaurav.pokemon.ui.main.MainViewModel
+import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.observeOnce
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 /**
  * CapturedFragment - A [Fragment] subclass used to display the Captured page on screen.
  */
 class CapturedFragment : Fragment() {
+
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private var _binding: FragmentCapturedBinding? = null
     private val binding get() = _binding!!
@@ -29,12 +36,22 @@ class CapturedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Timber.d("onViewCreated called !!!")
+        mainViewModel.capturedListLiveData.observe(viewLifecycleOwner, {
+            if (it == null) {
+                mainViewModel.fetchCapturedList()
+            } else {
+                setupRecyclerView(it)
+            }
+        })
+    }
+
+    private fun setupRecyclerView(pokemonLocationInfoList: List<PokemonLocationInfo>) {
 
         val capturedPokemonAdapter =
             context?.let {
                 CapturedPokemonAdapter(
-                    requireActivity()
+                    requireActivity(),
+                    pokemonLocationInfoList
                 )
             }
 

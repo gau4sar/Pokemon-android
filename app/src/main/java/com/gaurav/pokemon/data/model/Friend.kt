@@ -8,5 +8,5 @@ data class Friend(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val pokemon: Pokemon
+    val pokemonCapturedInfo: PokemonCapturedInfo
 ) : Serializable

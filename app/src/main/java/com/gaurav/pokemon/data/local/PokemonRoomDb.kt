@@ -8,12 +8,11 @@ import androidx.room.TypeConverters
 import com.gaurav.pokemon.data.local.dao.FirebaseDao
 import com.gaurav.pokemon.data.local.dao.PokemonDao
 import com.gaurav.pokemon.data.model.*
-import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.utils.Constants.POKEMON_ROOM_DB_NAME
 
 @Database(
     entities = [ApiTokenInfo::class, Friend::class, Foe::class,
-        Pokemon::class, PokemonInfo::class, MyTeam::class,
+        PokemonCapturedInfo::class, PokemonList::class, MyTeam::class,
         PokemonLocationInfo::class],
     version = 7
 )

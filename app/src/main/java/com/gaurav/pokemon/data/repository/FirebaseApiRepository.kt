@@ -40,8 +40,8 @@ class FirebaseApiRepository(
     //Captured Info
     val observeCapturedInfo = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchCapturedList() },
-        networkRequest = { firebaseApiRemoteDataSource.getCaptured() },
+        networkRequest = { firebaseApiRemoteDataSource.getCapturedList() },
         roomQueryToSaveData = { firebaseDao.insertCapturedList(it) })
 
-    val fetchCapturedList = firebaseDao.fetchCapturedList()
+    suspend fun fetchCapturedList() = firebaseApiRemoteDataSource.getCapturedList()
 }

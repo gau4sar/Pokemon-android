@@ -1,7 +1,7 @@
 package com.gaurav.pokemon.utils
 
 import android.location.Location
-import com.gaurav.pokemon.data.model.PokemonInfo
+import com.gaurav.pokemon.data.model.PokemonList
 import com.google.android.gms.maps.model.LatLng
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -12,12 +12,12 @@ object GeneralUtils {
     fun getAuthToken(encryptPrefUtils: EncryptPrefUtils) = encryptPrefUtils.getApiToken()
 
     fun pickPokemonsRandomly(
-        totalPokemons: Int, pokemonList: List<PokemonInfo>,
-        sendRandomPokemonList: (MutableList<PokemonInfo>) -> Unit = {}
+        totalPokemons: Int, pokemonList: List<PokemonList>,
+        sendRandomPokemonList: (MutableList<PokemonList>) -> Unit = {}
     ) {
 
 
-        val randomlySelectedPokemons = mutableListOf<PokemonInfo>()
+        val randomlySelectedPokemons = mutableListOf<PokemonList>()
 
         val mutablePokemonList = pokemonList.toMutableList()
 
@@ -101,7 +101,7 @@ object GeneralUtils {
         //2020-02-16T00:00:00.000Z
         val outputPattern = "MMM dd---,yyyy"
 
-        return parseDates(date, outputPattern).replace("---","th")
+        return parseDates(date, outputPattern).replace("---", "th")
     }
 
     fun parseDates(dateString: String, outputPattern: String): String {
@@ -113,4 +113,8 @@ object GeneralUtils {
         return outputFormat.format(date)
     }
 
+
+    fun getPokemonImageUrl(id: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png"
+    }
 }

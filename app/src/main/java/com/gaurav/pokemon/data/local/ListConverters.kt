@@ -1,8 +1,8 @@
 package com.gaurav.pokemon.data.local
 
 import androidx.room.TypeConverter
+import com.gaurav.pokemon.data.model.PokemonCapturedInfo
 import com.gaurav.pokemon.data.model.Pokemon
-import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.pokemon.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,14 +17,14 @@ class ListConverters {
      */
 
     @TypeConverter
-    fun pokemonDetailsObjectToJson(detailsList: PokemonDetails?): String? {
-        val type = object : TypeToken<PokemonDetails>() {}.type
-        return gson.toJson(detailsList, type)
+    fun pokemonDetailsObjectToJson(list: Pokemon?): String? {
+        val type = object : TypeToken<Pokemon>() {}.type
+        return gson.toJson(list, type)
     }
 
     @TypeConverter
-    fun pokemonDetailsJsonToObject(pokemonDetailsString: String): PokemonDetails? {
-        val type = object : TypeToken<PokemonDetails>() {}.type
+    fun pokemonDetailsJsonToObject(pokemonDetailsString: String): Pokemon? {
+        val type = object : TypeToken<Pokemon>() {}.type
         return gson.fromJson(pokemonDetailsString, type)
     }
 
@@ -129,14 +129,14 @@ class ListConverters {
      */
 
     @TypeConverter
-    fun pokemonObjectToJson(pokemon: Pokemon): String? {
-        val type = object : TypeToken<Pokemon>() {}.type
-        return gson.toJson(pokemon, type)
+    fun pokemonObjectToJson(pokemonCapturedInfo: PokemonCapturedInfo): String? {
+        val type = object : TypeToken<PokemonCapturedInfo>() {}.type
+        return gson.toJson(pokemonCapturedInfo, type)
     }
 
     @TypeConverter
-    fun pokemonJsonToList(pokemonString: String): Pokemon? {
-        val type = object : TypeToken<Pokemon>() {}.type
+    fun pokemonJsonToList(pokemonString: String): PokemonCapturedInfo? {
+        val type = object : TypeToken<PokemonCapturedInfo>() {}.type
         return gson.fromJson(pokemonString, type)
     }
 }

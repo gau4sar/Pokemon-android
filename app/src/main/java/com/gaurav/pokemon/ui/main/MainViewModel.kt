@@ -74,7 +74,7 @@ class MainViewModel(
     /**
      * Pokemon info list
      */
-    fun observePokemonInfoList(limit: String): LiveData<ResponseHandler<List<PokemonInfo>>> =
+    fun observePokemonInfoList(limit: String): LiveData<ResponseHandler<List<PokemonList>>> =
         pokemonApiRepository.observePokemonInfoList(limit)
 
     val fetchPokemonInfoList = pokemonApiRepository.fetchPokemonInfoList
@@ -84,19 +84,19 @@ class MainViewModel(
      * Pokemon details
      */
 
-    private val _pokemonDetailsLiveData = MutableLiveData<PokemonDetails>()
-    val pokemonDetailsLiveData: LiveData<PokemonDetails> = _pokemonDetailsLiveData
+    private val _pokemonLiveData = MutableLiveData<Pokemon>()
+    val pokemonLiveData: LiveData<Pokemon> = _pokemonLiveData
 
-    fun fetchPokemonDetails(id: Int) {
+    fun fetchPokemonDetails(name: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonApiRepository.fetchPokemonDetails(id).let { apiResponse ->
+            pokemonApiRepository.fetchPokemonDetails(name).let { apiResponse ->
                 when (apiResponse) {
                     is ResponseHandler.Success -> {
 
-                        apiResponse.data?.let { getPokemonDetailsResponse ->
-                            Timber.d("Pokemon details info ${getPokemonDetailsResponse}")
-                            _pokemonDetailsLiveData.postValue(getPokemonDetailsResponse)
+                        apiResponse.data?.let { getPokemonResponse ->
+                            Timber.d("Pokemon details info ${getPokemonResponse}")
+                            _pokemonLiveData.postValue(getPokemonResponse)
                         }
                     }
 
@@ -120,19 +120,19 @@ class MainViewModel(
 
     val fetchMyTeamList = firebaseApiRepository.fetchMyTeamList
 
-    val pokemonInfoListAndCurrentLocationLiveData: LiveData<Pair<List<PokemonInfo>, Location>> =
-        object : MediatorLiveData<Pair<List<PokemonInfo>, Location>>() {
-            var pokemonInfoList: List<PokemonInfo>? = null
+    val pokemonListListAndCurrentLocationLiveData: LiveData<Pair<List<PokemonList>, Location>> =
+        object : MediatorLiveData<Pair<List<PokemonList>, Location>>() {
+            var pokemonListList: List<PokemonList>? = null
             var location: Location? = null
 
             init {
                 addSource(fetchPokemonInfoList) { pokemonInfoList ->
-                    this.pokemonInfoList = pokemonInfoList
+                    this.pokemonListList = pokemonInfoList
                     location?.let { value = pokemonInfoList to it }
                 }
                 addSource(currentLocationLiveData) { location ->
                     this.location = location
-                    pokemonInfoList?.let { value = it to location }
+                    pokemonListList?.let { value = it to location }
                 }
             }
         }
@@ -141,7 +141,33 @@ class MainViewModel(
      * Captured info
      */
 
+    private val _capturedListLiveData = MutableLiveData<List<PokemonLocationInfo>>()
+    val capturedListLiveData: LiveData<List<PokemonLocationInfo>> = _capturedListLiveData
+
     val observeCapturedList = firebaseApiRepository.observeCapturedInfo
 
-    val fetchCapturedList = firebaseApiRepository.fetchCapturedList
+    fun fetchCapturedList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            firebaseApiRepository.fetchCapturedList().let { apiResponse ->
+                when (apiResponse) {
+
+                    is ResponseHandler.Success -> {
+
+                        apiResponse.data?.let { getCapturedListResponse ->
+                            Timber.d("Pokemon details info $getCapturedListResponse")
+                            _capturedListLiveData.postValue(getCapturedListResponse)
+                        }
+                    }
+
+                    is ResponseHandler.Error -> {
+                        Timber.e("Get token info error response: $apiResponse")
+                        //handleApiError(apiResponse, requireActivity())
+                    }
+
+                    is ResponseHandler.Loading -> {
+                    }
+                }
+            }
+        }
+    }
 }

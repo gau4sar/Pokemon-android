@@ -10,12 +10,14 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
-import com.gaurav.pokemon.data.model.PokemonFound
-import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.utils.Constants.POKEMON_FOUND
-import com.gaurav.pokemon.utils.handleApiError
+import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
+import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
+import com.gaurav.pokemon.utils.Constants.POKEMON_NAME
+import com.gaurav.pokemon.utils.Constants.POKEMON_STATUS
+import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.showToast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,22 +31,26 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.java.KoinJavaComponent
 import timber.log.Timber
+import kotlin.math.abs
 
 class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
-    private lateinit var googleMap: GoogleMap
 
-    lateinit var callback: OnMapReadyCallback
+    private lateinit var googleMap: GoogleMap
+    private lateinit var callback: OnMapReadyCallback
 
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
 
     private val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
+
+    private var isWild = false
+    private var isCaptured = false
+    private var isCapturedByOther = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,30 +63,42 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().intent?.let { it ->
-            it.getSerializableExtra(POKEMON_FOUND)?.let {
+        requireActivity().intent?.extras?.let { it ->
 
-                val type = object : TypeToken<PokemonFound>() {}.type
-                val jsonString = gson.toJson(it, type).toString()
-                val pokemonFound = gson.fromJson<PokemonFound>(jsonString, type)
+            it.getInt(POKEMON_STATUS).let {
+                Timber.d("Pokemon status : $it")
 
-                Timber.d("POKEMON_FOUND $pokemonFound")
+                when (it) {
+                    POKEMON_WILD -> {
+                        isWild = true
+                    }
 
-                setMarker(pokemonFound.pokemon_location)
-                initializeTheUi(pokemonFound)
+                    POKEMON_CAPTURED -> {
+                        isCaptured = true
+                    }
 
-
-                // TODO :: We need to get the URL from the Pokemon balls list and pass it hardcoding for testing
-                val pokeDetailsUrl = "https://pokeapi.co/api/v2/pokemon/1/"
-                val pokemonId = getPokemonIdFromUrl(pokeDetailsUrl)
-
-                viewModelWorks(pokemonId)
+                    POKEMON_CAPTURED_BY_OTHER -> {
+                        isCapturedByOther = true
+                    }
+                }
             }
+
+            it.getString(POKEMON_NAME)?.let { pokemonName ->
+                // Get details for pokemonName
+                Timber.d("Pokemon Name : $pokemonName")
+                mainViewModel.fetchPokemonDetails(pokemonName)
+            }
+
+            // Observer for getting pokemon details information
+            mainViewModel.pokemonLiveData.observe(requireActivity(), {
+                Timber.d("Pokemon details response : $it")
+                it?.let { setupUi(it) }
+            })
         }
     }
 
-    private fun initializeTheUi(pokemonFound: PokemonFound) {
-        Timber.d("pokemonFound $pokemonFound")
+    private fun setupUi(pokemon: Pokemon) {
+        Timber.d("setupUi $pokemon")
 
         val captureButton: MaterialButton = binding.btnCapture
         val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
@@ -90,15 +108,13 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         val appBarLayout: AppBarLayout = binding.appBarLayout
         val pokemonInToolbar: ImageView = binding.ivPokemonToolbar
 
-        pokemonFound.name?.let{
-            binding.collapsingToolbar.title = it
-        }
+        binding.collapsingToolbar.title = pokemon.name
 
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
 
-        if (pokemonFound.isWild) {
+        if (isWild) {
             pokemonCaptured.visibility = View.GONE
             captureButton.visibility = View.VISIBLE
         } else {
@@ -107,7 +123,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
             tvFoundCaptured.text = getString(R.string.captured_in)
         }
 
-        if (pokemonFound.isCapturedByOther) {
+        if (isCapturedByOther) {
             pokemonCaptured.visibility = View.GONE
             pokemonInToolbar.visibility = View.GONE
             captureButton.visibility = View.GONE
@@ -116,9 +132,9 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
             layoutCapturedBy.visibility = View.VISIBLE
         }
 
-        if (!pokemonFound.isCapturedByOther && !pokemonFound.isWild) {
-            appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
-                if (Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+        if (!isCapturedByOther && !isWild) {
+            appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { barLayout, verticalOffset ->
+                if (abs(verticalOffset) - barLayout.totalScrollRange == 0) {
                     pokemonCaptured.visibility = View.GONE
                     pokemonInToolbar.visibility = View.VISIBLE
                 } else {
@@ -161,42 +177,10 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     }
 
-    private fun viewModelWorks(pokemonId: Int) {
 
-        Timber.d("Pokemon ID : $pokemonId")
-        mainViewModel.fetchPokemonDetails(pokemonId)
-
-        mainViewModel.pokemonDetailsLiveData.observe(requireActivity(), {
-            Timber.d("Pokemon details response : $it")
-        })
-
-        /*mainViewModel.observePokemonDetails(pokemonId).observe(viewLifecycleOwner, { apiResponse ->
-            when (apiResponse) {
-
-                is ResponseHandler.Success -> {
-
-                    apiResponse.data?.let { getPokemonDetailsResponse ->
-                        Timber.d("Pokemon info list ${getPokemonDetailsResponse}")
-                    }
-                }
-
-                is ResponseHandler.Error -> {
-                    Timber.e("Get token info error response: $apiResponse")
-                    handleApiError(apiResponse, requireActivity())
-                }
-
-                is ResponseHandler.Loading -> {
-                }
-            }
-        })*/
-    }
-
-    private fun getPokemonIdFromUrl(pokeDetailsUrl: String): Int {
-        return pokeDetailsUrl
-            .replace("https://pokeapi.co/api/v2/pokemon/", "")
-            .replace("/", "")
-            .toInt()
-    }
+    /**
+     * Displays pop-up dialog to confirm capture
+     */
 
     private fun showCaptureDialog() {
         val dialog = Dialog(requireActivity())

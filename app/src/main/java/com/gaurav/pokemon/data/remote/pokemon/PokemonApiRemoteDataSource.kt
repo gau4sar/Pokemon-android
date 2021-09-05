@@ -1,9 +1,8 @@
 package com.gaurav.pokemon.data.remote.pokemon
 
-import com.gaurav.pokemon.data.model.PokemonDetails
+import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.remote.BaseDataSource
 import com.gaurav.pokemon.data.remote.ResponseHandler
-import com.gaurav.pokemon.data.remote.responses.GetPokemonDetailsResponse
 import com.gaurav.pokemon.data.remote.responses.GetPokemonListResponse
 
 class PokemonApiRemoteDataSource(private val apiService: PokeApiService) : BaseDataSource() {
@@ -12,7 +11,7 @@ class PokemonApiRemoteDataSource(private val apiService: PokeApiService) : BaseD
         return safeApiCall { apiService.getPokemonInfoList(limit) }
     }
 
-    suspend fun getPokemonDetails(id: Int): ResponseHandler<PokemonDetails> {
-        return safeApiCall { apiService.getPokemonDetailsById(id.toString()) }
+    suspend fun getPokemonDetails(name: String): ResponseHandler<Pokemon> {
+        return safeApiCall { apiService.getPokemonDetails(name) }
     }
 }
