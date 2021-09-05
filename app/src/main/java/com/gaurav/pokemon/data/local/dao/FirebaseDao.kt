@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gaurav.pokemon.data.model.*
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 
 @Dao
 interface FirebaseDao {
@@ -17,16 +18,10 @@ interface FirebaseDao {
     fun fetchTokenInfo(): LiveData<ApiTokenInfo>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFriendsList(friends: List<Friend>)
+    suspend fun insertCommunityActivity(friends: FriendsAndFoes)
 
-    @Query("SELECT * FROM friend")
-    fun fetchFriendsList(): LiveData<List<Friend>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFoesList(friends: List<Foe>)
-
-    @Query("SELECT * FROM foe")
-    fun fetchFoesList(): LiveData<List<Foe>>
+    @Query("SELECT * FROM friendsAndFoes")
+    fun fetchCommunityActivity(): LiveData<FriendsAndFoes>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMyTeamList(myTeamList: List<MyTeam>)

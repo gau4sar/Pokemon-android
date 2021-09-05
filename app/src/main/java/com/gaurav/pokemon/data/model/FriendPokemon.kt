@@ -1,28 +1,26 @@
 package com.gaurav.pokemon.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 @Entity(
-    tableName = "pokemon", foreignKeys = [
+    tableName = "pokemonFriend",
+    indices = [Index(value = ["friend_id_fk"], unique = true)],
+    foreignKeys = [
         ForeignKey(
             entity = Friend::class,
-            parentColumns = arrayOf("id"),
+            parentColumns = arrayOf("name"),
             childColumns = arrayOf("friend_id_fk"),
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
-data class PokemonCapturedInfo(
+data class FriendPokemon(
     @SerializedName("captured_at")
     val capturedAt: String,
     @PrimaryKey
     val id: Int,
-    val name: String,
-    @ColumnInfo(name = "friend_id_fk", index = true)
-    val friendIdFk: Int
+    @ColumnInfo(name = "friend_id_fk")
+    val name: String
 ) : Serializable

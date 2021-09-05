@@ -64,15 +64,18 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
                 Timber.d("pokemonInfoListAndCurrentLocationLiveData ${pokemonInfoList} || ${currentLocation}")
 
-                val minPokemon = MAX_POKEMONS - 4
+                if(pokemonInfoList.isNotEmpty()) {
 
-                val totalPokemons = (minPokemon..MAX_POKEMONS).random()
+                    val minPokemon = MAX_POKEMONS - 4
 
-                pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
-                    callBack(
-                        LatLng(currentLocation.latitude, currentLocation.longitude),
-                        totalPokemons, randomPokemonList
-                    )
+                    val totalPokemons = (minPokemon..MAX_POKEMONS).random()
+
+                    pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
+                        callBack(
+                            LatLng(currentLocation.latitude, currentLocation.longitude),
+                            totalPokemons, randomPokemonList
+                        )
+                    }
                 }
             })
 

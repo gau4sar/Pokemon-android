@@ -1,7 +1,11 @@
-package com.gaurav.pokemon.ui.main.screens.community
+package com.gaurav.pokemon.adapter
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.databinding.ItemFriendBinding
+import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.getFormattedDateTime
 
 /**
@@ -58,21 +65,34 @@ class FriendsListAdapter(val context: FragmentActivity) :
         return FriendsViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
 
         val friend = differ.currentList[position]
 
-        holder.binding.apply {
-            tvName.text = "${friend.name}"
-            tvCapturedAt.text = " : ${getFormattedDateTime(friend.pokemonCapturedInfo.capturedAt)}"
+        val pokemon = friend.pokemon
 
-            val imageUrl = ""
+        holder.binding.apply {
+
+            tvName.text = friend.name
+            tvCapturedAt.text = " : ${getFormattedDateTime(pokemon.capturedAt)}"
+
+            val imageUrl = GeneralUtils.getPokemonImageUrl(pokemon.id)
+
             Glide.with(context)
                 .load(imageUrl)
                 .into(ivPokemon)
 
             cardView.setOnClickListener {
-                //TODO :: Go to details page
+                val intent = Intent(context, PokemonDetailsActivity::class.java)
+                val bundle = Bundle()
+
+                bundle.putInt(Constants.POKEMON_ID, pokemon.id)
+                bundle.putString(Constants.POKEMON_NAME, pokemon.name)
+                bundle.putInt(Constants.POKEMON_STATUS, Constants.POKEMON_CAPTURED)
+
+                intent.putExtras(bundle)
+                ContextCompat.startActivity(context, intent, bundle)
             }
         }
     }

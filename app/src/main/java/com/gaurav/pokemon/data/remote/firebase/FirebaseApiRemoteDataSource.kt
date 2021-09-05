@@ -5,8 +5,7 @@ import com.gaurav.pokemon.data.model.MyTeam
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.data.remote.BaseDataSource
 import com.gaurav.pokemon.data.remote.ResponseHandler
-import com.gaurav.pokemon.data.remote.responses.GetCommunityResponse
-import com.gaurav.pokemon.data.remote.responses.GetMyTeamResponse
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 
 class FirebaseApiRemoteDataSource(private val apiService: FirebaseApiService) : BaseDataSource() {
 
@@ -14,7 +13,7 @@ class FirebaseApiRemoteDataSource(private val apiService: FirebaseApiService) : 
         return safeApiCall { apiService.getToken() }
     }
 
-    suspend fun getCommunity(): ResponseHandler<GetCommunityResponse> {
+    suspend fun getCommunityActivity(): ResponseHandler<FriendsAndFoes> {
         return safeApiCall { apiService.getCommunityActivity() }
     }
 

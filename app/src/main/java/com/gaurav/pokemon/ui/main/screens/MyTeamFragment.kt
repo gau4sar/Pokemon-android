@@ -52,35 +52,32 @@ class MyTeamFragment : Fragment() {
 
     private fun viewModelWorks() {
 
-        mainViewModel.observeMyTeam.observe(
-            viewLifecycleOwner,
-            {apiResponse ->
+        mainViewModel.observeMyTeam.observe(viewLifecycleOwner, { apiResponse ->
 
-                when (apiResponse) {
+            when (apiResponse) {
 
-                    is ResponseHandler.Success -> {
+                is ResponseHandler.Success -> {
 
-                        apiResponse.data?.let { observeMyTeam ->
-                            Timber.d("observeMyTeam $observeMyTeam")
-
-                        }
-                    }
-
-                    is ResponseHandler.Error -> {
-                        Timber.e("Get token info error response: $apiResponse")
-                        //handleApiError(apiResponse, this)
-                    }
-
-                    is ResponseHandler.Loading -> {
+                    apiResponse.data?.let { observeMyTeam ->
+                        Timber.d("observeMyTeam $observeMyTeam")
                     }
                 }
-            })
+
+                is ResponseHandler.Error -> {
+                    Timber.e("Get token info error response: $apiResponse")
+                    //handleApiError(apiResponse, this)
+                }
+
+                is ResponseHandler.Loading -> {
+                }
+            }
+        })
 
         mainViewModel.fetchMyTeamList.observe(
             viewLifecycleOwner,
             {
                 Timber.d("fetchMyTeamList $it")
-                binding.rvMyTeam.adapter = MyTeamAdapter(it,requireActivity())
+                binding.rvMyTeam.adapter = MyTeamAdapter(it, requireActivity())
             })
 
     }

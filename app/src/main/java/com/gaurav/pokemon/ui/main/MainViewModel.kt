@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.lifecycle.*
 import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
 import com.gaurav.pokemon.utils.EncryptPrefUtils
@@ -65,11 +66,8 @@ class MainViewModel(
     /**
      * Community info lists
      */
-    val fetchFriendsList: LiveData<ResponseHandler<List<Friend>>> =
+    val fetchCommunityActivity: LiveData<ResponseHandler<FriendsAndFoes>> =
         firebaseApiRepository.observeCommunityActivity
-
-    val fetchFoesList: LiveData<List<Foe>> =
-        firebaseApiRepository.fetchFoesList
 
     /**
      * Pokemon info list

@@ -3,8 +3,7 @@ package com.gaurav.pokemon.data.remote.firebase
 import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.model.MyTeam
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
-import com.gaurav.pokemon.data.remote.responses.GetCommunityResponse
-import com.gaurav.pokemon.data.remote.responses.GetMyTeamResponse
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -14,7 +13,7 @@ interface FirebaseApiService {
     suspend fun getToken() : ApiTokenInfo
 
     @GET("/activity")
-    suspend fun getCommunityActivity(): GetCommunityResponse
+    suspend fun getCommunityActivity(): FriendsAndFoes
 
     @GET("/my-team")
     suspend fun getMyTeam(): List<MyTeam>

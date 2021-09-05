@@ -1,9 +1,9 @@
 package com.gaurav.pokemon.data.local
 
 import androidx.room.TypeConverter
-import com.gaurav.pokemon.data.model.PokemonCapturedInfo
-import com.gaurav.pokemon.data.model.Pokemon
+import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.data.model.pokemon.*
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.java.KoinJavaComponent.inject
@@ -125,18 +125,66 @@ class ListConverters {
     }
 
     /**
-     * Pokemon object
+     * Firebase repositories
      */
 
     @TypeConverter
-    fun pokemonObjectToJson(pokemonCapturedInfo: PokemonCapturedInfo): String? {
-        val type = object : TypeToken<PokemonCapturedInfo>() {}.type
-        return gson.toJson(pokemonCapturedInfo, type)
+    fun friendsAndFoesObjectToJson(friendsAndFoes: FriendsAndFoes?): String? {
+        val type = object : TypeToken<FriendsAndFoes>() {}.type
+        return gson.toJson(friendsAndFoes, type)
     }
 
     @TypeConverter
-    fun pokemonJsonToList(pokemonString: String): PokemonCapturedInfo? {
-        val type = object : TypeToken<PokemonCapturedInfo>() {}.type
-        return gson.fromJson(pokemonString, type)
+    fun friendsAndFoesJsonToObject(friendsAndFoesString: String?): FriendsAndFoes? {
+        val type = object : TypeToken<FriendsAndFoes>() {}.type
+        return gson.fromJson(friendsAndFoesString, type)
+    }
+
+    @TypeConverter
+    fun friendListToJson(friendList: ArrayList<Friend>?): String? {
+        val type = object : TypeToken<ArrayList<Friend>>() {}.type
+        return gson.toJson(friendList, type)
+    }
+
+    @TypeConverter
+    fun friendJsonToList(friendListString: String?): ArrayList<Friend>? {
+        val type = object : TypeToken<ArrayList<Friend>>() {}.type
+        return gson.fromJson(friendListString, type)
+    }
+
+    @TypeConverter
+    fun foeListToJson(foeList: ArrayList<Foe>?): String? {
+        val type = object : TypeToken<ArrayList<Foe>>() {}.type
+        return gson.toJson(foeList, type)
+    }
+
+    @TypeConverter
+    fun foeJsonToList(foeString: String?): ArrayList<Foe>? {
+        val type = object : TypeToken<ArrayList<Foe>>() {}.type
+        return gson.fromJson(foeString, type)
+    }
+
+    @TypeConverter
+    fun foePokemonObjectToJson(foePokemon: FoePokemon?): String? {
+        val type = object : TypeToken<FoePokemon>() {}.type
+        return gson.toJson(foePokemon, type)
+    }
+
+    @TypeConverter
+    fun foePokemonJsonToList(pokemonCapturedInfoString: String?): FoePokemon? {
+        val type = object : TypeToken<FoePokemon>() {}.type
+        return gson.fromJson(pokemonCapturedInfoString, type)
+    }
+
+    @TypeConverter
+    fun friendPokemonObjectToJson(friendPokemon: FriendPokemon?): String? {
+        val type = object : TypeToken<FriendPokemon>() {}.type
+        return gson.toJson(friendPokemon, type)
+    }
+
+    @TypeConverter
+    fun friendPokemonJsonToList(friendPokemonString: String?): FriendPokemon? {
+        val type = object : TypeToken<FriendPokemon>() {}.type
+        return gson.fromJson(friendPokemonString, type)
     }
 }

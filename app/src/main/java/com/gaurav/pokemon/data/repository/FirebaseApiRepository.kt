@@ -3,6 +3,7 @@ package com.gaurav.pokemon.data.repository
 import com.gaurav.pokemon.data.local.dao.FirebaseDao
 import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.remote.firebase.FirebaseApiRemoteDataSource
+import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.utils.responseLiveData
 
 class FirebaseApiRepository(
@@ -20,14 +21,14 @@ class FirebaseApiRepository(
 
     // Community info
     val observeCommunityActivity = responseLiveData(
-        roomQueryToRetrieveData = { firebaseDao.fetchFriendsList() },
-        networkRequest = { firebaseApiRemoteDataSource.getCommunity() },
-        roomQueryToSaveData = {
-            firebaseDao.insertFriendsList(it.friends)
-            firebaseDao.insertFoesList(it.foes)
-        })
+        roomQueryToRetrieveData = { firebaseDao.fetchCommunityActivity() },
+        networkRequest = { firebaseApiRemoteDataSource.getCommunityActivity() },
+        roomQueryToSaveData = { firebaseDao.insertCommunityActivity(it) })
 
-    val fetchFoesList = firebaseDao.fetchFoesList()
+    /*suspend fun saveCommunityActivity(friendsAndFoes: FriendsAndFoes) =
+        firebaseDao.insertCommunityActivity(friendsAndFoes)
+
+    suspend fun fetchCommunityInfoApi() = firebaseApiRemoteDataSource.getCommunityActivity()*/
 
     // MyTeam info
     val observeMyTeam = responseLiveData(

@@ -5,8 +5,7 @@ import java.io.Serializable
 
 @Entity(tableName = "friend")
 data class Friend(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
     val name: String,
-    val pokemonCapturedInfo: PokemonCapturedInfo
+    val pokemon: FriendPokemon
 ) : Serializable
