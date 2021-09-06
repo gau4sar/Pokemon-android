@@ -138,34 +138,5 @@ class MainViewModel(
     /**
      * Captured info
      */
-
-    private val _capturedListLiveData = MutableLiveData<List<PokemonLocationInfo>>()
-    val capturedListLiveData: LiveData<List<PokemonLocationInfo>> = _capturedListLiveData
-
     val observeCapturedList = firebaseApiRepository.observeCapturedInfo
-
-    fun fetchCapturedList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            firebaseApiRepository.fetchCapturedList().let { apiResponse ->
-                when (apiResponse) {
-
-                    is ResponseHandler.Success -> {
-
-                        apiResponse.data?.let { getCapturedListResponse ->
-                            Timber.d("Pokemon details info $getCapturedListResponse")
-                            _capturedListLiveData.postValue(getCapturedListResponse)
-                        }
-                    }
-
-                    is ResponseHandler.Error -> {
-                        Timber.e("Get token info error response: $apiResponse")
-                        //handleApiError(apiResponse, requireActivity())
-                    }
-
-                    is ResponseHandler.Loading -> {
-                    }
-                }
-            }
-        }
-    }
 }

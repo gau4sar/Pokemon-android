@@ -34,8 +34,6 @@ class CapturedPokemonAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        Timber.d("onBindViewHolder")
-
         pokemonLocationInfoList.forEach { pokemonLocationInfo ->
 
             val url = getPokemonImageUrl(pokemonLocationInfo.id)
@@ -46,7 +44,6 @@ class CapturedPokemonAdapter(
                 .into(holder.binding.ivPokemon)
 
             holder.binding.ivPokemon.setOnClickListener {
-
                 GeneralUtils.intentPokemonDetails(
                     fragmentActivity, pokemonLocationInfo.id,
                     pokemonLocationInfo.name, Constants.POKEMON_CAPTURED

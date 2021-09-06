@@ -43,6 +43,4 @@ class FirebaseApiRepository(
         roomQueryToRetrieveData = { firebaseDao.fetchCapturedList() },
         networkRequest = { firebaseApiRemoteDataSource.getCapturedList() },
         roomQueryToSaveData = { firebaseDao.insertCapturedList(it) })
-
-    suspend fun fetchCapturedList() = firebaseApiRemoteDataSource.getCapturedList()
 }

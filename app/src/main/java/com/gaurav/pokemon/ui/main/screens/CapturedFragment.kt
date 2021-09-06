@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gaurav.pokemon.adapter.CapturedPokemonAdapter
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
+import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.FragmentCapturedBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.handleApiError
 import com.gaurav.pokemon.utils.observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
@@ -36,11 +38,25 @@ class CapturedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainViewModel.capturedListLiveData.observe(viewLifecycleOwner, {
-            if (it == null) {
-                mainViewModel.fetchCapturedList()
-            } else {
-                setupRecyclerView(it)
+        mainViewModel.observeCapturedList.observe(viewLifecycleOwner, { apiResponse ->
+
+            when (apiResponse) {
+
+                is ResponseHandler.Success -> {
+
+                    apiResponse.data?.let { capturedList ->
+                        Timber.d("Pokemon details info $capturedList")
+                        setupRecyclerView(capturedList)
+                    }
+                }
+
+                is ResponseHandler.Error -> {
+                    Timber.e("Get token info error response: $apiResponse")
+                    handleApiError(apiResponse, requireActivity())
+                }
+
+                is ResponseHandler.Loading -> {
+                }
             }
         })
     }

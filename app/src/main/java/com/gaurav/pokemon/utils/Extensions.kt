@@ -64,7 +64,7 @@ fun <T, L> responseLiveData(
             emit(
                 ResponseHandler.error(
                     false,
-                    apiResponse.message ?: "API response error",
+                    apiResponse.message ?: "Failed to fetch latest data from API",
                     null
                 )
             )
@@ -75,7 +75,7 @@ fun <T, L> responseLiveData(
             emit(
                 ResponseHandler.error(
                     true,
-                    "Something went wrong, please try again later",
+                    "Check your internet connection",
                     null
                 )
             )
@@ -96,13 +96,15 @@ fun Fragment.handleApiError(
 
         else -> {
 
-            when (error.message) {
-                // Handle expected scenarios. Example : Authentication failure, token expiry, etc
-
+            // Handle expected scenarios. Based on error message
+            // Example : Authentication failure, token expiry, etc
+            error.message?.let {
+                activity.showLongToast(it)
             }
 
-            val errorMessage = error.data?.string().toString()
-            activity.showLongToast(errorMessage)
+            // Handle the data sent my error
+            val errorData = error.data.toString()
+            Timber.e("handleApiError data: $errorData")
         }
     }
 }

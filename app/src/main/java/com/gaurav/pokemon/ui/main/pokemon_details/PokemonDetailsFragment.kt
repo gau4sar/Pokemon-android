@@ -46,8 +46,6 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val gson: Gson by KoinJavaComponent.inject(Gson::class.java)
-
     private var isWild = false
     private var isCaptured = false
     private var isCapturedByOther = false
