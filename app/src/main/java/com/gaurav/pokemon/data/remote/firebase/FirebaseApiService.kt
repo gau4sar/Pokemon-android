@@ -21,7 +21,7 @@ interface FirebaseApiService {
     @GET("/captured")
     suspend fun getCaptured(): List<PokemonLocationInfo>
 
-    @POST("/captured")
+    @POST("/capture")
     suspend fun postCaptured(@Body capture: CapturePokemon): CaptureResponse
 
 }

@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Heading2Black"
+                android:layout_marginEnd="@dimen/margin_4"
                 android:text="@string/level"/>
 
             <TextView
@@ -45,7 +46,8 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 style="@style/Heading2Black"
                 android:text="@string/types"/>
 
@@ -53,10 +55,12 @@
                 android:id="@+id/recyclerView_types"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_margin="@dimen/margin_8"
+                android:layout_height="match_parent"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_capture_on"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -65,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Heading2Black"
+                android:layout_marginEnd="@dimen/margin_4"
                 android:text="@string/capture_on"/>
 
             <TextView

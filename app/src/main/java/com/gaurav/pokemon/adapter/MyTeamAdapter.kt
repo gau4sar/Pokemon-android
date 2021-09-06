@@ -13,7 +13,9 @@ import com.gaurav.pokemon.databinding.ItemMyTeamBinding
 import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
+import com.gaurav.pokemon.utils.GeneralUtils.getPokemonImageUrl
 import com.gaurav.pokemon.utils.GeneralUtils.parseDateToShortMonthDateAndYear
+import com.gaurav.pokemon.utils.load
 
 class MyTeamAdapter(
     val myTeamList: List<MyTeam>,
@@ -36,22 +38,28 @@ class MyTeamAdapter(
 
         val pokemon = myTeamList[position]
 
-        holder.binding.tvName.text = pokemon.name
+        holder.binding.apply {
 
-        holder.binding.cvMyTeam.setOnClickListener {
+            tvName.text = pokemon.name
 
-            val pokemonLocationInfo = PokemonLocationInfo(
-                pokemon.capturedAt, pokemon.capturedLatAt, pokemon.capturedLongAt,
-                pokemon.id, pokemon.name
-            )
+            cvMyTeam.setOnClickListener {
 
-            GeneralUtils.intentPokemonDetails(
-                fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, ""
-            )
+                val pokemonLocationInfo = PokemonLocationInfo(
+                    pokemon.capturedAt, pokemon.capturedLatAt, pokemon.capturedLongAt,
+                    pokemon.id, pokemon.name
+                )
+
+                GeneralUtils.intentPokemonDetails(
+                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, ""
+                )
+            }
+
+            tvCaptureAt.text =
+                parseDateToShortMonthDateAndYear(pokemon.capturedAt)
+
+            ivPokemon.load(getPokemonImageUrl(pokemon.id),fragmentActivity)
+
         }
-
-        holder.binding.tvCaptureAt.text =
-            parseDateToShortMonthDateAndYear(pokemon.capturedAt)
     }
 
     override fun getItemCount(): Int {

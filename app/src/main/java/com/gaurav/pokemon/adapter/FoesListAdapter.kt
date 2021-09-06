@@ -2,11 +2,13 @@ package com.gaurav.pokemon.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.model.Foe
 import com.gaurav.pokemon.databinding.ItemFriendBinding
 import com.gaurav.pokemon.adapter.FoesListAdapter.FoesViewHolder
@@ -80,6 +82,8 @@ class FoesListAdapter(val context: FragmentActivity) :
                 pokemon.capturedAt, 0.00, 0.00,
                 pokemon.id, pokemon.name
             )
+
+            clMain.background = ContextCompat.getDrawable(context, R.color.veryLightRed)
 
             cardView.setOnClickListener {
                 GeneralUtils.intentPokemonDetails(

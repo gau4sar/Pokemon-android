@@ -8,6 +8,7 @@ import com.gaurav.pokemon.data.remote.responses.CaptureResponse
 import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
+import com.gaurav.pokemon.utils.Constants.FAILURE
 import com.gaurav.pokemon.utils.EncryptPrefUtils
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +112,7 @@ class MainViewModel(
                     is ResponseHandler.Success -> {
 
                         apiResponse.data?.let { getPokemonResponse ->
-                            Timber.d("Pokemon details info ${getPokemonResponse}")
+                            /*Timber.d("Pokemon details info ${getPokemonResponse}")*/
                             _pokemonLiveData.postValue(getPokemonResponse)
                         }
                     }
@@ -163,6 +164,9 @@ class MainViewModel(
 
                     is ResponseHandler.Error -> {
                         Timber.e("Get token info error response: $apiResponse")
+
+                        _capturePokemonLiveData.postValue(FAILURE)
+
                         //handleApiError(apiResponse, requireActivity())
                     }
 
@@ -172,4 +176,5 @@ class MainViewModel(
             }
         }
     }
+
 }

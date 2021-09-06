@@ -34,7 +34,9 @@ class CapturedPokemonAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        pokemonLocationInfoList.forEach { pokemonLocationInfo ->
+        val pokemonLocationInfo = pokemonLocationInfoList[position]
+
+        holder.binding.apply {
 
             val url = getPokemonImageUrl(pokemonLocationInfo.id)
 
@@ -43,14 +45,16 @@ class CapturedPokemonAdapter(
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.binding.ivPokemon)
 
-            holder.binding.ivPokemon.setOnClickListener {
+            ivPokemon.setOnClickListener {
 
-                Timber.d("ivPokemon setOnClickListener")
+                Timber.d("ivPokemon setOnClickListener pokemonLocationInfo $pokemonLocationInfo")
 
                 GeneralUtils.intentPokemonDetails(
-                    fragmentActivity,pokemonLocationInfo, Constants.POKEMON_CAPTURED,"")
+                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, ""
+                )
             }
         }
+
     }
 
     override fun getItemCount(): Int {

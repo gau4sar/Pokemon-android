@@ -21,6 +21,8 @@
     <color name="windowBackground">#2DA629</color>
     <color name="textColorPrimary">#2DA629</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="veryLightRed">#FFEBEB</color>
+    <color name="veryLightBlue">#E1FBFF</color>
 
     <color name="grey">#808080</color>
 </resources>

@@ -5,13 +5,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.data.model.pokemon.Type
 import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.utils.Constants.NA
 import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.google.android.gms.maps.model.LatLng
 import timber.log.Timber
@@ -107,20 +106,67 @@ object GeneralUtils {
         }
     }
 
+    var suffixes = arrayOf(
+        "th",
+        "st",
+        "nd",
+        "rd",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "st",
+        "nd",
+        "rd",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "st"
+    )
 
     fun parseDateToShortMonthDateAndYear(date: String): String {
-        //2020-02-16T00:00:00.000Z
-        val outputPattern = "MMM dd---,yyyy"
+        return if(date.isEmpty()) {
+            NA
+        } else{
+            //2020-02-16T00:00:00.000Z
+            val outputPattern = "MMM dd---,yyyy"
 
-        return parseDates(date, outputPattern).replace("---", "th")
+            parseDates(date, outputPattern).replace("---", suffixes[parseDateToD(date).toInt()])
+        }
+    }
+
+    fun parseDateToD(date: String): String {
+        //2020-02-16T00:00:00.000Z
+        val outputPattern = "d"
+
+        return parseDates(date, outputPattern)
     }
 
     fun parseDates(dateString: String, outputPattern: String): String {
+
         val inputPattern = "yyyy-MM-dd"
         val inputFormat = SimpleDateFormat(inputPattern, Locale.ENGLISH)
         val outputFormat = SimpleDateFormat(outputPattern, Locale.ENGLISH)
 
         val date = inputFormat.parse(dateString)
+
         return outputFormat.format(date)
     }
 
@@ -132,7 +178,7 @@ object GeneralUtils {
         context: Context,
         pokemonLocationInfo: PokemonLocationInfo,
         pokemonStatus: Int,
-        capturedBy:String
+        capturedBy: String
     ) {
         val intent = Intent(context, PokemonDetailsActivity::class.java)
         val pokemonDetails = PokemonDetails(pokemonLocationInfo, pokemonStatus, capturedBy)

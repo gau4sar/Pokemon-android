@@ -8,10 +8,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
 import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -22,6 +24,13 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
@@ -35,6 +44,133 @@ import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
+
+//Glide
+fun ImageView.load(
+    url: String?,
+    fragmentActivity: FragmentActivity,
+    isWithThumbnail: Boolean = false,
+    isCircularImage: Boolean = false,
+    onLoadingFinished: () -> Unit = {}
+) {
+    val targetImageView = this
+    val listener = object : RequestListener<Drawable> {
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: com.bumptech.glide.request.target.Target<Drawable>?,
+            dataSource: com.bumptech.glide.load.DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            onLoadingFinished()
+            return false
+        }
+
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: com.bumptech.glide.request.target.Target<Drawable>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            onLoadingFinished()
+            return false
+        }
+    }
+    if (url.isNullOrEmpty()) {
+        targetImageView.loadNoImage(fragmentActivity)
+    }
+    else if(url.contains("null"))
+    {
+        targetImageView.loadNoImage(fragmentActivity)
+    }
+    else {
+        if (isWithThumbnail) {
+            if (isCircularImage) {
+                Glide.with(this)
+                    .load(url)
+                    .apply(
+                        getOptionsForGlide(context, fragmentActivity)
+                    )
+                    .circleCrop()
+                    .listener(listener)
+                    .thumbnail(0.05f)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(this)
+            } else {
+                Glide.with(this)
+                    .load(url)
+                    .apply(
+                        getOptionsForGlide(context, fragmentActivity)
+                    )
+                    .listener(listener)
+                    .thumbnail(0.05f)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(this)
+            }
+        } else {
+            if (isCircularImage) {
+                Glide.with(this)
+                    .load(url)
+                    .apply(
+                        getOptionsForGlide(context, fragmentActivity)
+                    )
+                    .circleCrop()
+                    .listener(listener)
+                    .into(this)
+            } else {
+                Glide.with(this)
+                    .load(url)
+                    .apply(
+                        getOptionsForGlide(context, fragmentActivity)
+                    )
+                    .listener(listener)
+                    .into(this)
+            }
+        }
+    }
+}
+
+private fun ImageView.loadNoImage(fragmentActivity: FragmentActivity) {
+    Glide.with(this)
+        .load(R.drawable.icons8_pokeball_96)
+        .apply(
+            getOptionsForGlide(context, fragmentActivity)
+        )
+        .into(this)
+}
+
+fun getOptionsForGlide(context: Context, fragmentActivity: FragmentActivity): RequestOptions {
+    //Options
+    return RequestOptions()
+        .error(R.drawable.icons8_pokeball_96)
+        .placeholder(getCustomProgressBar(context, fragmentActivity))
+}
+
+fun getCustomProgressBar(
+    context: Context,
+    fragmentActivity: FragmentActivity
+): CircularProgressDrawable {
+    //Custom Progress Bar for glide while loading the image
+    val circularProgressDrawable = CircularProgressDrawable(fragmentActivity)
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 30f
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        circularProgressDrawable.setColorSchemeColors(context.getColor(R.color.colorPrimary))
+    } else
+        circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorPrimary))
+    circularProgressDrawable.start()
+    return circularProgressDrawable
+}
+
+
+/*fun ImageView.load(url:String, fragmentActivity:Activity)
+{
+    Glide.with(fragmentActivity)
+        .load(url)
+        .apply(RequestOptions.circleCropTransform())
+        .into(this)
+}*/
 
 fun <T, L> responseLiveData(
     roomQueryToRetrieveData: () -> LiveData<T>,
@@ -227,4 +363,9 @@ fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
             removeObserver(this)
         }
     })
+}
+
+fun String.make1stCharacterUpper():String
+{
+    return this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 }

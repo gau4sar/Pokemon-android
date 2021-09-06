@@ -27,7 +27,6 @@
             android:id="@+id/iv_pokemon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/margin_8"
             android:src="@drawable/icons8_pokeball_96"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat2"
             app:layout_constraintDimensionRatio="1:1"
@@ -55,6 +54,7 @@
 
                 <TextView
                     style="@style/TextStyle16"
+                    android:layout_marginEnd="@dimen/margin_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name" />
@@ -113,6 +113,7 @@
                 <TextView
                     style="@style/TextStyle16"
                     android:layout_width="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_4"
                     android:layout_height="wrap_content"
                     android:text="@string/capture_at" />
 

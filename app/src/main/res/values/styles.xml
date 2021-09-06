@@ -51,12 +51,20 @@
     </style>
 
     <style name="RedButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textAllCaps">false</item>
         <item name="backgroundTint">@color/color_red</item>
         <item name="rippleColor">@color/white</item>
     </style>
 
+    <style name="RedButtonStyleForBottom" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="backgroundTint">@color/color_red</item>
+        <item name="rippleColor">@color/white</item>
+        <item name="android:layout_marginBottom">-6dp</item>
+        <item name="android:padding">@dimen/margin_16</item>
+    </style>
 
     <style name="GreyButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:textSize">@dimen/text_size_14</item>
@@ -86,6 +94,7 @@
     </style>
 
     <style name="TextStyle14" parent="TextStyle15">
+        <item name="android:background">@color/transparent</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 
@@ -154,9 +163,10 @@
     <!-- Text Design styles -->
     <style name="TextStyle15" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <!-- Text Design styles -->
@@ -165,6 +175,7 @@
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <!-- Text Design styles -->

@@ -8,6 +8,7 @@ import com.gaurav.pokemon.databinding.ItemPokemonTypeBinding
 import timber.log.Timber
 import com.gaurav.pokemon.data.model.pokemon.Type
 import com.gaurav.pokemon.utils.GeneralUtils.parseTypeToColor
+import com.gaurav.pokemon.utils.make1stCharacterUpper
 
 class PokemonTypeAdapter(
     private val fragmentActivity: FragmentActivity,
@@ -35,7 +36,7 @@ class PokemonTypeAdapter(
         pokemonType[position].let { pokemonType->
             holder.binding.llType.setBackgroundColor(parseTypeToColor(pokemonType).toInt())
 
-            holder.binding.tvType.text = pokemonType.type.name
+            holder.binding.tvType.text = pokemonType.type.name.make1stCharacterUpper()
         }
     }
 
