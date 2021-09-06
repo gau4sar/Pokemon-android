@@ -9,14 +9,17 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gaurav.pokemon.R
+import com.gaurav.pokemon.adapter.PokemonTypeAdapter
 import com.gaurav.pokemon.data.model.Pokemon
+import com.gaurav.pokemon.data.model.PokemonDetails
+import com.gaurav.pokemon.data.model.pokemon.Type
 import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
-import com.gaurav.pokemon.utils.Constants.POKEMON_NAME
-import com.gaurav.pokemon.utils.Constants.POKEMON_STATUS
+import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.showToast
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,17 +34,20 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.java.KoinJavaComponent
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import kotlin.math.abs
 
 class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val gson: Gson by inject(Gson::class.java)
 
     private lateinit var googleMap: GoogleMap
     private lateinit var callback: OnMapReadyCallback
+    private lateinit var pokemonDetails: PokemonDetails
 
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
@@ -63,10 +69,14 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
         requireActivity().intent?.extras?.let { it ->
 
-            it.getInt(POKEMON_STATUS).let {
-                Timber.d("Pokemon status : $it")
+            it.getSerializable(POKEMON_DETAILS)?.let {
+                val type = object : TypeToken<PokemonDetails>() {}.type
+                val pokemonDetailsString = gson.toJson(it, type)
+                pokemonDetails = gson.fromJson(pokemonDetailsString, type)
 
-                when (it) {
+                Timber.d("pokemonDetails : $pokemonDetails")
+
+                when (pokemonDetails.pokemonStatus) {
                     POKEMON_WILD -> {
                         isWild = true
                     }
@@ -79,12 +89,11 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
                         isCapturedByOther = true
                     }
                 }
-            }
 
-            it.getString(POKEMON_NAME)?.let { pokemonName ->
-                // Get details for pokemonName
-                Timber.d("Pokemon Name : $pokemonName")
-                mainViewModel.fetchPokemonDetails(pokemonName)
+                val pokemonLocationInfo = pokemonDetails.pokemonLocationInfo
+                mainViewModel.fetchPokemonDetails(pokemonLocationInfo.name.lowercase())
+
+                setMarker(LatLng(pokemonLocationInfo.capturedLatAt, pokemonLocationInfo.capturedLongAt))
             }
 
             // Observer for getting pokemon details information
@@ -105,8 +114,13 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         val layoutCapturedBy: CardView = binding.layoutCapturedBy.cvCapturedBy
         val appBarLayout: AppBarLayout = binding.appBarLayout
         val pokemonInToolbar: ImageView = binding.ivPokemonToolbar
+        val tvCapturedBy = binding.layoutCapturedBy.tvName
+
+        setupRecyclerView(pokemon.types)
 
         binding.collapsingToolbar.title = pokemon.name
+
+        pokemon.types
 
         val collapsingToolbar = binding.collapsingToolbar
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
@@ -122,6 +136,8 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         }
 
         if (isCapturedByOther) {
+
+            tvCapturedBy.text = pokemonDetails.capturedByName
             pokemonCaptured.visibility = View.GONE
             pokemonInToolbar.visibility = View.GONE
             captureButton.visibility = View.GONE
@@ -175,6 +191,21 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     }
 
+    private fun setupRecyclerView(pokemonType: List<Type>) {
+
+        val pokemonTypeAdapter =
+            context?.let {
+                PokemonTypeAdapter(
+                    requireActivity(),
+                    pokemonType
+                )
+            }
+
+        binding.layoutBasicInfo.recyclerViewTypes.apply {
+            adapter = pokemonTypeAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
 
     /**
      * Displays pop-up dialog to confirm capture

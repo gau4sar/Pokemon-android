@@ -2,12 +2,17 @@ package com.gaurav.pokemon.utils
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.gaurav.pokemon.data.model.Pokemon
+import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.PokemonList
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
+import com.gaurav.pokemon.data.model.pokemon.Type
 import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.google.android.gms.maps.model.LatLng
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -123,17 +128,43 @@ object GeneralUtils {
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png"
     }
 
-    fun intentPokemonDetails(context : Context, pokemonId: Int,
-                             pokemonName: String, pokemonStatus: Int) {
+    fun intentPokemonDetails(
+        context: Context,
+        pokemonLocationInfo: PokemonLocationInfo,
+        pokemonStatus: Int,
+        capturedBy:String
+    ) {
         val intent = Intent(context, PokemonDetailsActivity::class.java)
+        val pokemonDetails = PokemonDetails(pokemonLocationInfo, pokemonStatus, capturedBy)
         val bundle = Bundle()
 
-        bundle.putInt(Constants.POKEMON_ID, pokemonId)
-        bundle.putString(Constants.POKEMON_NAME, pokemonName)
-        bundle.putInt(Constants.POKEMON_STATUS, pokemonStatus)
-
+        bundle.putSerializable(POKEMON_DETAILS, pokemonDetails)
         intent.putExtras(bundle)
-        ContextCompat.startActivity(context, intent, bundle)
 
+        context.startActivity(intent)
+    }
+
+    fun parseTypeToColor(type: Type): Long {
+        return when (type.type.name.lowercase(Locale.ROOT)) {
+            "normal" -> TypeNormal
+            "fire" -> TypeFire
+            "water" -> TypeWater
+            "electric" -> TypeElectric
+            "grass" -> TypeGrass
+            "ice" -> TypeIce
+            "fighting" -> TypeFighting
+            "poison" -> TypePoison
+            "ground" -> TypeGround
+            "flying" -> TypeFlying
+            "psychic" -> TypePsychic
+            "bug" -> TypeBug
+            "rock" -> TypeRock
+            "ghost" -> TypeGhost
+            "dragon" -> TypeDragon
+            "dark" -> TypeDark
+            "steel" -> TypeSteel
+            "fairy" -> TypeFairy
+            else -> Color.BLACK.toLong()
+        }
     }
 }

@@ -10,7 +10,10 @@ import com.bumptech.glide.Glide
 import com.gaurav.pokemon.data.model.Foe
 import com.gaurav.pokemon.databinding.ItemFriendBinding
 import com.gaurav.pokemon.adapter.FoesListAdapter.FoesViewHolder
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
+import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.getFormattedDateTime
 
@@ -73,9 +76,14 @@ class FoesListAdapter(val context: FragmentActivity) :
                 .load(imageUrl)
                 .into(ivPokemon)
 
+            val pokemonLocationInfo = PokemonLocationInfo(
+                pokemon.capturedAt, 0.00, 0.00,
+                pokemon.id, pokemon.name
+            )
+
             cardView.setOnClickListener {
                 GeneralUtils.intentPokemonDetails(
-                    context, pokemon.id, pokemon.name, Constants.POKEMON_CAPTURED
+                    context, pokemonLocationInfo, POKEMON_CAPTURED_BY_OTHER, foe.name
                 )
             }
         }

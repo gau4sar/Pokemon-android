@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gaurav.pokemon.data.model.Friend
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemFriendBinding
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.getFormattedDateTime
+import timber.log.Timber
 
 /**
  * RecyclerView Adapter to handle data in FriendListFragment
@@ -64,7 +66,9 @@ class FriendsListAdapter(val context: FragmentActivity) :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
 
+
         val friend = differ.currentList[position]
+        Timber.d("FriendsViewHolder $friend")
 
         val pokemon = friend.pokemon
 
@@ -79,9 +83,14 @@ class FriendsListAdapter(val context: FragmentActivity) :
                 .load(imageUrl)
                 .into(ivPokemon)
 
+            val pokemonLocationInfo = PokemonLocationInfo(
+                pokemon.capturedAt, 0.00, 0.00,
+                pokemon.id, pokemon.name
+            )
+
             cardView.setOnClickListener {
                 GeneralUtils.intentPokemonDetails(
-                    context, pokemon.id, pokemon.name, Constants.POKEMON_CAPTURED
+                    context, pokemonLocationInfo, Constants.POKEMON_CAPTURED_BY_OTHER, friend.name
                 )
             }
         }

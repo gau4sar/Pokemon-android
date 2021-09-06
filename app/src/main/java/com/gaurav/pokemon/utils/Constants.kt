@@ -8,9 +8,12 @@ object Constants {
     const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2/"
     const val POKEAPI_SCOPE = "pokemon"
 
+    const val POKEMON_DETAILS = "pokemon_details"
     const val POKEMON_ID = "pokemon_id"
     const val POKEMON_NAME = "pokemon_name"
     const val POKEMON_STATUS = "pokemon_status"
+    const val POKEMON_LOCATION_LATITUDE = "pokemon_location_latitude"
+    const val POKEMON_LOCATION_LONGITUDE = "pokemon_location_longitude"
 
     const val POKEMON_WILD = 1
     const val POKEMON_CAPTURED = 2

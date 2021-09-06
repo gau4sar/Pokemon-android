@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.model.PokemonList
+import com.gaurav.pokemon.data.model.PokemonLocationInfo
+import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.FragmentExploreBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.*
+import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.GeneralUtils.generateRandomMarkers
 import com.gaurav.pokemon.utils.GeneralUtils.pickPokemonsRandomly
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -59,7 +62,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     private fun viewModelWorks() {
 
-        mainViewModel.pokemonListListAndCurrentLocationLiveData.observe(viewLifecycleOwner,
+        mainViewModel.pokemonListAndCurrentLocationLiveData.observe(viewLifecycleOwner,
             { (pokemonInfoList, currentLocation) ->
 
                 Timber.d("pokemonInfoListAndCurrentLocationLiveData ${pokemonInfoList} || ${currentLocation}")
@@ -78,6 +81,28 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                     }
                 }
             })
+
+
+        mainViewModel.observePokemonInfoList("150").observe(viewLifecycleOwner, { apiResponse ->
+
+            when (apiResponse) {
+
+                is ResponseHandler.Success -> {
+
+                    apiResponse.data?.let { pokemonList ->
+                        Timber.d("pokemonList $pokemonList")
+                    }
+                }
+
+                is ResponseHandler.Error -> {
+                    Timber.e("Get token info error response: $apiResponse")
+                    //handleApiError(apiResponse, this)
+                }
+
+                is ResponseHandler.Loading -> {
+                }
+            }
+        })
 
         /* mainViewModel.fetchPokemonInfoList.observe(viewLifecycleOwner, { pokemonInfoList ->
              Timber.d("Saved pokemon info list : $pokemonInfoList")
@@ -146,37 +171,12 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         googleMap.setOnMarkerClickListener { marker ->
 
-            val intent = Intent(requireActivity(), PokemonDetailsActivity::class.java)
-            val bundle = Bundle()
+            val pokemonSelected:PokemonList = marker.tag as PokemonList
 
-            /*when (counter) {
-                1 -> {
-                    bundle.putSerializable(
-                        POKEMON_FOUND,
-                        PokemonFound(1, false, marker.position, true)
-                    )
-                }
-                2 -> {
-                    bundle.putSerializable(
-                        POKEMON_FOUND,
-                        PokemonFound(1, true, marker.position, false)
-                    )
-                }
-                else -> {
-                    bundle.putSerializable(
-                        POKEMON_FOUND,
-                        PokemonFound(1, false, marker.position, false)
-                    )
-                    counter = 0
-                }
-            }
-            counter++*/
+            val pokemonLocationInfo = PokemonLocationInfo("",marker.position.latitude,marker.position.longitude,
+            1,pokemonSelected.name)
 
-            // TODO :: Send info to details page
-
-            intent.putExtras(bundle)
-            startActivity(intent)
-
+            GeneralUtils.intentPokemonDetails(requireActivity(),pokemonLocationInfo,POKEMON_WILD, "")
             false
         }
     }

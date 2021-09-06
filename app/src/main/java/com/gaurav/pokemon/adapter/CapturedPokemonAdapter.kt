@@ -44,10 +44,11 @@ class CapturedPokemonAdapter(
                 .into(holder.binding.ivPokemon)
 
             holder.binding.ivPokemon.setOnClickListener {
+
+                Timber.d("ivPokemon setOnClickListener")
+
                 GeneralUtils.intentPokemonDetails(
-                    fragmentActivity, pokemonLocationInfo.id,
-                    pokemonLocationInfo.name, Constants.POKEMON_CAPTURED
-                )
+                    fragmentActivity,pokemonLocationInfo, Constants.POKEMON_CAPTURED,"")
             }
         }
     }

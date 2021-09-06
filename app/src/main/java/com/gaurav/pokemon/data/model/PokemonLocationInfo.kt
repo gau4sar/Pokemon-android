@@ -3,6 +3,7 @@ package com.gaurav.pokemon.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(tableName = "pokemonLocationInfo")
 data class PokemonLocationInfo(
@@ -15,4 +16,4 @@ data class PokemonLocationInfo(
     @PrimaryKey
     val id: Int,
     val name: String
-)
+):Serializable

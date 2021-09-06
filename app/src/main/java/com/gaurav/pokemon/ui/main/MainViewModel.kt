@@ -77,6 +77,23 @@ class MainViewModel(
 
     val fetchPokemonInfoList = pokemonApiRepository.fetchPokemonInfoList
 
+    val pokemonListAndCurrentLocationLiveData: LiveData<Pair<List<PokemonList>, Location>> =
+        object : MediatorLiveData<Pair<List<PokemonList>, Location>>() {
+            var pokemonList: List<PokemonList>? = null
+            var location: Location? = null
+
+            init {
+                addSource(fetchPokemonInfoList) { pokemonInfoList ->
+                    this.pokemonList = pokemonInfoList
+                    location?.let { value = pokemonInfoList to it }
+                }
+                addSource(currentLocationLiveData) { location ->
+                    this.location = location
+                    pokemonList?.let { value = it to location }
+                }
+            }
+        }
+
 
     /**
      * Pokemon details
@@ -117,23 +134,6 @@ class MainViewModel(
     val observeMyTeam = firebaseApiRepository.observeMyTeam
 
     val fetchMyTeamList = firebaseApiRepository.fetchMyTeamList
-
-    val pokemonListListAndCurrentLocationLiveData: LiveData<Pair<List<PokemonList>, Location>> =
-        object : MediatorLiveData<Pair<List<PokemonList>, Location>>() {
-            var pokemonListList: List<PokemonList>? = null
-            var location: Location? = null
-
-            init {
-                addSource(fetchPokemonInfoList) { pokemonInfoList ->
-                    this.pokemonListList = pokemonInfoList
-                    location?.let { value = pokemonInfoList to it }
-                }
-                addSource(currentLocationLiveData) { location ->
-                    this.location = location
-                    pokemonListList?.let { value = it to location }
-                }
-            }
-        }
 
     /**
      * Captured info

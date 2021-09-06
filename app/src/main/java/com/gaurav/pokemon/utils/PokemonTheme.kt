@@ -1,0 +1,30 @@
+package com.gaurav.pokemon.utils
+
+val LightBlue = (0xFFBAC7FF)
+val lightGrey = (0xFFAAAAAA)
+
+val HPColor = (0xFFF5FF00)
+/*val AtkColor = (1f, 0f, 0f, 0.66f)
+val DefColor = (0f, 0f, 1f, 0.44f)
+val SpAtkColor = (0.671f, 0f, 1f, 0.57f)
+val SpDefColor = (1f, 0f, 0.8f, 0.7f)
+val SpdColor = (0f, 1f, 0.063f, 0.55f)*/
+
+val TypeNormal = (0xFFA8A77A)
+val TypeFire = (0xFFEE8130)
+val TypeWater = (0xFF6390F0)
+val TypeElectric = (0xFFF7D02C)
+val TypeGrass = (0xFF7AC74C)
+val TypeIce = (0xFF96D9D6)
+val TypeFighting = (0xFFC22E28)
+val TypePoison = (0xFFA33EA1)
+val TypeGround = (0xFFE2BF65)
+val TypeFlying = (0xFFA98FF3)
+val TypePsychic = (0xFFF95587)
+val TypeBug = (0xFFA6B91A)
+val TypeRock = (0xFFB6A136)
+val TypeGhost = (0xFF735797)
+val TypeDragon = (0xFF6F35FC)
+val TypeDark = (0xFF705746)
+val TypeSteel = (0xFFB7B7CE)
+val TypeFairy = (0xFFD685AD)
