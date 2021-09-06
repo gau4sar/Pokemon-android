@@ -23,8 +23,8 @@
                 android:id="@+id/appCompatTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/friends"
                 android:padding="@dimen/margin_8"
+                android:text="@string/friends"
                 android:textSize="@dimen/text_size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,11 +51,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_friends"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="horizontal" />
+                    android:layout_height="wrap_content" />
 
             </com.gaurav.pokemon.utils.NestedScrollableHost>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,10 +63,10 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView_friends"
-        android:layout_marginTop="@dimen/margin_16">
+        app:layout_constraintTop_toBottomOf="@+id/cardView_friends">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -95,15 +93,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_foes"
+            <com.gaurav.pokemon.utils.NestedScrollableHost
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/margin_8"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_foes" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_foes">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_foes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_8"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_foes" />
+
+            </com.gaurav.pokemon.utils.NestedScrollableHost>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
