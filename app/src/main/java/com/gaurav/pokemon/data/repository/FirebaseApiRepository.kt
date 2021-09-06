@@ -2,6 +2,7 @@ package com.gaurav.pokemon.data.repository
 
 import com.gaurav.pokemon.data.local.dao.FirebaseDao
 import com.gaurav.pokemon.data.model.ApiTokenInfo
+import com.gaurav.pokemon.data.model.CapturePokemon
 import com.gaurav.pokemon.data.remote.firebase.FirebaseApiRemoteDataSource
 import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.utils.responseLiveData
@@ -43,4 +44,7 @@ class FirebaseApiRepository(
         roomQueryToRetrieveData = { firebaseDao.fetchCapturedList() },
         networkRequest = { firebaseApiRemoteDataSource.getCapturedList() },
         roomQueryToSaveData = { firebaseDao.insertCapturedList(it) })
+
+    suspend fun postCapturePokemon(capturePokemon: CapturePokemon) =
+        firebaseApiRemoteDataSource.postCapturePokemon(capturePokemon)
 }
