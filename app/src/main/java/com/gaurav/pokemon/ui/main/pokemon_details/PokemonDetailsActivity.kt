@@ -1,4 +1,4 @@
-package com.gaurav.pokemon.ui.main.screens.pokemon_details
+package com.gaurav.pokemon.ui.main.pokemon_details
 
 import android.os.Bundle
 import androidx.navigation.NavController

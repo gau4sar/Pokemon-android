@@ -36,6 +36,9 @@ class SplashScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
+    }
+
+    private fun viewModelObservers() {
 
         mainViewModel.tokenInfoLiveData.observeOnce {
             Timber.d("Api Token Info : $it")
@@ -53,5 +56,11 @@ class SplashScreenFragment : Fragment() {
 
     private fun navigateToMain() {
         navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModelObservers()
     }
 }
