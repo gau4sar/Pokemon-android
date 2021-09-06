@@ -1,20 +1,15 @@
 package com.gaurav.pokemon.adapter
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemCapturedBinding
-import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants
+import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.GeneralUtils.getPokemonImageUrl
 import timber.log.Timber
 
@@ -41,7 +36,7 @@ class CapturedPokemonAdapter(
 
         Timber.d("onBindViewHolder")
 
-        pokemonLocationInfoList.forEach {pokemonLocationInfo ->
+        pokemonLocationInfoList.forEach { pokemonLocationInfo ->
 
             val url = getPokemonImageUrl(pokemonLocationInfo.id)
 
@@ -51,15 +46,11 @@ class CapturedPokemonAdapter(
                 .into(holder.binding.ivPokemon)
 
             holder.binding.ivPokemon.setOnClickListener {
-                val intent = Intent(fragmentActivity, PokemonDetailsActivity::class.java)
-                val bundle = Bundle()
 
-                bundle.putInt(Constants.POKEMON_ID, pokemonLocationInfo.id)
-                bundle.putString(Constants.POKEMON_NAME, pokemonLocationInfo.name)
-                bundle.putInt(Constants.POKEMON_STATUS, Constants.POKEMON_CAPTURED)
-
-                intent.putExtras(bundle)
-                startActivity(fragmentActivity, intent, bundle)
+                GeneralUtils.intentPokemonDetails(
+                    fragmentActivity, pokemonLocationInfo.id,
+                    pokemonLocationInfo.name, Constants.POKEMON_CAPTURED
+                )
             }
         }
     }

@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/pokemonDetailsFragment"
-        android:name="com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsFragment"
+        android:name="com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsFragment"
         android:label="PokemonDetailsFragment" />
 </navigation>

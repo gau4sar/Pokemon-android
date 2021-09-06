@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gaurav.pokemon.data.model.Foe
-import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.databinding.ItemFriendBinding
 import com.gaurav.pokemon.adapter.FoesListAdapter.FoesViewHolder
+import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.getFormattedDateTime
 
@@ -64,8 +64,8 @@ class FoesListAdapter(val context: FragmentActivity) :
         val pokemon = foe.pokemon
 
         holder.binding.apply {
-            tvName.text = "${foe.name}"
-            tvCapturedAt.text = " : ${getFormattedDateTime(pokemon.capturedAt)}"
+            tvName.text = foe.name
+            tvCapturedAt.text = getFormattedDateTime(pokemon.capturedAt)
 
             val imageUrl = GeneralUtils.getPokemonImageUrl(pokemon.id)
 
@@ -74,18 +74,10 @@ class FoesListAdapter(val context: FragmentActivity) :
                 .into(ivPokemon)
 
             cardView.setOnClickListener {
-                //TODO :: Go to details page
+                GeneralUtils.intentPokemonDetails(
+                    context, pokemon.id, pokemon.name, Constants.POKEMON_CAPTURED
+                )
             }
         }
-    }
-
-    /**
-     * Click listener handler for list items
-     */
-
-    private var onItemClickListener: ((Friend) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Friend) -> Unit) {
-        onItemClickListener = listener
     }
 }

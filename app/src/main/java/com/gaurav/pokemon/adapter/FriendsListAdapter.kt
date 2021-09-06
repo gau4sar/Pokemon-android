@@ -1,11 +1,8 @@
 package com.gaurav.pokemon.adapter
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -13,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gaurav.pokemon.data.model.Friend
 import com.gaurav.pokemon.databinding.ItemFriendBinding
-import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.getFormattedDateTime
@@ -84,26 +80,10 @@ class FriendsListAdapter(val context: FragmentActivity) :
                 .into(ivPokemon)
 
             cardView.setOnClickListener {
-                val intent = Intent(context, PokemonDetailsActivity::class.java)
-                val bundle = Bundle()
-
-                bundle.putInt(Constants.POKEMON_ID, pokemon.id)
-                bundle.putString(Constants.POKEMON_NAME, pokemon.name)
-                bundle.putInt(Constants.POKEMON_STATUS, Constants.POKEMON_CAPTURED)
-
-                intent.putExtras(bundle)
-                ContextCompat.startActivity(context, intent, bundle)
+                GeneralUtils.intentPokemonDetails(
+                    context, pokemon.id, pokemon.name, Constants.POKEMON_CAPTURED
+                )
             }
         }
-    }
-
-    /**
-     * Click listener handler for list items
-     */
-
-    private var onItemClickListener: ((Friend) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Friend) -> Unit) {
-        onItemClickListener = listener
     }
 }

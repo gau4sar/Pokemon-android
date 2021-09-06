@@ -1,7 +1,13 @@
 package com.gaurav.pokemon.utils
 
+import android.content.Context
+import android.content.Intent
 import android.location.Location
+import android.os.Bundle
+import androidx.core.content.ContextCompat
+import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonList
+import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.google.android.gms.maps.model.LatLng
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -113,8 +119,21 @@ object GeneralUtils {
         return outputFormat.format(date)
     }
 
-
     fun getPokemonImageUrl(id: Int): String {
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png"
+    }
+
+    fun intentPokemonDetails(context : Context, pokemonId: Int,
+                             pokemonName: String, pokemonStatus: Int) {
+        val intent = Intent(context, PokemonDetailsActivity::class.java)
+        val bundle = Bundle()
+
+        bundle.putInt(Constants.POKEMON_ID, pokemonId)
+        bundle.putString(Constants.POKEMON_NAME, pokemonName)
+        bundle.putInt(Constants.POKEMON_STATUS, pokemonStatus)
+
+        intent.putExtras(bundle)
+        ContextCompat.startActivity(context, intent, bundle)
+
     }
 }

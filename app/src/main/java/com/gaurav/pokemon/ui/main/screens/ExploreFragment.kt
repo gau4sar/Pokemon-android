@@ -11,7 +11,7 @@ import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.databinding.FragmentExploreBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.ui.main.screens.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.*
 import com.gaurav.pokemon.utils.GeneralUtils.generateRandomMarkers
 import com.gaurav.pokemon.utils.GeneralUtils.pickPokemonsRandomly
