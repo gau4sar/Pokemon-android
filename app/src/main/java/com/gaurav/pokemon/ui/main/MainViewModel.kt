@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.lifecycle.*
 import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.data.remote.responses.CaptureResponse
 import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
@@ -139,4 +140,36 @@ class MainViewModel(
      * Captured info
      */
     val observeCapturedList = firebaseApiRepository.observeCapturedInfo
+
+    /**
+     * Post capture pokemon
+     */
+    private val _capturePokemonLiveData = MutableLiveData<Boolean>()
+    val capturePokemonLiveData: LiveData<Boolean> = _capturePokemonLiveData
+
+    fun capturePokemon(capturePokemon: CapturePokemon) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            firebaseApiRepository.postCapturePokemon(capturePokemon).let { apiResponse ->
+                when (apiResponse) {
+                    is ResponseHandler.Success -> {
+
+                        apiResponse.data?.let { captureResponse ->
+
+                            Timber.d("Pokemon captured : $captureResponse")
+                            _capturePokemonLiveData.postValue(captureResponse.successful)
+                        }
+                    }
+
+                    is ResponseHandler.Error -> {
+                        Timber.e("Get token info error response: $apiResponse")
+                        //handleApiError(apiResponse, requireActivity())
+                    }
+
+                    is ResponseHandler.Loading -> {
+                    }
+                }
+            }
+        }
+    }
 }
