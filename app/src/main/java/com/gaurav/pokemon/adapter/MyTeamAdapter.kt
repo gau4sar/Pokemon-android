@@ -50,7 +50,7 @@ class MyTeamAdapter(
                 )
 
                 GeneralUtils.intentPokemonDetails(
-                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, ""
+                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, "",ivPokemon
                 )
             }
 

@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemCapturedBinding
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.GeneralUtils.getPokemonImageUrl
+import com.gaurav.pokemon.utils.load
 import timber.log.Timber
 
 class CapturedPokemonAdapter(
@@ -40,17 +39,14 @@ class CapturedPokemonAdapter(
 
             val url = getPokemonImageUrl(pokemonLocationInfo.id)
 
-            Glide.with(fragmentActivity)
-                .load(url)
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.binding.ivPokemon)
+            ivPokemon.load(url,fragmentActivity,true)
 
             ivPokemon.setOnClickListener {
 
                 Timber.d("ivPokemon setOnClickListener pokemonLocationInfo $pokemonLocationInfo")
 
                 GeneralUtils.intentPokemonDetails(
-                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, ""
+                    fragmentActivity, pokemonLocationInfo, Constants.POKEMON_CAPTURED, "", it
                 )
             }
         }

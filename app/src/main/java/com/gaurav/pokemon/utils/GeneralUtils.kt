@@ -1,10 +1,15 @@
 package com.gaurav.pokemon.utils
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.FragmentActivity
+import androidx.palette.graphics.Palette
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
@@ -142,9 +147,9 @@ object GeneralUtils {
     )
 
     fun parseDateToShortMonthDateAndYear(date: String): String {
-        return if(date.isEmpty()) {
+        return if (date.isEmpty()) {
             NA
-        } else{
+        } else {
             //2020-02-16T00:00:00.000Z
             val outputPattern = "MMM dd---,yyyy"
 
@@ -175,10 +180,11 @@ object GeneralUtils {
     }
 
     fun intentPokemonDetails(
-        context: Context,
+        context: FragmentActivity,
         pokemonLocationInfo: PokemonLocationInfo,
         pokemonStatus: Int,
-        capturedBy: String
+        capturedBy: String,
+        transitionImage: View? = null
     ) {
         val intent = Intent(context, PokemonDetailsActivity::class.java)
         val pokemonDetails = PokemonDetails(pokemonLocationInfo, pokemonStatus, capturedBy)
@@ -187,7 +193,27 @@ object GeneralUtils {
         bundle.putSerializable(POKEMON_DETAILS, pokemonDetails)
         intent.putExtras(bundle)
 
-        context.startActivity(intent)
+        if (transitionImage != null) {
+            // create an options object that defines the transition
+            val options = ActivityOptions
+                .makeSceneTransitionAnimation(context, transitionImage, "pokemon_image")
+            context.startActivity(intent, options?.toBundle())
+        } else {
+            context.startActivity(intent)
+        }
+
+    }
+
+    /**
+     * Calculate dominant color
+     */
+    fun calcDominantColor(bitmap: Bitmap, onFinish: (Int) -> Unit) {
+
+        Palette.from(bitmap).generate { palette ->
+            palette?.dominantSwatch?.rgb?.let { colorValue ->
+                onFinish((colorValue))
+            }
+        }
     }
 
     fun parseTypeToColor(type: Type): Long {

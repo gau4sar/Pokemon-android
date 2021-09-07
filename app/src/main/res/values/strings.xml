@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Pokemon</string>
-    <string name="google_maps_key">AIzaSyBQUGBgZEOkEx0qHAdYbSMOQDs7OKnaEsc</string>
 
     <string name="connect_error">Please check your network connectivity and try again.</string>
     <string name="retry">retry</string>
@@ -19,7 +18,7 @@
     <string name="name">Name: </string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="captured_by">Captured By</string>
+    <string name="captured_by">Captured By </string>
     <string name="found_in">Found In</string>
     <string name="moves">Moves</string>
     <string name="razor_wind">Razor Wind: </string>

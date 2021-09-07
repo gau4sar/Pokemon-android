@@ -15,6 +15,7 @@ import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemFriendBinding
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
+import com.gaurav.pokemon.utils.getDominantColor
 import com.gaurav.pokemon.utils.getFormattedDateTime
 import timber.log.Timber
 
@@ -80,22 +81,26 @@ class FriendsListAdapter(val context: FragmentActivity) :
             tvCapturedAt.text = "${getFormattedDateTime(pokemon.capturedAt)}"
 
             val imageUrl = GeneralUtils.getPokemonImageUrl(pokemon.id)
-
+/*
             Glide.with(context)
                 .load(imageUrl)
-                .into(ivPokemon)
+                .into(ivPokemon)*/
 
             val pokemonLocationInfo = PokemonLocationInfo(
                 pokemon.capturedAt, 0.00, 0.00,
                 pokemon.id, pokemon.name
             )
 
-            clMain.background = ContextCompat.getDrawable(context, R.color.veryLightBlue)
+//            clMain.background = ContextCompat.getDrawable(context, R.color.veryLightBlue)
 
             cardView.setOnClickListener {
                 GeneralUtils.intentPokemonDetails(
                     context, pokemonLocationInfo, Constants.POKEMON_CAPTURED_BY_OTHER, friend.name
                 )
+            }
+
+            context.getDominantColor(imageUrl,ivPokemon){
+                clMain.setBackgroundColor(it)
             }
         }
     }

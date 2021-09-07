@@ -17,6 +17,7 @@ import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
 import com.gaurav.pokemon.utils.GeneralUtils
+import com.gaurav.pokemon.utils.getDominantColor
 import com.gaurav.pokemon.utils.getFormattedDateTime
 
 class FoesListAdapter(val context: FragmentActivity) :
@@ -74,22 +75,30 @@ class FoesListAdapter(val context: FragmentActivity) :
 
             val imageUrl = GeneralUtils.getPokemonImageUrl(pokemon.id)
 
+/*
             Glide.with(context)
                 .load(imageUrl)
                 .into(ivPokemon)
+*/
 
             val pokemonLocationInfo = PokemonLocationInfo(
                 pokemon.capturedAt, 0.00, 0.00,
                 pokemon.id, pokemon.name
             )
 
+/*
             clMain.background = ContextCompat.getDrawable(context, R.color.veryLightRed)
+*/
 
             cardView.setOnClickListener {
                 GeneralUtils.intentPokemonDetails(
                     context, pokemonLocationInfo, POKEMON_CAPTURED_BY_OTHER, foe.name
                 )
             }
+            context.getDominantColor(imageUrl,ivPokemon){
+                clMain.setBackgroundColor(it)
+            }
+
         }
     }
 }

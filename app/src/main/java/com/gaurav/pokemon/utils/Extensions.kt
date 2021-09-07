@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Build
@@ -31,10 +32,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.CustomNetworkFailedBinding
 import com.gaurav.pokemon.utils.Constants.LOCATION_REQUEST_CODE
+import com.gaurav.pokemon.utils.GeneralUtils.calcDominantColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -46,12 +50,63 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+
+fun Activity.getDominantColor(url: String,imageView: ImageView?=null,
+                             onLoadingFinished: (Int) -> Unit) {
+
+    Glide.with(this)
+        .asBitmap()
+        .load(url)
+        .into(object : CustomTarget<Bitmap>(){
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+
+                imageView?.setImageBitmap(resource)
+                Timber.d("onResourceReady")
+                calcDominantColor(resource){
+
+                    onLoadingFinished(it)
+
+                    Timber.d("calcDominantColor $it")
+                }
+            }
+            override fun onLoadCleared(placeholder: Drawable?) {
+                // this is called when imageView is cleared on lifecycle call or for
+                // some other reason.
+                // if you are referencing the bitmap somewhere else too other than this imageView
+                // clear it here as you can no longer have the bitmap
+            }
+        })
+
+
+/*
+        image.setDrawingCacheEnabled(true)
+
+        val bitmap = image.drawable.toBitmap(50,50)
+
+        val icon = BitmapFactory.decodeResource(
+            requireContext().resources,
+            R.drawable.icons8_pokeball_96
+        )
+
+        Palette.Builder(image.getDrawingCache()).generate { it?.let { palette ->
+            val dominantColor = palette.getDominantColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+
+            // TODO: use dominant color
+
+            Timber.d("dominantColor ${dominantColor}")
+
+            binding.clMain.setBackgroundColor(dominantColor)
+
+        } }*/
+}
 //Glide
 fun ImageView.load(
     url: String?,
     fragmentActivity: FragmentActivity,
+    isCircularCropImage: Boolean = false,
     isWithThumbnail: Boolean = false,
     isCircularImage: Boolean = false,
+    customOption:RequestOptions? = null,
     onLoadingFinished: () -> Unit = {}
 ) {
     val targetImageView = this
@@ -85,47 +140,42 @@ fun ImageView.load(
         targetImageView.loadNoImage(fragmentActivity)
     }
     else {
+
+        val glide = Glide.with(this)
+            .load(url)
+            .apply(
+                getOptionsForGlide(context, fragmentActivity)
+            )
+            .listener(listener)
+            .transition(DrawableTransitionOptions.withCrossFade())
         if (isWithThumbnail) {
             if (isCircularImage) {
-                Glide.with(this)
-                    .load(url)
-                    .apply(
-                        getOptionsForGlide(context, fragmentActivity)
-                    )
-                    .circleCrop()
-                    .listener(listener)
+                glide.circleCrop()
                     .thumbnail(0.05f)
-                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(this)
-            } else {
-                Glide.with(this)
-                    .load(url)
-                    .apply(
-                        getOptionsForGlide(context, fragmentActivity)
-                    )
-                    .listener(listener)
-                    .thumbnail(0.05f)
-                    .transition(DrawableTransitionOptions.withCrossFade())
+
+            }
+            else if(isCircularCropImage)
+            {
+                glide.thumbnail(0.05f)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(this)
+            }
+            else {
+                glide.thumbnail(0.05f)
                     .into(this)
             }
         } else {
             if (isCircularImage) {
-                Glide.with(this)
-                    .load(url)
-                    .apply(
-                        getOptionsForGlide(context, fragmentActivity)
-                    )
-                    .circleCrop()
-                    .listener(listener)
+                glide.circleCrop()
+                    .into(this)
+            }
+            else if(isCircularCropImage)
+            {
+                glide.apply(RequestOptions.circleCropTransform())
                     .into(this)
             } else {
-                Glide.with(this)
-                    .load(url)
-                    .apply(
-                        getOptionsForGlide(context, fragmentActivity)
-                    )
-                    .listener(listener)
-                    .into(this)
+                glide.into(this)
             }
         }
     }

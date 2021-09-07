@@ -6,9 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,14 +17,12 @@ import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonCapture
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.pokemon.Type
-import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
 import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.GeneralUtils.parseDateToShortMonthDateAndYear
-import com.gaurav.pokemon.utils.load
 import com.gaurav.pokemon.utils.make1stCharacterUpper
 import com.gaurav.pokemon.utils.showToast
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -37,18 +33,27 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
-import kotlin.math.abs
+import android.graphics.Bitmap
+
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.gaurav.pokemon.databinding.FragmentPokemonDetails2Binding
+import com.gaurav.pokemon.utils.getDominantColor
+import android.graphics.drawable.GradientDrawable
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.drawToBitmap
 
 
-class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
+class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private val gson: Gson by inject(Gson::class.java)
@@ -57,7 +62,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     private lateinit var callback: OnMapReadyCallback
     private lateinit var pokemonDetails: PokemonDetails
 
-    private var _binding: FragmentPokemonDetailsBinding? = null
+    private var _binding: FragmentPokemonDetails2Binding? = null
     private val binding get() = _binding!!
 
     private var isWild = false
@@ -68,7 +73,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentPokemonDetails2Binding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -198,12 +203,78 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private fun setupUi(pokemon: Pokemon) {
         Timber.d("setupUi $pokemon")
+        val captureButton: MaterialButton = binding.btnCapture
+        val tvCaptureDate = binding.layoutBasicInfo.tvCaptureDate
+        val captureLayout = binding.layoutBasicInfo.tvCaptureDate
+        val ivPokemonFront = binding.ivPokemon
+//        val ivPokemonBack = binding.ivPokemonBack
+        val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
+        val pokemonCaptured = binding.fabCapture
+        val layoutMap = binding.layoutMap.cvFoundCaptured
+        val layoutCapturedBy = binding.layoutCapturedBy.cvCapturedBy
+        val tvPokemon = binding.tvPokemonName
+
+        val tvCapturedBy = binding.layoutCapturedBy.tvName
+        val tvLevel = binding.layoutBasicInfo.tvLevel
+
+        setupRecyclerView(pokemon.types)
+
+        requireActivity().getDominantColor(pokemon.sprites.frontDefault,binding.ivPokemon){
+
+            val gd = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(-0x9e9d9f, it)
+            )
+            gd.cornerRadius = 0f
+
+            binding.clMain.background = gd
+            binding.scrollView.background = (gd)
+        }
+
+
+        tvPokemon.text = pokemon.name.make1stCharacterUpper()
+        tvLevel.text = pokemon.id.toString()
+        tvCapturedBy.text = pokemonDetails.capturedByName
+        tvCaptureDate.text =
+            parseDateToShortMonthDateAndYear(pokemonDetails.pokemonLocationInfo.capturedAt)
+
+        if (isWild) {
+            captureLayout.visibility = View.GONE
+            pokemonCaptured.visibility = View.GONE
+            captureButton.visibility = View.VISIBLE
+            binding.layoutBasicInfo.tvCaptureOn.visibility = View.GONE
+        } else {
+            captureLayout.visibility = View.VISIBLE
+            pokemonCaptured.visibility = View.VISIBLE
+            captureButton.visibility = View.GONE
+            tvFoundCaptured.text = getString(R.string.captured_in)
+        }
+
+        if (isCapturedByOther) {
+
+            pokemonCaptured.visibility = View.GONE
+            captureButton.visibility = View.GONE
+            tvFoundCaptured.text = getString(R.string.captured_in)
+            layoutMap.visibility = View.GONE
+            layoutCapturedBy.visibility = View.VISIBLE
+        }
+
+        captureButton.setOnClickListener {
+            showCaptureDialog(pokemon)
+        }
+
+        binding.llProgressBar.visibility = View.GONE
+    }
+
+/*
+
+    private fun setupUi2(pokemon: Pokemon) {
+        Timber.d("setupUi $pokemon")
 
         val captureButton: MaterialButton = binding.btnCapture
         val tvCaptureDate = binding.layoutBasicInfo.tvCaptureDate
         val captureLayout = binding.layoutBasicInfo.llCaptureOn
         val ivPokemonFront = binding.ivPokemonFront
-        val ivPokemonBack = binding.ivPokemonBack
+//        val ivPokemonBack = binding.ivPokemonBack
         val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
         val pokemonCaptured: com.github.clans.fab.FloatingActionButton = binding.fabCapture
         val layoutMap: CardView = binding.layoutMap.cvFoundCaptured
@@ -216,7 +287,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         setupRecyclerView(pokemon.types)
 
         ivPokemonFront.load(pokemon.sprites.frontDefault, requireActivity())
-        ivPokemonBack.load(pokemon.sprites.backDefault, requireActivity())
+//        ivPokemonBack.load(pokemon.sprites.backDefault, requireActivity())
 
         binding.collapsingToolbar.title = pokemon.name.make1stCharacterUpper()
 
@@ -270,6 +341,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
         binding.llProgressBar.visibility = View.GONE
     }
+*/
 
     private fun setMarker(position: LatLng) {
 

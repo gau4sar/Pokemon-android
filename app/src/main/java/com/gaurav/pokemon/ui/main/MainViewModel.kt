@@ -1,7 +1,12 @@
 package com.gaurav.pokemon.ui.main
 
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
 import androidx.lifecycle.*
+import androidx.palette.graphics.Palette
 import com.gaurav.pokemon.data.model.*
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.data.remote.responses.CaptureResponse
@@ -173,6 +178,18 @@ class MainViewModel(
                     is ResponseHandler.Loading -> {
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Calculate dominant color
+     */
+    fun calcDominantColor(bitmap: Bitmap, onFinish: (Int) -> Unit) {
+
+        Palette.from(bitmap).generate { palette ->
+            palette?.dominantSwatch?.rgb?.let { colorValue ->
+                onFinish((colorValue))
             }
         }
     }

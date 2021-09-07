@@ -51,7 +51,7 @@
 
             <TextView
                 android:id="@+id/textView4"
-                style="@style/TextStyle14"
+                style="@style/TextStyle14Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -63,7 +63,7 @@
 
             <TextView
                 android:id="@+id/tv_captured_at"
-                style="@style/TextStyle14"
+                style="@style/TextStyle14Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -82,6 +82,7 @@
             android:layout_height="0dp"
             android:background="@color/transparent"
             android:layout_marginStart="@dimen/margin_8"
+            android:transitionName="pokemon_image"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat3"
             app:layout_constraintStart_toEndOf="@+id/linearLayoutCompat3"

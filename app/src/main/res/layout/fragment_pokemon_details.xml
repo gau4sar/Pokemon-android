@@ -56,30 +56,17 @@
                         android:id="@+id/iv_pokemon_front"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        android:background="@color/transparent"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_barbasaur_front"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="4:3"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_pokemon_back"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_pokemon_back"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerCrop"
                         android:background="@color/transparent"
-                        android:src="@drawable/ic_barbasaur_back"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="?attr/actionBarSize"
+                        android:transitionName="pokemon_image"
+                        android:src="@drawable/icons8_pokeball_96"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/iv_pokemon_front"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_start"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
