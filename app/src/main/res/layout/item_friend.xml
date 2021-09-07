@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    android:id="@+id/cardView"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    app:cardCornerRadius="@dimen/margin_4"
-    android:layout_margin="@dimen/margin_6"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_6"
+    app:cardCornerRadius="@dimen/margin_4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_main"
+        android:background="@color/purple_200"
         android:layout_width="match_parent"
-        android:background="@color/veryLightRed"
         android:layout_height="match_parent"
         android:padding="@dimen/margin_12">
 
@@ -21,19 +20,20 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/transparent"
-            app:layout_constraintDimensionRatio="1:1"
-            android:src="@drawable/ic_baseline_person_24"
+            android:src="@drawable/ic_user_placeholder_24"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat3"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat3" />
+            app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat3"
+            android:contentDescription="TODO" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutCompat3"
             android:layout_width="wrap_content"
-            android:background="@color/transparent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_8"
             android:layout_marginStart="@dimen/margin_4"
+            android:background="@color/transparent"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_user"
@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                style="@style/TextStyle16Black"
+                style="@style/TextStyle16Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"
@@ -51,11 +51,11 @@
 
             <TextView
                 android:id="@+id/textView4"
-                style="@style/TextStyle14Black"
+                style="@style/TextStyle14Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/margin_4"
+                android:gravity="center"
                 android:text="Captured @"
                 app:layout_constraintEnd_toStartOf="@+id/iv_pokemon"
                 app:layout_constraintStart_toEndOf="@+id/iv_user"
@@ -63,11 +63,11 @@
 
             <TextView
                 android:id="@+id/tv_captured_at"
-                style="@style/TextStyle14Black"
+                style="@style/TextStyle14Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 android:layout_marginTop="@dimen/margin_4"
+                android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_user"
                 app:layout_constraintEnd_toStartOf="@+id/iv_pokemon"
                 app:layout_constraintStart_toEndOf="@+id/iv_user"
@@ -80,11 +80,11 @@
             android:id="@+id/iv_pokemon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/transparent"
             android:layout_marginStart="@dimen/margin_8"
+            android:background="@color/transparent"
             android:transitionName="pokemon_image"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat3"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toEndOf="@+id/linearLayoutCompat3"
             app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat3"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />

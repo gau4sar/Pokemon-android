@@ -2,9 +2,9 @@
 
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="10dp"/>
+            <corners android:radius="12dp"/>
             <solid android:color="@color/white"/>
-            <stroke android:color="@color/black" android:width="3dp" />
+            <stroke android:color="@color/black" android:width="2dp" />
         </shape>
     </item>
 
@@ -16,8 +16,8 @@
         <clip>
             <scale android:scaleWidth="100%" >
                 <shape>
-                    <corners android:radius="10dp"/>
-                    <solid android:color="@color/color_green"/>
+                    <corners android:radius="12dp"/>
+                    <solid android:color="@color/teal_200"/>
                 </shape>
             </scale>
         </clip>

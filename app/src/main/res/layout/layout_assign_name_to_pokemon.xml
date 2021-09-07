@@ -40,7 +40,7 @@
             <EditText
                 android:id="@+id/et_name"
                 android:background="@drawable/border_edit_text"
-                style="@style/MyEditTextstyle"
+                style="@style/MyEditTextStyle"
                 android:layout_width="0dp"
                 android:padding="@dimen/margin_8"
                 android:layout_height="wrap_content"

@@ -5,7 +5,6 @@
     android:id="@+id/cl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:paddingLeft="@dimen/margin_12"
     android:paddingRight="@dimen/margin_12">
 
@@ -31,13 +30,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent">
 
-         <!--       <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.15" />
--->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView2"
                     android:layout_width="match_parent"
@@ -63,7 +55,7 @@
 
                         <TextView
                             android:id="@+id/tv_pokemon_name"
-                            style="@style/TextStyle24WhiteBold"
+                            style="@style/TextStyle24Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -125,7 +117,7 @@
                     android:background="@color/transparent"
                     android:elevation="2dp"
                     android:paddingBottom="@dimen/margin_20"
-                    android:src="@drawable/icons8_pokeball_96"
+                    android:src="@drawable/ic_pokeball_96"
                     android:transitionName="pokemon_image"
                     app:layout_constraintBottom_toTopOf="@+id/cardView2"
                     app:layout_constraintDimensionRatio="1:1"
@@ -139,7 +131,7 @@
                     android:layout_height="60dp"
                     android:background="@color/transparent"
                     android:elevation="2dp"
-                    android:src="@drawable/icons8_pokeball_96"
+                    android:src="@drawable/ic_pokeball_96"
                     app:layout_constraintBottom_toTopOf="@+id/cardView2"
                     app:layout_constraintDimensionRatio="4:3"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +147,6 @@
         style="@style/RedButtonStyleForBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-6dp"
         android:text="Capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +203,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/transparent"
-            android:src="@drawable/icons8_pokeball_96"
+            android:src="@drawable/ic_pokeball_96"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent" />

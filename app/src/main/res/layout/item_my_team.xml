@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:transitionName="pokemon_image"
-            android:src="@drawable/icons8_pokeball_96"
+            android:src="@drawable/ic_pokeball_96"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat2"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/guideline_start"

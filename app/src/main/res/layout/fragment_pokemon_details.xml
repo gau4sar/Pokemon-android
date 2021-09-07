@@ -61,7 +61,7 @@
                         android:scaleType="centerCrop"
                         android:layout_marginTop="?attr/actionBarSize"
                         android:transitionName="pokemon_image"
-                        android:src="@drawable/icons8_pokeball_96"
+                        android:src="@drawable/ic_pokeball_96"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="4:3"
                         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
@@ -87,7 +87,7 @@
                 android:background="@color/transparent"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_8"
-                android:src="@drawable/icons8_pokeball_96"
+                android:src="@drawable/ic_pokeball_96"
                 />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -150,7 +150,7 @@
             app:fab_showShadow="false"
             app:fab_colorNormal="@color/transparent"
             app:layout_anchorGravity="bottom|end"
-            android:src="@drawable/icons8_pokeball_96"/>
+            android:src="@drawable/ic_pokeball_96"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -184,7 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/transparent"
-            android:src="@drawable/icons8_pokeball_96"
+            android:src="@drawable/ic_pokeball_96"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent" />
