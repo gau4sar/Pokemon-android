@@ -4,10 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.gaurav.pokemon.ui.main.screens.CapturedFragment
-import com.gaurav.pokemon.ui.main.screens.CommunityFragment
-import com.gaurav.pokemon.ui.main.screens.ExploreFragment
-import com.gaurav.pokemon.ui.main.screens.MyTeamFragment
+import com.gaurav.pokemon.ui.main.screens.*
 import timber.log.Timber
 
 private const val TOTAL_TABS = 4
@@ -24,11 +21,12 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         Timber.d("VPAdapter createFragment position %s", position)
 
         return when (position) {
+            0 -> ExploreFragment()
             1 -> CommunityFragment()
             2 -> MyTeamFragment()
             3 -> CapturedFragment()
 
-            else -> ExploreFragment()
+            else -> MainFragment()
         }
     }
 }
