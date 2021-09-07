@@ -14,8 +14,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 /**
- * A simple [Fragment] subclass.
- * create an instance of this fragment.
+ * A [Fragment] subclass which displays the Main Screen of the app and contains the viewpager as well
  */
 class MainFragment : Fragment() {
 
@@ -23,8 +22,6 @@ class MainFragment : Fragment() {
 
     // tab titles
     private val titles = arrayOf("Explore", "Community", "MyTeam", "Captured")
-
-    private val encryptPrefUtils: EncryptPrefUtils by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +34,6 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Timber.d("DS saved token : ${GeneralUtils.getAuthToken(encryptPrefUtils)}")
 
         val viewPager = binding.pager
         val tabLayout = binding.tabLayout

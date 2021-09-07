@@ -143,13 +143,9 @@ dependencies {
 
     // Groupie for Recycler View
     def groupie_version = "2.9.0"
-    // https://mvnrepository.com/artifact/com.xwray/groupie
     runtimeOnly("com.xwray:groupie:$groupie_version")
-    // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions
     implementation("com.xwray:groupie-kotlin-android-extensions:$groupie_version")
-    // https://mvnrepository.com/artifact/com.xwray/groupie-databinding
     implementation "com.xwray:groupie-databinding:$groupie_version"
-
 
     // Timber for Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -193,5 +189,8 @@ dependencies {
 
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'androidx.palette:palette-ktx:1.0.0'
+
+    // Palette
+    implementation "androidx.palette:palette-ktx:1.0.0"
 
 }

@@ -3,9 +3,7 @@ package com.gaurav.pokemon.utils
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,7 +11,6 @@ import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -183,7 +180,7 @@ fun ImageView.load(
 
 private fun ImageView.loadNoImage(fragmentActivity: FragmentActivity) {
     Glide.with(this)
-        .load(R.drawable.icons8_pokeball_96)
+        .load(R.drawable.ic_pokeball_96)
         .apply(
             getOptionsForGlide(context, fragmentActivity)
         )
@@ -193,7 +190,7 @@ private fun ImageView.loadNoImage(fragmentActivity: FragmentActivity) {
 fun getOptionsForGlide(context: Context, fragmentActivity: FragmentActivity): RequestOptions {
     //Options
     return RequestOptions()
-        .error(R.drawable.icons8_pokeball_96)
+        .error(R.drawable.ic_pokeball_96)
         .placeholder(getCustomProgressBar(context, fragmentActivity))
 }
 
@@ -205,7 +202,7 @@ fun getCustomProgressBar(
     val circularProgressDrawable = CircularProgressDrawable(fragmentActivity)
     circularProgressDrawable.strokeWidth = 5f
     circularProgressDrawable.centerRadius = 30f
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         circularProgressDrawable.setColorSchemeColors(context.getColor(R.color.colorPrimary))
     } else
         circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorPrimary))
@@ -214,25 +211,17 @@ fun getCustomProgressBar(
 }
 
 
-/*fun ImageView.load(url:String, fragmentActivity:Activity)
-{
-    Glide.with(fragmentActivity)
-        .load(url)
-        .apply(RequestOptions.circleCropTransform())
-        .into(this)
-}*/
-
 fun <T, L> responseLiveData(
-    roomQueryToRetrieveData: () -> LiveData<T>,
+    roomQueryToRetrieveData: suspend () -> LiveData<T>?,
     networkRequest: suspend () -> ResponseHandler<L>,
-    roomQueryToSaveData: suspend (L) -> Unit
+    roomQueryToSaveData: suspend (L) -> Unit?
 ): LiveData<ResponseHandler<T>> = liveData(Dispatchers.IO) {
 
     emit(ResponseHandler.loading(null))
 
     // Get data from room db
-    val source = roomQueryToRetrieveData().map { ResponseHandler.success(it) }
-    emitSource(source)
+    val source = roomQueryToRetrieveData()?.map { ResponseHandler.success(it) }
+    source?.let { emitSource(it) }
     Timber.d("Room query to get data : $latestValue")
 
 
@@ -254,7 +243,7 @@ fun <T, L> responseLiveData(
                     null
                 )
             )
-            emitSource(source)
+            source?.let { emitSource(it) }
         }
 
         else -> {
@@ -265,7 +254,7 @@ fun <T, L> responseLiveData(
                     null
                 )
             )
-            emitSource(source)
+            source?.let { emitSource(it) }
         }
     }
 }

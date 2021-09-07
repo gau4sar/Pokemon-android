@@ -1,16 +1,12 @@
 package com.gaurav.pokemon.adapter
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gaurav.pokemon.data.model.MyTeam
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.databinding.ItemMyTeamBinding
-import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.GeneralUtils
 import com.gaurav.pokemon.utils.GeneralUtils.getPokemonImageUrl

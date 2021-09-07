@@ -1,4 +1,4 @@
-package com.gaurav.pokemon.ui.main.pokemon_details
+package com.gaurav.pokemon.ui.pokemon_details
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gaurav.pokemon.R
 import com.gaurav.pokemon.adapter.PokemonTypeAdapter
@@ -17,14 +18,15 @@ import com.gaurav.pokemon.data.model.Pokemon
 import com.gaurav.pokemon.data.model.PokemonCapture
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.pokemon.Type
+import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.databinding.FragmentPokemonDetails2Binding
 import com.gaurav.pokemon.ui.main.MainViewModel
+import com.gaurav.pokemon.utils.*
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED_BY_OTHER
 import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.GeneralUtils.parseDateToShortMonthDateAndYear
-import com.gaurav.pokemon.utils.make1stCharacterUpper
-import com.gaurav.pokemon.utils.showToast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,24 +38,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
-import android.graphics.Bitmap
 
-import android.graphics.drawable.Drawable
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import com.gaurav.pokemon.databinding.FragmentPokemonDetails2Binding
-import com.gaurav.pokemon.utils.getDominantColor
-import android.graphics.drawable.GradientDrawable
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.drawToBitmap
-
-
-class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
+class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private val gson: Gson by inject(Gson::class.java)
@@ -69,6 +59,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
     private var isCaptured = false
     private var isCapturedByOther = false
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,13 +74,16 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
         binding.llProgressBar.visibility = View.VISIBLE
 
         requireActivity().intent?.extras?.let { it ->
-
             it.getSerializable(POKEMON_DETAILS)?.let {
+
+                // Convert serializable to pokemon details object
                 val type = object : TypeToken<PokemonDetails>() {}.type
                 val pokemonDetailsString = gson.toJson(it, type)
                 pokemonDetails = gson.fromJson(pokemonDetailsString, type)
 
                 Timber.d("pokemonDetails : $pokemonDetails")
+
+                val pokemonLocationInfo = pokemonDetails.pokemonLocationInfo
 
                 when (pokemonDetails.pokemonStatus) {
                     POKEMON_WILD -> {
@@ -105,36 +99,44 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
                     }
                 }
 
-                val pokemonLocationInfo = pokemonDetails.pokemonLocationInfo
-                mainViewModel.fetchPokemonDetails(pokemonLocationInfo.name.lowercase())
-
                 setMarker(
                     LatLng(
                         pokemonLocationInfo.capturedLatAt,
                         pokemonLocationInfo.capturedLongAt
                     )
                 )
+
+                // Pokemon details api response handler
+                lifecycleScope.launch {
+
+                    // Set pokemon ID when routing from explore fragment
+                    val pokemonId =
+                        if (pokemonLocationInfo.id == 0) pokemonLocationInfo.name
+                        else pokemonLocationInfo.id.toString()
+
+                    mainViewModel.fetchPokemonDetails(pokemonId)
+                        .let { apiResponse ->
+                            when (apiResponse) {
+                                is ResponseHandler.Success -> {
+
+                                    apiResponse.data?.let { getPokemonResponse ->
+                                        Timber.d("Pokemon details info $getPokemonResponse")
+                                        setupUi(getPokemonResponse)
+                                    }
+                                }
+
+                                is ResponseHandler.Error -> {
+                                    Timber.e("Pokemon details error response: $apiResponse")
+                                    handleApiError(apiResponse, requireActivity())
+                                }
+
+                                is ResponseHandler.Loading -> {
+                                }
+                            }
+                        }
+                }
             }
-
-            // Observer for getting pokemon details information
-            mainViewModel.pokemonLiveData.observe(requireActivity(), {
-/*
-                Timber.d("Pokemon details response : $it")
-*/
-                it?.let { setupUi(it) }
-            })
         }
-
-        viewModelWorks()
-
-    }
-
-    private fun viewModelWorks() {
-
-        mainViewModel.capturePokemonLiveData.observe(requireActivity(), { isSuccess ->
-
-            animation(isSuccess)
-        })
     }
 
     private fun animation(isSuccess: Boolean) {
@@ -147,7 +149,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
 
         /*val animation: Animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_blink)
         binding.ivPokeballStatus.startAnimation(animation)
-*/
+        */
 
         //TODO find another way for animation
         Handler(Looper.getMainLooper()).postDelayed(
@@ -172,8 +174,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
                                                         View.GONE
                                                     binding.fabCapture.visibility =
                                                         View.VISIBLE
-                                                }
-                                                else{
+                                                } else {
                                                     binding.ivPokeballStatus.background = red
                                                 }
                                                 Handler(Looper.getMainLooper()).postDelayed(
@@ -198,7 +199,6 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
             },
             1000
         )
-
     }
 
     private fun setupUi(pokemon: Pokemon) {
@@ -206,8 +206,6 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
         val captureButton: MaterialButton = binding.btnCapture
         val tvCaptureDate = binding.layoutBasicInfo.tvCaptureDate
         val captureLayout = binding.layoutBasicInfo.tvCaptureDate
-        val ivPokemonFront = binding.ivPokemon
-//        val ivPokemonBack = binding.ivPokemonBack
         val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
         val pokemonCaptured = binding.fabCapture
         val layoutMap = binding.layoutMap.cvFoundCaptured
@@ -219,17 +217,19 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
 
         setupRecyclerView(pokemon.types)
 
-        requireActivity().getDominantColor(pokemon.sprites.frontDefault,binding.ivPokemon){
+        requireActivity().getDominantColor(pokemon.sprites.frontDefault, binding.ivPokemon) {
 
-            val gd = GradientDrawable(
+            binding.clMain.setBackgroundColor(it)
+            binding.scrollView.setBackgroundColor(it)
+
+            /*val gd = GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(-0x9e9d9f, it)
             )
             gd.cornerRadius = 0f
 
             binding.clMain.background = gd
-            binding.scrollView.background = (gd)
+            binding.scrollView.background = (gd)*/
         }
-
 
         tvPokemon.text = pokemon.name.make1stCharacterUpper()
         tvLevel.text = pokemon.id.toString()
@@ -265,84 +265,6 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
         binding.llProgressBar.visibility = View.GONE
     }
 
-/*
-
-    private fun setupUi2(pokemon: Pokemon) {
-        Timber.d("setupUi $pokemon")
-
-        val captureButton: MaterialButton = binding.btnCapture
-        val tvCaptureDate = binding.layoutBasicInfo.tvCaptureDate
-        val captureLayout = binding.layoutBasicInfo.llCaptureOn
-        val ivPokemonFront = binding.ivPokemonFront
-//        val ivPokemonBack = binding.ivPokemonBack
-        val tvFoundCaptured: TextView = binding.layoutMap.tvFoundInCapturedIn
-        val pokemonCaptured: com.github.clans.fab.FloatingActionButton = binding.fabCapture
-        val layoutMap: CardView = binding.layoutMap.cvFoundCaptured
-        val layoutCapturedBy: CardView = binding.layoutCapturedBy.cvCapturedBy
-        val appBarLayout: AppBarLayout = binding.appBarLayout
-        val pokemonInToolbar: ImageView = binding.ivPokemonToolbar
-        val tvCapturedBy = binding.layoutCapturedBy.tvName
-        val tvLevel = binding.layoutBasicInfo.tvLevel
-
-        setupRecyclerView(pokemon.types)
-
-        ivPokemonFront.load(pokemon.sprites.frontDefault, requireActivity())
-//        ivPokemonBack.load(pokemon.sprites.backDefault, requireActivity())
-
-        binding.collapsingToolbar.title = pokemon.name.make1stCharacterUpper()
-
-        pokemon.types
-
-        val collapsingToolbar = binding.collapsingToolbar
-        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
-        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
-
-        tvLevel.text = pokemon.id.toString()
-        tvCapturedBy.text = pokemonDetails.capturedByName
-        tvCaptureDate.text =
-            parseDateToShortMonthDateAndYear(pokemonDetails.pokemonLocationInfo.capturedAt)
-
-        if (isWild) {
-            captureLayout.visibility = View.GONE
-            pokemonCaptured.visibility = View.GONE
-            captureButton.visibility = View.VISIBLE
-        } else {
-            captureLayout.visibility = View.VISIBLE
-            pokemonCaptured.visibility = View.VISIBLE
-            captureButton.visibility = View.GONE
-            tvFoundCaptured.text = getString(R.string.captured_in)
-        }
-
-        if (isCapturedByOther) {
-
-            pokemonCaptured.visibility = View.GONE
-            pokemonInToolbar.visibility = View.GONE
-            captureButton.visibility = View.GONE
-            tvFoundCaptured.text = getString(R.string.captured_in)
-            layoutMap.visibility = View.GONE
-            layoutCapturedBy.visibility = View.VISIBLE
-        }
-
-        if (!isCapturedByOther && !isWild) {
-            appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { barLayout, verticalOffset ->
-                if (abs(verticalOffset) - barLayout.totalScrollRange == 0) {
-                    pokemonCaptured.visibility = View.GONE
-                    pokemonInToolbar.visibility = View.VISIBLE
-                } else {
-                    pokemonCaptured.visibility = View.VISIBLE
-                    pokemonInToolbar.visibility = View.GONE
-                }
-            })
-        }
-
-        captureButton.setOnClickListener {
-            showCaptureDialog(pokemon)
-        }
-
-        binding.llProgressBar.visibility = View.GONE
-    }
-*/
-
     private fun setMarker(position: LatLng) {
 
         callback = OnMapReadyCallback { _googleMap ->
@@ -359,7 +281,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
                     .title("Pokemon")
                     .icon(
                         BitmapDescriptorFactory
-                            .fromResource(R.drawable.icons8_pokeball_96)
+                            .fromResource(R.drawable.ic_pokeball_96)
                     )
             )
             googleMap = _googleMap
@@ -391,6 +313,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
      */
 
     private fun showCaptureDialog(pokemon: Pokemon) {
+
         val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_assign_name_to_pokemon)
@@ -400,6 +323,23 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
         val cancelButton = dialog.findViewById(R.id.btn_cancel) as MaterialButton
         val saveButton = dialog.findViewById(R.id.btn_save) as MaterialButton
         val etName: EditText = dialog.findViewById(R.id.et_name) as EditText
+
+        resources.let {
+            val displayMetrics = it.displayMetrics
+            val dialogWidth = (displayMetrics.widthPixels * 0.70).toInt()
+            val dialogHeight = WindowManager.LayoutParams.WRAP_CONTENT
+            dialog.window?.setLayout(dialogWidth, dialogHeight)
+            dialog.show()
+        }
+
+        dialog.window?.setBackgroundDrawable(
+            ContextCompat.getDrawable(
+                requireActivity(),
+                android.R.color.transparent
+            )
+        )
+
+        dialog.show()
 
         saveButton.setOnClickListener {
             if (etName.editableText.isNullOrEmpty()) {
@@ -415,30 +355,35 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details2) {
                         pokemonLocationInfo.capturedLongAt.toLong()
                     )
                 )
-                mainViewModel.capturePokemon(capturePokemon)
-                dialog.dismiss()
+
+                lifecycleScope.launch {
+                    mainViewModel.capturePokemonData(capturePokemon).let { apiResponse ->
+                        when (apiResponse) {
+                            is ResponseHandler.Success -> {
+
+                                apiResponse.data?.let { captureResponse ->
+                                    Timber.d("Pokemon captured : $captureResponse")
+                                    animation(captureResponse.successful)
+                                }
+                            }
+
+                            is ResponseHandler.Error -> {
+                                Timber.e("capturePokemonData error response: $apiResponse")
+                                handleApiError(apiResponse, requireActivity())
+                            }
+
+                            is ResponseHandler.Loading -> {
+                            }
+                        }
+                    }
+                }
             }
-        }
-        cancelButton.setOnClickListener {
+
             dialog.dismiss()
         }
 
-        resources.let {
-            val displayMetrics = it.displayMetrics
-            val dialogWidth = (displayMetrics.widthPixels * 0.70).toInt()
-            val dialogHeight = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog.window?.setLayout(dialogWidth, dialogHeight)
-            dialog.show()
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
         }
-        dialog.window?.setBackgroundDrawable(
-            ContextCompat.getDrawable(
-                requireActivity(),
-                android.R.color.transparent
-            )
-        )
-
-        dialog.show()
     }
-
-
 }

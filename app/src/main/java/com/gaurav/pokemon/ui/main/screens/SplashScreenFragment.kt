@@ -55,7 +55,10 @@ class SplashScreenFragment : Fragment() {
     }
 
     private fun navigateToMain() {
-        navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
+        // Check to handle crash when navigation from different destination
+        if (navController.currentDestination?.id == R.id.splashScreenFragment) {
+            navController.navigate(R.id.action_splashScreenFragment_to_mainFragment)
+        }
     }
 
     override fun onResume() {

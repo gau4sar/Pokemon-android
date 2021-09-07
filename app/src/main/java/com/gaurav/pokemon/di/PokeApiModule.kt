@@ -4,7 +4,6 @@ import android.content.Context
 import com.gaurav.pokemon.data.remote.pokemon.PokeApiService
 import com.gaurav.pokemon.data.remote.pokemon.PokemonApiRemoteDataSource
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
-import com.gaurav.pokemon.ui.PokeApiViewModel
 import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.Constants.POKEAPI_SCOPE
 import com.google.gson.Gson
@@ -12,7 +11,6 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit

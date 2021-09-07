@@ -1,7 +1,6 @@
 package com.gaurav.pokemon.utils
 
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -14,7 +13,7 @@ import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.data.model.pokemon.Type
-import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
+import com.gaurav.pokemon.ui.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.Constants.NA
 import com.gaurav.pokemon.utils.Constants.POKEMON_DETAILS
 import com.google.android.gms.maps.model.LatLng
@@ -30,7 +29,6 @@ object GeneralUtils {
         totalPokemons: Int, pokemonList: List<PokemonList>,
         sendRandomPokemonList: (MutableList<PokemonList>) -> Unit = {}
     ) {
-
 
         val randomlySelectedPokemons = mutableListOf<PokemonList>()
 

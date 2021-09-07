@@ -11,9 +11,7 @@ import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.FragmentCapturedBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.utils.Constants
 import com.gaurav.pokemon.utils.handleApiError
-import com.gaurav.pokemon.utils.observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 

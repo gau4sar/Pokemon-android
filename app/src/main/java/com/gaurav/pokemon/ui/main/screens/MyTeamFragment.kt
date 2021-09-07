@@ -1,22 +1,18 @@
 package com.gaurav.pokemon.ui.main.screens
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.gaurav.pokemon.R
-import com.gaurav.pokemon.databinding.FragmentCommunityBinding
-import com.gaurav.pokemon.databinding.FragmentMyTeamBinding
-import timber.log.Timber
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import androidx.recyclerview.widget.RecyclerView
 import com.gaurav.pokemon.adapter.MyTeamAdapter
-import com.gaurav.pokemon.data.model.MyTeam
 import com.gaurav.pokemon.data.remote.ResponseHandler
+import com.gaurav.pokemon.databinding.FragmentMyTeamBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 
 /**

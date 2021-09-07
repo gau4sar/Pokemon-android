@@ -11,18 +11,10 @@ class PokemonApiRepository(
 
     fun observePokemonInfoList(limit: String) = responseLiveData(
         roomQueryToRetrieveData = { pokemonDao.fetchPokemonList() },
-        networkRequest = { pokemonApiRemoteDataSource.getPokemonInfoList(limit) },
-        roomQueryToSaveData = { pokemonDao.insertPokemonList(it.results) })
+        networkRequest = { pokemonApiRemoteDataSource.getPokemonInfoList(limit) }
+    ) { pokemonDao.insertPokemonList(it.results) }
 
     val fetchPokemonInfoList = pokemonDao.fetchPokemonList()
-
-    /*fun observePokemonDetails(id: Int) = responseLiveData(
-        roomQueryToRetrieveData = { pokemonDao.fetchPokemonDetails(id) },
-        networkRequest = { pokemonApiRemoteDataSource.getPokemonDetails(id) },
-        roomQueryToSaveData = { pokemonDao.insertPokemonDetails(it.pokemonDetails) })*/
-
-    // TODO:: Fetch from room
-    //fun fetchPokemonDetails(id: Int) = pokemonDao.fetchPokemonDetails(id)
 
     suspend fun fetchPokemonDetails(name: String) = pokemonApiRemoteDataSource.getPokemonDetails(name)
 }

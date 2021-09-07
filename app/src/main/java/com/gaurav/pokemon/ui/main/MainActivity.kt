@@ -18,20 +18,13 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Timber.d("MainActivity")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         navController = findNavController(R.id.nav_host_fragment_container)
 
-
-        mainViewModel.pokemonLiveData.observe(this@MainActivity, {
-            Timber.d("pokemonDetailsLiveData response : $it")
-        })
     }
 }

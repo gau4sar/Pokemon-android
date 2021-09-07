@@ -4,7 +4,6 @@ import com.gaurav.pokemon.data.local.dao.FirebaseDao
 import com.gaurav.pokemon.data.model.ApiTokenInfo
 import com.gaurav.pokemon.data.model.CapturePokemon
 import com.gaurav.pokemon.data.remote.firebase.FirebaseApiRemoteDataSource
-import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.utils.responseLiveData
 
 class FirebaseApiRepository(
@@ -23,27 +22,22 @@ class FirebaseApiRepository(
     // Community info
     val observeCommunityActivity = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchCommunityActivity() },
-        networkRequest = { firebaseApiRemoteDataSource.getCommunityActivity() },
-        roomQueryToSaveData = { firebaseDao.insertCommunityActivity(it) })
-
-    /*suspend fun saveCommunityActivity(friendsAndFoes: FriendsAndFoes) =
-        firebaseDao.insertCommunityActivity(friendsAndFoes)
-
-    suspend fun fetchCommunityInfoApi() = firebaseApiRemoteDataSource.getCommunityActivity()*/
+        networkRequest = { firebaseApiRemoteDataSource.getCommunityActivity() }
+    ) { firebaseDao.insertCommunityActivity(it) }
 
     // MyTeam info
     val observeMyTeam = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchMyTeamList() },
-        networkRequest = { firebaseApiRemoteDataSource.getMyTeam() },
-        roomQueryToSaveData = { firebaseDao.insertMyTeamList(it) })
+        networkRequest = { firebaseApiRemoteDataSource.getMyTeam() }
+    ) { firebaseDao.insertMyTeamList(it) }
 
     val fetchMyTeamList = firebaseDao.fetchMyTeamList()
 
     //Captured Info
     val observeCapturedInfo = responseLiveData(
         roomQueryToRetrieveData = { firebaseDao.fetchCapturedList() },
-        networkRequest = { firebaseApiRemoteDataSource.getCapturedList() },
-        roomQueryToSaveData = { firebaseDao.insertCapturedList(it) })
+        networkRequest = { firebaseApiRemoteDataSource.getCapturedList() }
+    ) { firebaseDao.insertCapturedList(it) }
 
     suspend fun postCapturePokemon(capturePokemon: CapturePokemon) =
         firebaseApiRemoteDataSource.postCapturePokemon(capturePokemon)

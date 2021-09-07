@@ -1,19 +1,17 @@
 package com.gaurav.pokemon.ui.main
 
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.location.Location
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
-import com.gaurav.pokemon.data.model.*
+import com.gaurav.pokemon.data.model.ApiTokenInfo
+import com.gaurav.pokemon.data.model.CapturePokemon
+import com.gaurav.pokemon.data.model.Pokemon
+import com.gaurav.pokemon.data.model.PokemonList
 import com.gaurav.pokemon.data.remote.ResponseHandler
-import com.gaurav.pokemon.data.remote.responses.CaptureResponse
 import com.gaurav.pokemon.data.remote.responses.FriendsAndFoes
 import com.gaurav.pokemon.data.repository.FirebaseApiRepository
 import com.gaurav.pokemon.data.repository.PokemonApiRepository
-import com.gaurav.pokemon.utils.Constants.FAILURE
 import com.gaurav.pokemon.utils.EncryptPrefUtils
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
@@ -106,33 +104,8 @@ class MainViewModel(
      * Pokemon details
      */
 
-    private val _pokemonLiveData = MutableLiveData<Pokemon>()
-    val pokemonLiveData: LiveData<Pokemon> = _pokemonLiveData
-
-    fun fetchPokemonDetails(name: String) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            pokemonApiRepository.fetchPokemonDetails(name).let { apiResponse ->
-                when (apiResponse) {
-                    is ResponseHandler.Success -> {
-
-                        apiResponse.data?.let { getPokemonResponse ->
-                            /*Timber.d("Pokemon details info ${getPokemonResponse}")*/
-                            _pokemonLiveData.postValue(getPokemonResponse)
-                        }
-                    }
-
-                    is ResponseHandler.Error -> {
-                        Timber.e("Get token info error response: $apiResponse")
-                        //handleApiError(apiResponse, requireActivity())
-                    }
-
-                    is ResponseHandler.Loading -> {
-                    }
-                }
-            }
-        }
-    }
+    suspend fun fetchPokemonDetails (id:String) : ResponseHandler<Pokemon> =
+        pokemonApiRepository.fetchPokemonDetails(id)
 
     /**
      * MyTeam info
@@ -150,37 +123,8 @@ class MainViewModel(
     /**
      * Post capture pokemon
      */
-    private val _capturePokemonLiveData = MutableLiveData<Boolean>()
-    val capturePokemonLiveData: LiveData<Boolean> = _capturePokemonLiveData
-
-    fun capturePokemon(capturePokemon: CapturePokemon) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            firebaseApiRepository.postCapturePokemon(capturePokemon).let { apiResponse ->
-                when (apiResponse) {
-                    is ResponseHandler.Success -> {
-
-                        apiResponse.data?.let { captureResponse ->
-
-                            Timber.d("Pokemon captured : $captureResponse")
-                            _capturePokemonLiveData.postValue(captureResponse.successful)
-                        }
-                    }
-
-                    is ResponseHandler.Error -> {
-                        Timber.e("Get token info error response: $apiResponse")
-
-                        _capturePokemonLiveData.postValue(FAILURE)
-
-                        //handleApiError(apiResponse, requireActivity())
-                    }
-
-                    is ResponseHandler.Loading -> {
-                    }
-                }
-            }
-        }
-    }
+    suspend fun capturePokemonData(capturePokemon: CapturePokemon) =
+        firebaseApiRepository.postCapturePokemon(capturePokemon)
 
     /**
      * Calculate dominant color

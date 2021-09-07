@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity"
+            android:name="com.gaurav.pokemon.ui.pokemon_details.PokemonDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

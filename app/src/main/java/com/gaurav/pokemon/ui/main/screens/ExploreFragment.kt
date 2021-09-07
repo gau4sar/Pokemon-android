@@ -1,6 +1,5 @@
 package com.gaurav.pokemon.ui.main.screens
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import com.gaurav.pokemon.data.model.PokemonLocationInfo
 import com.gaurav.pokemon.data.remote.ResponseHandler
 import com.gaurav.pokemon.databinding.FragmentExploreBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
-import com.gaurav.pokemon.ui.main.pokemon_details.PokemonDetailsActivity
 import com.gaurav.pokemon.utils.*
 import com.gaurav.pokemon.utils.Constants.POKEMON_WILD
 import com.gaurav.pokemon.utils.GeneralUtils.generateRandomMarkers
@@ -65,9 +63,9 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         mainViewModel.pokemonListAndCurrentLocationLiveData.observe(viewLifecycleOwner,
             { (pokemonInfoList, currentLocation) ->
 
-                Timber.d("pokemonInfoListAndCurrentLocationLiveData ${pokemonInfoList} || ${currentLocation}")
+                Timber.d("pokemonInfoListAndCurrentLocationLiveData $pokemonInfoList || $currentLocation")
 
-                if(pokemonInfoList.isNotEmpty()) {
+                if (pokemonInfoList.isNotEmpty()) {
 
                     val minPokemon = MAX_POKEMONS - 4
 
@@ -95,40 +93,14 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 }
 
                 is ResponseHandler.Error -> {
-                    Timber.e("Get token info error response: $apiResponse")
-                    //handleApiError(apiResponse, this)
+                    Timber.e("observePokemonInfoList error response: $apiResponse")
+                    handleApiError(apiResponse, requireActivity())
                 }
 
                 is ResponseHandler.Loading -> {
                 }
             }
         })
-
-        /* mainViewModel.fetchPokemonInfoList.observe(viewLifecycleOwner, { pokemonInfoList ->
-             Timber.d("Saved pokemon info list : $pokemonInfoList")
-             // TODO :: Use the info list here to set the item information on the pokemon balls
-
-             val minPokemon = MAX_POKEMONS - 4
-
-             val totalPokemons = (minPokemon..MAX_POKEMONS).random()
-
-             pickPokemonsRandomly(totalPokemons, pokemonInfoList) { randomPokemonList ->
-
-                 mainViewModel.currentLocationLiveData.observe(
-                     viewLifecycleOwner,
-                     { currentLocation ->
-                         callBack(
-                             LatLng(currentLocation.latitude, currentLocation.longitude),
-                             totalPokemons, randomPokemonList
-                         )
-                     })
-
-                 mainViewModel.moveToLocationLiveData.observe(
-                     viewLifecycleOwner,
-                     { moveCameraToLocation(it) })
-             }
-         })
-         */
 
         mainViewModel.moveToLocationLiveData.observe(
             viewLifecycleOwner,
@@ -171,12 +143,19 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         googleMap.setOnMarkerClickListener { marker ->
 
-            val pokemonSelected:PokemonList = marker.tag as PokemonList
+            val pokemon: PokemonList = marker.tag as PokemonList
 
-            val pokemonLocationInfo = PokemonLocationInfo("",marker.position.latitude,marker.position.longitude,
-            1,pokemonSelected.name)
+            val pokemonLocationInfo = PokemonLocationInfo(
+                "", marker.position.latitude, marker.position.longitude,
+                0, pokemon.name
+            )
 
-            GeneralUtils.intentPokemonDetails(requireActivity(),pokemonLocationInfo,POKEMON_WILD, "")
+            GeneralUtils.intentPokemonDetails(
+                requireActivity(),
+                pokemonLocationInfo,
+                POKEMON_WILD,
+                ""
+            )
             false
         }
     }
@@ -207,7 +186,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                 .title(pokemonList.name)
                 .icon(
                     BitmapDescriptorFactory
-                        .fromResource(R.drawable.icons8_pokeball_96)
+                        .fromResource(R.drawable.ic_pokeball_96)
                 )
         )
 
