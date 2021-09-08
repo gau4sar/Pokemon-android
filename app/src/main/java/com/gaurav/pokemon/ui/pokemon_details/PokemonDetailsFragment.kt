@@ -22,7 +22,7 @@ import com.gaurav.pokemon.data.model.PokemonCapture
 import com.gaurav.pokemon.data.model.PokemonDetails
 import com.gaurav.pokemon.data.model.pokemon.Type
 import com.gaurav.pokemon.data.remote.ResponseHandler
-import com.gaurav.pokemon.databinding.FragmentPokemonDetails2Binding
+import com.gaurav.pokemon.databinding.FragmentPokemonDetailsBinding
 import com.gaurav.pokemon.ui.main.MainViewModel
 import com.gaurav.pokemon.utils.*
 import com.gaurav.pokemon.utils.Constants.POKEMON_CAPTURED
@@ -56,7 +56,7 @@ class PokemonDetailsFragment : Fragment() {
     private lateinit var callback: OnMapReadyCallback
     private lateinit var pokemonDetails: PokemonDetails
 
-    private var _binding: FragmentPokemonDetails2Binding? = null
+    private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
 
     private var isWild = false
@@ -68,7 +68,7 @@ class PokemonDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPokemonDetails2Binding.inflate(inflater, container, false)
+        _binding = FragmentPokemonDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
