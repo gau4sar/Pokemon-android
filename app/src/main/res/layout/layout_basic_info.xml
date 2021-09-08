@@ -1,84 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardElevation="@dimen/margin_4">
+    android:layout_marginTop="@dimen/margin_45"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/margin_12"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Heading1Black"
-            android:text="@string/basic_info"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_basic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_4"
+            android:id="@+id/linearLayoutCompat5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
             <TextView
+                style="@style/TextStyle16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Heading2Black"
-                android:layout_marginEnd="@dimen/margin_4"
-                android:text="@string/level"/>
-
+                android:layout_gravity="center"
+                android:text="Level: " />
             <TextView
                 android:id="@+id/tv_level"
+                style="@style/Heading1Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Heading2Black"
-                android:text="2"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_gravity="center"
+                android:text="101" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                style="@style/Heading2Black"
-                android:text="@string/types"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_types"
-                android:orientation="horizontal"
+            <ProgressBar
+                android:id="@+id/pBar"
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/margin_8"
-                android:layout_height="match_parent"/>
+                android:scrollbarSize="@dimen/margin_45"
+                style="@style/CustomProgressBarHorizontal"
+                android:progress="70"
+                android:layout_margin="@dimen/margin_16"
+                android:progressDrawable="@drawable/progress_drawable"
+                android:layout_height="@dimen/margin_32" />
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/ll_capture_on"
-            android:orientation="horizontal"
+            android:id="@+id/linearLayoutCompat4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Heading2Black"
-                android:layout_marginEnd="@dimen/margin_4"
-                android:text="@string/capture_on"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/linearLayoutCompat5"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tv_capture_date"
+                style="@style/Heading1Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Heading2Black"
-                android:text="July 23rd, 2021"/>
+                android:layout_gravity="center"
+                android:text="10111111111111" />
+
+            <TextView
+                android:id="@+id/tv_capture_on"
+                style="@style/TextStyle16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Capture on" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_26"
+        app:layout_constraintTop_toBottomOf="@+id/ll_basic">
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/margin_4"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat4"
+            app:layout_constraintEnd_toStartOf="@+id/guideline5"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat5" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/TextStyle16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Types"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recyclerView_types" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_types"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/margin_4"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat4"
+            app:layout_constraintEnd_toStartOf="@+id/guideline5"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat5" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

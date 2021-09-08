@@ -1,172 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent">
+        android:scrollbars="none"
+        android:layout_marginLeft="@dimen/margin_12"
+        android:layout_marginRight="@dimen/margin_12"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:padding="0dp"
-            android:theme="@style/toolbar">
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:orientation="vertical">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbar"
-                style="@style/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@color/dark_grey"
-                android:padding="0dp"
-                app:contentScrim="@color/color_red"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                app:title="Bulbasaur">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark_grey"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/margin_16">
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline_start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintGuide_percent="0.1"
-                        android:orientation="vertical"/>
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline_end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintGuide_percent="0.9"
-                        android:orientation="vertical"/>
-
-                    <ImageView
-                        android:id="@+id/iv_pokemon_front"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center"
-                        android:background="@color/transparent"
-                        android:scaleType="centerCrop"
-                        android:layout_marginTop="?attr/actionBarSize"
-                        android:transitionName="pokemon_image"
-                        android:src="@drawable/ic_pokeball_96"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="4:3"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.appcompat.widget.Toolbar
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/dark_grey"
-                    app:popupTheme="@style/toolbar"
-                    app:title="" />
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
-            <ImageView
-                android:id="@+id/iv_pokemon_toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/transparent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/margin_8"
-                android:src="@drawable/ic_pokeball_96"
-                />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_45"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:background="@color/transparent">
 
-                <include
-                    android:id="@+id/layout_captured_by"
-                    layout="@layout/layout_captured_by"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
                     android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:elevation="0dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="180dp"
+                    app:cardCornerRadius="@dimen/margin_8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/margin_12"
+                        android:paddingTop="@dimen/margin_45"
+                        android:paddingRight="@dimen/margin_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+                        <TextView
+                            android:id="@+id/tv_pokemon_name"
+                            style="@style/TextStyle24Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Pokemon" />
+
+                        <include
+                            android:id="@+id/layout_captured_by"
+                            layout="@layout/layout_captured_by"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_12"
+                            android:visibility="gone" />
+
+                        <include
+                            android:id="@+id/layout_basic_info"
+                            layout="@layout/layout_basic_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_12" />
+
+                        <include
+                            android:id="@+id/layout_moves"
+                            layout="@layout/layout_moves"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_12" />
+
+                        <include
+                            android:id="@+id/layout_map"
+                            layout="@layout/layout_found_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_24"
+                            android:layout_marginBottom="@dimen/margin_45" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.2" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.8" />
+
+                <ImageView
+                    android:id="@+id/iv_pokemon"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:layout_margin="@dimen/margin_16"
-                    android:visibility="gone" />
+                    android:background="@color/transparent"
+                    android:elevation="2dp"
+                    android:paddingBottom="@dimen/margin_20"
+                    android:src="@drawable/ic_pokeball_96"
+                    android:transitionName="pokemon_image"
+                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                    app:layout_constraintStart_toStartOf="@+id/guideline4"
+                    app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
-                <include
-                    android:id="@+id/layout_basic_info"
-                    layout="@layout/layout_basic_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_16" />
+                <ImageView
+                    android:id="@+id/fabCapture"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@color/transparent"
+                    android:elevation="2dp"
+                    android:src="@drawable/ic_pokeball_96"
+                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                    app:layout_constraintDimensionRatio="4:3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
-                <include
-                    android:id="@+id/layout_moves"
-                    layout="@layout/layout_moves"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_16" />
 
-                <include
-                    android:id="@+id/layout_map"
-                    layout="@layout/layout_found_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_16" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_capture"
+        style="@style/RedButtonStyleForBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_capture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/appBarLayout"
-            app:fab_showShadow="false"
-            app:fab_colorNormal="@color/transparent"
-            app:layout_anchorGravity="bottom|end"
-            android:src="@drawable/ic_pokeball_96"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="@dimen/margin_2"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/transparent"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/color_red" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_start_main"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25"
-        android:layout_height="match_parent"/>
+        app:layout_constraintGuide_percent="0.25" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end_main"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75"
-        android:layout_height="match_parent"/>
+        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_pokeball_status"
@@ -180,66 +200,52 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView_pokeball_status"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_pokeball_96"
+            android:src="@drawable/ic_pokeball_high_resolution"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_pokeball_status"
-            android:layout_width="@dimen/margin_45"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            app:cardCornerRadius="45dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="@+id/imageView"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView">
-
-            <ImageView
-                android:id="@+id/iv_pokeball_status"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_red"
-                android:scaleType="centerCrop" />
-        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_capture"
-        style="@style/RedButtonStyleForBottom"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture"
-        android:layout_marginBottom="-6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/ll_progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:padding="@dimen/margin_8"
+        android:background="@color/colorAccent"
         android:visibility="gone"
-        android:background="@color/white"
-        android:elevation="@dimen/margin_2"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progress_circular"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:indeterminateTint="@color/color_red"
-            android:layout_height="70dp" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        <TextView
+            android:id="@+id/tv_toolbar_name"
+            style="@style/TextStyle24WhiteBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_marginStart="@dimen/margin_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_pokemon_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@drawable/ic_pokeball_96"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_toolbar_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

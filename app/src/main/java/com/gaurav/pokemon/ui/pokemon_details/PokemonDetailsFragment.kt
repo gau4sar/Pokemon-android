@@ -47,7 +47,7 @@ import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
 
-class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
+class PokemonDetailsFragment : Fragment() {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private val gson: Gson by inject(Gson::class.java)
@@ -149,34 +149,31 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         val scrollBounds = Rect()
         binding.scrollView.getHitRect(scrollBounds)
 
-        binding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (binding.ivPokemon.getLocalVisibleRect(scrollBounds)) {
-                if (!binding.ivPokemon.getLocalVisibleRect(scrollBounds)
-                    || scrollBounds.height() < binding.ivPokemon.getHeight()
-                ) {
-                    showToolbar()
-                    Timber.d("ivPokemon APPEAR PARTIALLY")
+        binding.scrollView.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (binding.ivPokemon.getLocalVisibleRect(scrollBounds)) {
+                    if (!binding.ivPokemon.getLocalVisibleRect(scrollBounds)
+                        || scrollBounds.height() < binding.ivPokemon.height
+                    ) {
+                        showToolbar()
+                    } else {
+                        hideToolbar()
+                    }
                 } else {
                     hideToolbar()
-                    Timber.d("ivPokemon APPEAR FULLY!!!")
                 }
-            } else {
-                hideToolbar()
-                Timber.d("ivPokemon APPEAR No")
-            }
-        })
+            })
     }
 
-    fun showToolbar() {
+    private fun showToolbar() {
         binding.ivPokemon.visibility = View.INVISIBLE
         binding.llToolbar.visibility = View.VISIBLE
         binding.tvPokemonName.visibility = View.INVISIBLE
         binding.fabCapture.visibility = View.INVISIBLE
     }
 
-    fun hideToolbar() {
-        if(!isWild&&!isCapturedByOther)
-        {
+    private fun hideToolbar() {
+        if (!isWild && !isCapturedByOther) {
             binding.fabCapture.visibility = View.VISIBLE
         }
         binding.ivPokemon.visibility = View.VISIBLE
