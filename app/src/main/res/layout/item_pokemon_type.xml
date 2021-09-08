@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/tv_type"
-            style="@style/TextStyle16LightBold"
+            style="@style/TextStyle16WhiteBold"
             android:paddingBottom="@dimen/margin_2"
             android:background="@color/transparent"
             android:layout_marginLeft="@dimen/margin_20"

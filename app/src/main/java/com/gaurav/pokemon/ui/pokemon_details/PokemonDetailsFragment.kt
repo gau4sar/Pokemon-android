@@ -1,13 +1,16 @@
 package com.gaurav.pokemon.ui.pokemon_details
 
 import android.app.Dialog
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +46,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
+
 class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
@@ -72,6 +76,8 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.llProgressBar.visibility = View.VISIBLE
+
+        listener()
 
         requireActivity().intent?.extras?.let { it ->
             it.getSerializable(POKEMON_DETAILS)?.let {
@@ -139,63 +145,69 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         }
     }
 
-    private fun animation(isSuccess: Boolean) {
+    private fun listener() {
+        val scrollBounds = Rect()
+        binding.scrollView.getHitRect(scrollBounds)
+
+        binding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (binding.ivPokemon.getLocalVisibleRect(scrollBounds)) {
+                if (!binding.ivPokemon.getLocalVisibleRect(scrollBounds)
+                    || scrollBounds.height() < binding.ivPokemon.getHeight()
+                ) {
+                    showToolbar()
+                    Timber.d("ivPokemon APPEAR PARTIALLY")
+                } else {
+                    hideToolbar()
+                    Timber.d("ivPokemon APPEAR FULLY!!!")
+                }
+            } else {
+                hideToolbar()
+                Timber.d("ivPokemon APPEAR No")
+            }
+        })
+    }
+
+    fun showToolbar() {
+        binding.ivPokemon.visibility = View.INVISIBLE
+        binding.llToolbar.visibility = View.VISIBLE
+        binding.tvPokemonName.visibility = View.INVISIBLE
+        binding.fabCapture.visibility = View.INVISIBLE
+    }
+
+    fun hideToolbar() {
+        if(!isWild&&!isCapturedByOther)
+        {
+            binding.fabCapture.visibility = View.VISIBLE
+        }
+        binding.ivPokemon.visibility = View.VISIBLE
+        binding.llToolbar.visibility = View.GONE
+        binding.tvPokemonName.visibility = View.VISIBLE
+    }
+
+    private fun startAnimation() {
         binding.clPokeballStatus.visibility = View.VISIBLE
 
+        val clkRotate = AnimationUtils.loadAnimation(
+            requireActivity(),
+            R.anim.anim_rotate_clockwise
+        )
 
-        val red = ContextCompat.getDrawable(requireActivity(), R.color.color_red)
-        val white = ContextCompat.getDrawable(requireActivity(), R.color.white)
-        val blue = ContextCompat.getDrawable(requireActivity(), R.color.light_blue_A400)
+        binding.clPokeballStatus.startAnimation(clkRotate)
+    }
 
-        /*val animation: Animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_blink)
-        binding.ivPokeballStatus.startAnimation(animation)
-        */
-
-        //TODO find another way for animation
+    private fun stopAnimation(isSuccess: Boolean) {
+        binding.clPokeballStatus.clearAnimation()
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                binding.ivPokeballStatus.background = red
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        binding.ivPokeballStatus.background = white
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            {
-                                binding.ivPokeballStatus.background = red
-
-                                Handler(Looper.getMainLooper()).postDelayed(
-                                    {
-                                        binding.ivPokeballStatus.background = white
-                                        Handler(Looper.getMainLooper()).postDelayed(
-                                            {
-                                                binding.ivPokeballStatus.background = blue
-
-                                                if (isSuccess) {
-                                                    binding.btnCapture.visibility =
-                                                        View.GONE
-                                                    binding.fabCapture.visibility =
-                                                        View.VISIBLE
-                                                } else {
-                                                    binding.ivPokeballStatus.background = red
-                                                }
-                                                Handler(Looper.getMainLooper()).postDelayed(
-                                                    {
-                                                        binding.clPokeballStatus.visibility =
-                                                            View.GONE
-                                                    },
-                                                    1500
-                                                )
-                                            },
-                                            1000
-                                        )
-                                    },
-                                    500
-                                )
-                            },
-                            1000
-                        )
-                    },
-                    500
-                )
+                binding.clPokeballStatus.visibility =
+                    View.GONE
+                if (isSuccess) {
+                    binding.fabCapture.visibility =
+                        View.VISIBLE
+                } else {
+                    binding.fabCapture.visibility =
+                        View.GONE
+                }
             },
             1000
         )
@@ -221,6 +233,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
             binding.clMain.setBackgroundColor(it)
             binding.scrollView.setBackgroundColor(it)
+            binding.llToolbar.setBackgroundColor(it)
 
             /*val gd = GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(-0x9e9d9f, it)
@@ -232,6 +245,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         }
 
         tvPokemon.text = pokemon.name.make1stCharacterUpper()
+        binding.tvToolbarName.text = pokemon.name.make1stCharacterUpper()
         tvLevel.text = pokemon.id.toString()
         tvCapturedBy.text = pokemonDetails.capturedByName
         tvCaptureDate.text =
@@ -245,6 +259,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         } else {
             captureLayout.visibility = View.VISIBLE
             pokemonCaptured.visibility = View.VISIBLE
+            binding.ivPokemonToolbar.visibility = View.VISIBLE
             captureButton.visibility = View.GONE
             tvFoundCaptured.text = getString(R.string.captured_in)
         }
@@ -345,6 +360,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
             if (etName.editableText.isNullOrEmpty()) {
                 requireActivity().showToast("Please assign a name!")
             } else {
+                startAnimation()
                 binding.clPokeballStatus.visibility = View.VISIBLE
                 val pokemonLocationInfo = pokemonDetails.pokemonLocationInfo
                 val capturePokemon = CapturePokemon(
@@ -363,7 +379,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
                                 apiResponse.data?.let { captureResponse ->
                                     Timber.d("Pokemon captured : $captureResponse")
-                                    animation(captureResponse.successful)
+                                    stopAnimation(captureResponse.successful)
                                 }
                             }
 
