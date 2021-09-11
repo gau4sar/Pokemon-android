@@ -17,6 +17,8 @@ object Constants {
     const val POKEMON_LOCATION_LATITUDE = "pokemon_location_latitude"
     const val POKEMON_LOCATION_LONGITUDE = "pokemon_location_longitude"
 
+    const val POKEMON_FROM_EXPLORE = 0
+
     const val POKEMON_WILD = 1
     const val POKEMON_CAPTURED = 2
     const val POKEMON_CAPTURED_BY_OTHER = 3

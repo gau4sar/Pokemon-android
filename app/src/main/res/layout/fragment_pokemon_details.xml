@@ -10,139 +10,132 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:layout_marginLeft="@dimen/margin_12"
         android:layout_marginRight="@dimen/margin_12"
         android:background="@color/transparent"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:orientation="vertical">
+            android:background="@color/transparent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent">
+                android:layout_height="0dp"
+                android:layout_marginTop="180dp"
+                android:background="@color/white"
+                android:elevation="0dp"
+                android:visibility="visible"
+                app:cardCornerRadius="@dimen/margin_8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView2"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@color/white"
-                    android:elevation="0dp"
-                    android:visibility="visible"
-                    android:layout_marginTop="180dp"
-                    app:cardCornerRadius="@dimen/margin_8"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/margin_12"
+                    android:paddingTop="@dimen/margin_45"
+                    android:paddingRight="@dimen/margin_12"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline2">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    <TextView
+                        android:id="@+id/tv_pokemon_name"
+                        style="@style/TextStyle24Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Pokemon" />
+
+                    <include
+                        android:id="@+id/layout_captured_by"
+                        layout="@layout/layout_captured_by"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/margin_12"
-                        android:paddingTop="@dimen/margin_45"
-                        android:paddingRight="@dimen/margin_12"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/guideline2">
+                        android:layout_marginTop="@dimen/margin_12"
+                        android:visibility="gone" />
 
-                        <TextView
-                            android:id="@+id/tv_pokemon_name"
-                            style="@style/TextStyle24Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Pokemon" />
+                    <include
+                        android:id="@+id/layout_basic_info"
+                        layout="@layout/layout_basic_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_12" />
 
-                        <include
-                            android:id="@+id/layout_captured_by"
-                            layout="@layout/layout_captured_by"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_12"
-                            android:visibility="gone" />
+                    <include
+                        android:id="@+id/layout_moves"
+                        layout="@layout/layout_moves"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_12" />
 
-                        <include
-                            android:id="@+id/layout_basic_info"
-                            layout="@layout/layout_basic_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_12" />
+                    <include
+                        android:id="@+id/layout_map"
+                        layout="@layout/layout_found_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_24"
+                        android:layout_marginBottom="@dimen/margin_45" />
 
-                        <include
-                            android:id="@+id/layout_moves"
-                            layout="@layout/layout_moves"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_12" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-                        <include
-                            android:id="@+id/layout_map"
-                            layout="@layout/layout_found_in"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_24"
-                            android:layout_marginBottom="@dimen/margin_45" />
+            </androidx.cardview.widget.CardView>
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2" />
 
-                </androidx.cardview.widget.CardView>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.2" />
+            <ImageView
+                android:id="@+id/iv_pokemon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_16"
+                android:background="@color/transparent"
+                android:elevation="2dp"
+                android:paddingBottom="@dimen/margin_20"
+                android:src="@drawable/ic_pokeball_96"
+                android:transitionName="pokemon_image"
+                app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.8" />
-
-                <ImageView
-                    android:id="@+id/iv_pokemon"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="@dimen/margin_16"
-                    android:background="@color/transparent"
-                    android:elevation="2dp"
-                    android:paddingBottom="@dimen/margin_20"
-                    android:src="@drawable/ic_pokeball_96"
-                    android:transitionName="pokemon_image"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="@+id/cardView2" />
-
-                <ImageView
-                    android:id="@+id/fabCapture"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@color/transparent"
-                    android:elevation="2dp"
-                    android:src="@drawable/ic_pokeball_96"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
-                    app:layout_constraintDimensionRatio="4:3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/cardView2" />
+            <ImageView
+                android:id="@+id/fabCapture"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@color/transparent"
+                android:elevation="2dp"
+                android:src="@drawable/ic_pokeball_96"
+                app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                app:layout_constraintDimensionRatio="4:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- Capture button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_capture"
         style="@style/RedButtonStyleForBottom"
@@ -153,6 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Loader -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/ll_progressBar"
         android:layout_width="match_parent"
@@ -169,8 +163,8 @@
             android:id="@+id/progress_circular"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/transparent"
             android:layout_gravity="center"
+            android:background="@color/transparent"
             android:indeterminateTint="@color/color_red" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -188,37 +182,27 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_pokeball_status"
+    <!-- Pokemon ball big -->
+    <ImageView
+        android:id="@+id/iv_pokeball"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/transparent"
+        android:src="@drawable/ic_pokeball_high_resolution"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end_main"
         app:layout_constraintStart_toStartOf="@+id/guideline_start_main"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView_pokeball_status"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_pokeball_high_resolution"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <!-- Toolbar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_8"
         android:background="@color/colorAccent"
+        android:padding="@dimen/margin_8"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -229,8 +213,8 @@
             style="@style/TextStyle24WhiteBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:layout_marginStart="@dimen/margin_8"
+            android:text="Name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -239,9 +223,9 @@
             android:id="@+id/iv_pokemon_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:src="@drawable/ic_pokeball_96"
             android:background="@color/transparent"
+            android:src="@drawable/ic_pokeball_96"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tv_toolbar_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_toolbar_name" />
